@@ -282,27 +282,61 @@ template<class T> bool DList<T>::sublist(DList<T> *dlist)
 // Definations for the functions for Exercise 3:
 template<class T> void DList<T>::pushback (T value)
 {
+    // Since the append(value) function has the complexity O(1),
+    // we can not further increase the efficiency of function...
     append (value);     // Directly add the new node to the end
 }
 
 template<class T> void DList<T>::pushfront (T value)
 {
-    insert (1, value);  // Directly add the new node to the start of the list
+    // Also, we can not further increase the efficiency
+    insert (1, value);  // Directly add the new node after the dummy node
+    // Note that although the insert itself has the complexity O(n), here
+    // n = 1 forever, so complexity is O(1).
 }
 
 template<class T> node<T>* DList<T>::popback (void)
 {
-    int length = getlength ();      // Get the length of the list
-    node<T>* pt;
-    pt = locate (length);       // Get the pointer of the last element
-    remove (length);            // Remove that element
-    return pt;
+    node<T>* pt_i;
+    pt_i = last ();           // Get the pointer of the last element
+
+    // Check if the list is empty:
+    if (dummy == pt_i)
+    {
+        return NULL;
+    }
+
+    // Remove the last element from the list
+    // Since the remove (index) calls locate (index), which has the 
+    // complexity O(n), we don't use that:
+    node<T> *pt_i1;
+    pt_i1 = (*pt_i).getprevious();  // Get the previous pointer of the last element
+    (*pt_i1).setnext(dummy);        // Set the next node of the second last element to be dummy
+    (*dummy).setprevious(pt_i1);    // Set the previous node of the dummy to be pt_i1
+    numitems -= 1;
+
+    return pt_i;
 }
 
 template<class T> node<T>* DList<T>::popfront (void)
 {
-    node<T>* pt;
-    pt = locate (1);       // Get the pointer of the first element
-    remove (1);            // Remove that element
-    return pt;
+    node<T>* pt_i;
+    pt_i = (*dummy).getnext();       // Get the pointer of the first element
+
+    // Check if the list is empty:
+    if (dummy == pt_i)
+    {
+        return NULL;
+    }
+
+    // Remove the first element from the list
+    // Since the remove (index) calls locate (index), which has the 
+    // complexity O(n), we don't use that:
+    node<T> *pt_i1;
+    pt_i1 = (*pt_i).getnext();          // Get the next pointer of the first element
+    (*pt_i1).setprevious(dummy);        // Set the previous node of the second element to be dummy
+    (*dummy).setnext(pt_i1);            // Set the next node of the dummy to be pt_i1
+    numitems -= 1;
+
+    return pt_i;
 }

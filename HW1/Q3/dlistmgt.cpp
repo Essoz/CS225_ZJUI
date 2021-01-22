@@ -309,6 +309,8 @@ int main()
                 }
                 break;
             }
+
+            // These are for Exercise 3:
             // pushback operation:
             case 12:
             {
@@ -348,6 +350,14 @@ int main()
                 {
                     node<int>* lst_node;
                     lst_node = mylist1.popback();
+
+                    // Check if the function succeeds:
+                    if (NULL == lst_node)
+                    {
+                        cout << "The list is already empty.\n";
+                        break;
+                    }
+                    
                     cout << "You get the last node, the value stored is: ";
 
                     // Print the value stored in the last node:
@@ -358,6 +368,14 @@ int main()
                 {
                     node<double>* lst_node;
                     lst_node = mylist2.popback();
+
+                    // Check if the function succeeds:
+                    if (NULL == lst_node)
+                    {
+                        cout << "The list is already empty.\n";
+                        break;
+                    }
+                    
                     cout << "You get the last node, the value stored is: ";
 
                     // Print the value stored in the last node:
@@ -373,6 +391,14 @@ int main()
                 {
                     node<int>* fst_node;
                     fst_node = mylist1.popfront();
+
+                    // Check if the function succeeds:
+                    if (NULL == fst_node)
+                    {
+                        cout << "The list is already empty.\n";
+                        break;
+                    }
+                    
                     cout << "You get the first node, the value stored is: ";
 
                     // Print the value stored in the last node:
@@ -383,6 +409,14 @@ int main()
                 {
                     node<double>* fst_node;
                     fst_node = mylist2.popfront();
+
+                    // Check if the function succeeds:
+                    if (NULL == fst_node)
+                    {
+                        cout << "The list is already empty.\n";
+                        break;
+                    }
+                    
                     cout << "You get the first node, the value stored is: ";
 
                     // Print the value stored in the last node:
