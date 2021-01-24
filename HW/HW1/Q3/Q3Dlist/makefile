@@ -2,7 +2,7 @@ CC = g++
 LD = g++
 SRCS = $(wildcard *.cpp)
 OBJS = $(patsubst %cpp, %o, $(SRCS))
-TARGET = listmgt
+TARGET = Q3dlistmgt
 all: $(TARGET)
 $(TARGET): $(OBJS)
 	$(LD) -o $@ $^

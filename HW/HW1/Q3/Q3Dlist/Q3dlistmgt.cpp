@@ -1,5 +1,5 @@
 //
-//  listmgt.cpp
+//  Q3dlistmgt.cpp
 //  
 //
 //  Created by KD on 14.01.21.
@@ -8,17 +8,17 @@
 #include <stdio.h>
 #include <iostream>
 #include <cstdlib>
-#include "alist.cpp"
+#include "Q3dlist.cpp"
 using std::cout;
 using std::cin;
 
 int main()
 {
-    int type, size, op;
+    int type, op, testcase;
     int pos, yes;
     int intitem, result1;
-    AList<int> mylist1;
-    AList<double> mylist2;
+    DList<int> mylist1 = DList<int>();
+    DList<double> mylist2 = DList<double>();
     double doubleitem, result2;
     bool boolresult;
     do
@@ -30,23 +30,45 @@ int main()
             cout << "You must choose 0 or 1\n\n";
     }
     while ((type != 0) && (type != 1));
-    cout << "Enter a positive integer for the size of your list:\n";
-    cin >> size;
-    if (size <= 0)
-        size = 20;
-    switch(type)
+
+    // Choose a test case from empty list and [3,2,1,2,3]:
+    do
     {
-        case 0:
+        cout << "Which test case do you want?\n";
+        cout << "0: empty list  1: fixed non-empty list\n";
+        cin >> testcase ;
+        if ((testcase != 0) && (testcase != 1))
+            cout << "You must choose 0 or 1!\n";
+    } 
+    while ((testcase != 0) && (testcase != 1));
+    
+    // Build test case:
+    if (1 == testcase)
+    {
+        // Build the test case [3,2,1,2,3]:
+        if (type == 0)
         {
-            AList<int> mylist1 = AList<int>(size);
-            break;
+            mylist1.append(3);
+            mylist1.append(2);
+            mylist1.append(1);
+            mylist1.append(2);
+            mylist1.append(3);
+        } else {
+            mylist2.append(3);
+            mylist2.append(2);
+            mylist2.append(1);
+            mylist2.append(2);
+            mylist2.append(3);
         }
-        case 1:
-        {
-            AList<double> mylist2 = AList<double>(size);
-            break;
-        }
+
+        // Display:
+        cout << "Now you have the list [3,2,1,2,3] for testing.\n";
+    } else {
+        cout << "Now you have an empty list for testing.\n";
     }
+
+    cout << "\n\n";
+    
     do
     {
         do
@@ -127,32 +149,38 @@ int main()
             {
                 if (type == 0)
                 {
-                    result1 = mylist1.popback();
+                    node<int>* lst_node;
+                    lst_node = mylist1.popback();
 
                     // Check if the function succeeds:
-                    if (0 == result1 && 0 == mylist1.getlength())
+                    if (NULL == lst_node)
                     {
-                        cout << "The array is already empty.\n";
+                        cout << "The list is already empty.\n";
                         break;
                     }
+                    
+                    cout << "You get the last node, the value stored is: ";
 
-                    // Print the last value:
-                    cout << "You get the last value stored, it is: ";
+                    // Print the value stored in the last node:
+                    result1 = lst_node->getdata();
                     cout << result1 << "\n";
                 }
                 else
                 {
-                    result2 = mylist2.popback();
+                    node<double>* lst_node;
+                    lst_node = mylist2.popback();
 
                     // Check if the function succeeds:
-                    if (0 == result2 && 0 == mylist2.getlength())
+                    if (NULL == lst_node)
                     {
-                        cout << "The array is already empty.\n";
+                        cout << "The list is already empty.\n";
                         break;
                     }
+                    
+                    cout << "You get the last node, the value stored is: ";
 
-                    // Print the last value:
-                    cout << "You get the last value stored, it is: ";
+                    // Print the value stored in the last node:
+                    result2 = lst_node->getdata();
                     cout << result2 << "\n";
                 }
                 break;
@@ -162,32 +190,38 @@ int main()
             {
                 if (type == 0)
                 {
-                    result1 = mylist1.popfront();
+                    node<int>* fst_node;
+                    fst_node = mylist1.popfront();
 
                     // Check if the function succeeds:
-                    if (0 == result1 && 0 == mylist1.getlength())
+                    if (NULL == fst_node)
                     {
-                        cout << "The array is already empty.\n";
+                        cout << "The list is already empty.\n";
                         break;
                     }
+                    
+                    cout << "You get the first node, the value stored is: ";
 
-                    // Print the first value:
-                    cout << "You get the first value stored, it is: ";
+                    // Print the value stored in the last node:
+                    result1 = fst_node->getdata();
                     cout << result1 << "\n";
                 }
                 else
                 {
-                    result2 = mylist2.popfront();
+                    node<double>* fst_node;
+                    fst_node = mylist2.popfront();
 
                     // Check if the function succeeds:
-                    if (0 == result2 && 0 == mylist2.getlength())
+                    if (NULL == fst_node)
                     {
-                        cout << "The array is already empty.\n";
+                        cout << "The list is already empty.\n";
                         break;
                     }
                     
-                    // Print the first value:
-                    cout << "You get the first value stored, it is: ";
+                    cout << "You get the first node, the value stored is: ";
+
+                    // Print the value stored in the last node:
+                    result2 = fst_node->getdata();
                     cout << result2 << "\n";
                 }
                 break;

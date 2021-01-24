@@ -1,12 +1,12 @@
 //
-//  dlist.h
+//  Q3dlist.h
 //  
 //
 //  Created by KD on 16.01.21.
 //
 
-#ifndef dlist_h
-#define dlist_h
+#ifndef Q3dlist_h
+#define Q3dlist_h
 
 template<class T> class DList;
 
@@ -59,4 +59,4 @@ private:
     node<T> *last(void);
 };
 
-#endif /* dlist_h */
+#endif /* Q3dlist_h */

@@ -1,5 +1,5 @@
 //
-//  alist.cpp
+//  Q3alist.cpp
 //  
 //
 //  Created by KD on 14.01.21.
@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <cstdlib>
-#include "alist.h"
+#include "Q3alist.h"
 using std::cout;
 using std::cin;
 
@@ -223,10 +223,16 @@ template<class T> T AList<T>::popback (void)
     // Get the value of the last element in the array:
     T value;
     value = getitem(length);
-
+    
     // Remove the last element from the array:
-    // Note the remove (index) operation has the complexity O(n), which we can't simplify:
-    remove (length);
+    // First, check if the array needs deallocation:
+    if ((numitems <= maxsize / 4) && (maxsize > minsize)) {
+        deallocate();
+    }
+
+    reprarray[length-1] = reprarray[length];
+    --numitems;
+
     return value;
 }
 

@@ -1,5 +1,5 @@
 //
-//  dlist.cpp
+//  Q3dlist.cpp
 //  
 //
 //  Created by KD on 16.01.21.
@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <cstdlib>
-#include "dlist.h"
+#include "Q3dlist.h"
 using std::cout;
 using std::cin;
 

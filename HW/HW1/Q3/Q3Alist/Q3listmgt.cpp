@@ -1,5 +1,5 @@
 //
-//  dlistmgt.cpp
+//  Q3listmgt.cpp
 //  
 //
 //  Created by KD on 14.01.21.
@@ -8,17 +8,17 @@
 #include <stdio.h>
 #include <iostream>
 #include <cstdlib>
-#include "dlist.cpp"
+#include "Q3alist.cpp"
 using std::cout;
 using std::cin;
 
 int main()
 {
-    int type, op;
+    int type, size, op, testcase;
     int pos, yes;
     int intitem, result1;
-    DList<int> mylist1 = DList<int>();
-    DList<double> mylist2 = DList<double>();
+    AList<int> mylist1;
+    AList<double> mylist2;
     double doubleitem, result2;
     bool boolresult;
     do
@@ -30,6 +30,76 @@ int main()
             cout << "You must choose 0 or 1\n\n";
     }
     while ((type != 0) && (type != 1));
+
+    // Choose a test case from empty array and [3,2,1,2,3]:
+    do
+    {
+        cout << "Which test case do you want?\n";
+        cout << "0: empty array  1: fixed non-empty arrat  2: a array written by yourself\n";
+        cin >> testcase ;
+        if ((testcase != 0) && (testcase != 1) && (testcase != 2))
+            cout << "You must choose 0 or 1 or 2!\n";
+    } 
+    while ((testcase != 0) && (testcase != 1) && (testcase != 2));
+    
+    // Build test case:
+    if (1 == testcase)
+    {
+        // Build the test case [3,2,1,2,3]:
+        switch(type)
+        {
+            case 0:
+            {
+                mylist1 = AList<int>(5);
+                mylist1.append(3);
+                mylist1.append(2);
+                mylist1.append(1);
+                mylist1.append(2);
+                mylist1.append(3);
+                break;
+            }
+            case 1:
+            {
+                mylist2 = AList<double>(5);
+                mylist2.append(3);
+                mylist2.append(2);
+                mylist2.append(1);
+                mylist2.append(2);
+                mylist2.append(3);
+                break;
+            }
+        }
+        // Display:
+        cout << "Now you have the array [3,2,1,2,3] for testing.\n";
+    }
+    else if (2 == testcase)
+    {
+        // The test case written by yourself:
+        cout << "Enter a positive integer for the size of your list:\n";
+        cin >> size;
+        if (size <= 0)
+            size = 20;
+        switch(type)
+        {
+            case 0:
+            {
+                mylist1 = AList<int>(size);
+                break;
+            }
+            case 1:
+            {
+                mylist2 = AList<double>(size);
+                break;
+            }
+        }
+    } 
+    else
+    {
+        cout << "Now you have an empty array for testing.\n";
+    }
+
+    cout << "\n\n";
+    
     do
     {
         do
@@ -110,38 +180,32 @@ int main()
             {
                 if (type == 0)
                 {
-                    node<int>* lst_node;
-                    lst_node = mylist1.popback();
+                    result1 = mylist1.popback();
 
                     // Check if the function succeeds:
-                    if (NULL == lst_node)
+                    if (0 == result1 && 0 == mylist1.getlength())
                     {
-                        cout << "The list is already empty.\n";
+                        cout << "The array is already empty.\n";
                         break;
                     }
-                    
-                    cout << "You get the last node, the value stored is: ";
 
-                    // Print the value stored in the last node:
-                    result1 = lst_node->getdata();
+                    // Print the last value:
+                    cout << "You get the last value stored, it is: ";
                     cout << result1 << "\n";
                 }
                 else
                 {
-                    node<double>* lst_node;
-                    lst_node = mylist2.popback();
+                    result2 = mylist2.popback();
 
                     // Check if the function succeeds:
-                    if (NULL == lst_node)
+                    if (0 == result2 && 0 == mylist2.getlength())
                     {
-                        cout << "The list is already empty.\n";
+                        cout << "The array is already empty.\n";
                         break;
                     }
-                    
-                    cout << "You get the last node, the value stored is: ";
 
-                    // Print the value stored in the last node:
-                    result2 = lst_node->getdata();
+                    // Print the last value:
+                    cout << "You get the last value stored, it is: ";
                     cout << result2 << "\n";
                 }
                 break;
@@ -151,38 +215,32 @@ int main()
             {
                 if (type == 0)
                 {
-                    node<int>* fst_node;
-                    fst_node = mylist1.popfront();
+                    result1 = mylist1.popfront();
 
                     // Check if the function succeeds:
-                    if (NULL == fst_node)
+                    if (0 == result1 && 0 == mylist1.getlength())
                     {
-                        cout << "The list is already empty.\n";
+                        cout << "The array is already empty.\n";
                         break;
                     }
-                    
-                    cout << "You get the first node, the value stored is: ";
 
-                    // Print the value stored in the last node:
-                    result1 = fst_node->getdata();
+                    // Print the first value:
+                    cout << "You get the first value stored, it is: ";
                     cout << result1 << "\n";
                 }
                 else
                 {
-                    node<double>* fst_node;
-                    fst_node = mylist2.popfront();
+                    result2 = mylist2.popfront();
 
                     // Check if the function succeeds:
-                    if (NULL == fst_node)
+                    if (0 == result2 && 0 == mylist2.getlength())
                     {
-                        cout << "The list is already empty.\n";
+                        cout << "The array is already empty.\n";
                         break;
                     }
                     
-                    cout << "You get the first node, the value stored is: ";
-
-                    // Print the value stored in the last node:
-                    result2 = fst_node->getdata();
+                    // Print the first value:
+                    cout << "You get the first value stored, it is: ";
                     cout << result2 << "\n";
                 }
                 break;

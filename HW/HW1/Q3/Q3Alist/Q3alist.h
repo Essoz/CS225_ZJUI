@@ -1,12 +1,12 @@
 //
-//  alist.h
+//  Q3alist.h
 //  
 //
 //  Created by KD on 14.01.21.
 //
 
-#ifndef alist_h
-#define alist_h
+#ifndef Q3alist_h
+#define Q3alist_h
 
 template<class T> class AList
 {
@@ -55,4 +55,4 @@ template<class T> AList<T>::AList(int size)
 //    delete[] reprarray;
 //}
 
-#endif /* alist_h */
+#endif /* Q3alist_h */
