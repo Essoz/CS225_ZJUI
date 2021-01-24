@@ -1,5 +1,5 @@
 //
-//  listmgt.cpp
+//  dlistmgt.cpp
 //  
 //
 //  Created by KD on 14.01.21.
@@ -8,17 +8,17 @@
 #include <stdio.h>
 #include <iostream>
 #include <cstdlib>
-#include "alist.cpp"
+#include "dlist.cpp"
 using std::cout;
 using std::cin;
 
 int main()
 {
-    int type, size, op;
+    int type, op;
     int pos, yes;
     int intitem, result1;
-    AList<int> mylist1;
-    AList<double> mylist2;
+    DList<int> mylist1 = DList<int>();
+    DList<double> mylist2 = DList<double>();
     double doubleitem, result2;
     bool boolresult;
     do
@@ -30,23 +30,6 @@ int main()
             cout << "You must choose 0 or 1\n\n";
     }
     while ((type != 0) && (type != 1));
-    cout << "Enter a positive integer for the size of your list:\n";
-    cin >> size;
-    if (size <= 0)
-        size = 20;
-    switch(type)
-    {
-        case 0:
-        {
-            AList<int> mylist1 = AList<int>(size);
-            break;
-        }
-        case 1:
-        {
-            AList<int> mylist2 = AList<int>(size);
-            break;
-        }
-    }
     do
     {
         do
@@ -64,6 +47,8 @@ int main()
             cout << "9: sublist\n";
             cout << "10: equal\n";
             cout << "11: display\n";
+            cout << "12: binary inserionsort\n";
+            cout << "13: bubble sort\n";
             cin >> op ;
         }
         while ((op < 0) && (op > 11));
@@ -72,16 +57,25 @@ int main()
             case 0: return(0);
             case 1:
             {
-                cout << "Enter a value:\n";
+                int length;
+                cout << "array initialinzing, enter the total length (in integer) : \n";
+                cin >> length;
+                int v1;
                 if (type == 0)
                 {
-                    cin >> intitem;
-                    mylist1.append(intitem);
+                    for (int i = 0; i < length; i++)
+                    {
+                        v1 = rand() % 10000; 
+                        mylist1.append(v1);
+                    }
                 }
                 else
                 {
-                    cin >> doubleitem;
-                    mylist2.append(doubleitem);
+                   for (int i = 0; i < length; i++)
+                    {
+                        v1 = (double) (rand() % 10000); 
+                        mylist2.append(v1);
+                    }
                 }
                 break;
             }
@@ -172,7 +166,7 @@ int main()
             {
                 if (type == 0)
                 {
-                    AList<int> mylistnew1 = AList<int>(10);
+                    DList<int> mylistnew1 = DList<int>();
                     do
                     {
                         cout << "Do you want to enter more list elements?\n";
@@ -186,11 +180,11 @@ int main()
                         }
                     }
                     while (yes == 1);
-                    mylist1.concat(mylistnew1);
+                    mylist1.concat(&mylistnew1);
                 }
                 else
                 {
-                    AList<double> mylistnew2 = AList<double>(10);
+                    DList<double> mylistnew2 = DList<double>();
                     do
                     {
                         cout << "Do you want to enter more list elements?\n";
@@ -204,7 +198,7 @@ int main()
                         }
                     }
                     while (yes == 1);
-                    mylist2.concat(mylistnew2);
+                    mylist2.concat(&mylistnew2);
                 }
                 break;
             }
@@ -212,7 +206,7 @@ int main()
             {
                 if (type == 0)
                 {
-                    AList<int> mylistnew1 = AList<int>(10);
+                    DList<int> mylistnew1 = DList<int>();
                     do
                     {
                         cout << "Do you want to enter more list elements?\n";
@@ -226,11 +220,11 @@ int main()
                         }
                     }
                     while (yes == 1);
-                    boolresult = mylist1.sublist(mylistnew1);
+                    boolresult = mylist1.sublist(&mylistnew1);
                 }
                 else
                 {
-                    AList<double> mylistnew2 = AList<double>(10);
+                    DList<double> mylistnew2 = DList<double>();
                     do
                     {
                         cout << "Do you want to enter more list elements?\n";
@@ -244,7 +238,7 @@ int main()
                         }
                     }
                     while (yes == 1);
-                    boolresult = mylist2.sublist(mylistnew2);
+                    boolresult = mylist2.sublist(&mylistnew2);
                 }
                 if (boolresult == true)
                 {
@@ -258,7 +252,7 @@ int main()
             {
                 if (type == 0)
                 {
-                    AList<int> mylistnew1 = AList<int>(10);
+                    DList<int> mylistnew1 = DList<int>();
                     do
                     {
                         cout << "Do you want to enter more list elements?\n";
@@ -272,11 +266,11 @@ int main()
                         }
                     }
                     while (yes == 1);
-                    boolresult = mylist1.equal(mylistnew1);
+                    boolresult = mylist1.equal(&mylistnew1);
                 }
                 else
                 {
-                    AList<double> mylistnew2 = AList<double>(10);
+                    DList<double> mylistnew2 = DList<double>();
                     do
                     {
                         cout << "Do you want to enter more list elements?\n";
@@ -290,7 +284,7 @@ int main()
                         }
                     }
                     while (yes == 1);
-                    boolresult = mylist2.sublist(mylistnew2);
+                    boolresult = mylist2.equal(&mylistnew2);
                 }
                 if (boolresult == true)
                 {
@@ -319,6 +313,30 @@ int main()
                         doubleitem = mylist2[i];
                         cout << "List element " << i << " is " << doubleitem <<".\n";
                     }
+                }
+                break;
+            }
+            case 12:
+            {
+                if (type == 0)
+                {
+                   mylist1.binary_insertion_sort();
+                }
+                else
+                {
+                    mylist2.binary_insertion_sort();
+                }
+                break;
+            }
+            case 13:
+            {
+                if (type == 0)
+                {
+                   mylist1.bubblesort();
+                }
+                else
+                {
+                    mylist2.bubblesort();
                 }
                 break;
             }

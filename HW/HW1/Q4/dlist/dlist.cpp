@@ -78,7 +78,7 @@ template<class T> int DList<T>::getlength(void)
 
 template<class T> node<T> *DList<T>::last(void)
 {
-    return (*dummy).getprevious();
+    return (*dummy).getprevious();  //dummy link the last one and the first one, from the last to the first
 }
 
 template<class T> node<T> *DList<T>::first(void)
@@ -89,10 +89,10 @@ template<class T> node<T> *DList<T>::first(void)
 template<class T> void DList<T>::append(T value)
 {
     node<T> *lpt;
-    lpt = last();
+    lpt = last();   //return the pointer to the former last element
     node<T> *pt = new node<T>;
     (*pt).setdata(value);
-    (*pt).setnext(dummy);
+    (*pt).setnext(dummy);   //the next element of the last element is dummy node
     (*pt).setprevious(lpt);
     (*dummy).setprevious(pt);
     (*lpt).setnext(pt);
@@ -110,7 +110,7 @@ template<class T> node<T> *DList<T>::locate(int index)
     else
     {
         node<T> *pt;
-        pt = (*dummy).getnext();
+        pt = (*dummy).getnext();    //find the first element
         for (int i = 1; i < index; ++i)
         {
             pt = (*pt).getnext();
@@ -276,4 +276,37 @@ template<class T> bool DList<T>::sublist(DList<T> *dlist)
         
     }
     return result;
+}
+template<class T> void DList<T>::binary_insertion_sort(void)
+{
+    for( int i=1; i<numitems; i++)  //iratate all elements in the list, since the first one need't be insert, starting from the second (index 1);
+    {
+        int low=0;
+        int high=i-1;
+        T temp=getitem(i+1);
+        int mid=0;
+        while(low<=high)    //binary search for the correct location to insert;
+        {
+            mid=(low+high)/2;
+            if(getitem(mid+1)<temp) {
+                low=mid+1;
+            } else {
+                high=mid-1;
+            }
+        }
+        insert(low+1,temp);
+        remove(i+2);    //since insert first, then remove the element, and the insert location is always former than the remove location, so can singlely treat (i+1)+1 as the removed location
+    }
+}
+template<class T> void DList<T>::bubblesort(void)
+{
+    T temp;
+    for (int i = 0; i < numitems-1; i++)
+        for (int j = 0; j < numitems- i-1; j++)
+            if (getitem(j+1) > getitem(j+2))
+            {    
+                temp = getitem(j+1);
+                setitem(j+1,getitem(j+2));
+                setitem(j+2,temp);
+            }
 }

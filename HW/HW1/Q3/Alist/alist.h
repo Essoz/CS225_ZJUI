@@ -20,10 +20,16 @@ public:
     void append(T value);
     void insert(int index, T value);
     void remove(int index);
-    void concat(AList<T> list);
+    void concat(AList<T> &list);
     bool member(T value);
-    bool equal(AList<T> list);
-    bool sublist(AList<T> list);
+    bool equal(AList<T> &list);
+    bool sublist(AList<T> &list);
+
+    // New functions defined for Exercise 3:
+    void pushback (T value);
+    void pushfront (T value);
+    T popback (void);
+    T popfront (void);
     
 private:
     int maxsize, minsize;

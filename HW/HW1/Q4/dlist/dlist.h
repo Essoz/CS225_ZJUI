@@ -44,6 +44,8 @@ public:
     bool member(T value);
     bool equal(DList<T> *dlist);
     bool sublist(DList<T> *dlist);
+    void binary_insertion_sort(void);
+    void bubblesort(void);
 private:
     node<T> *dummy;
     int numitems;
