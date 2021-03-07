@@ -291,18 +291,18 @@ template<class T> void DListsort<T>::selectionsort(void)
     node<T> *firstnode;
     firstnode = (*dummy).getnext();
     node<T> *lastnode;
-    lastnode = (*dummy).getprevious();
+    lastnode = (*dummy).getprevious();  //initialing the first node and the last node;
     node<T> *outlastnode;
     outlastnode = dummy;
     (*outlastnode).setnext(dummy);
-    (*outlastnode).setprevious(dummy);
+    (*outlastnode).setprevious(dummy);  
     outlastnode = ssort(numitems, firstnode, lastnode, dummy, outlastnode);
     return;
 }
 
 template<class T> node<T> *DListsort<T>::ssort(int num, node<T> *firstnode, node<T> *lastnode, node<T> *outlastnode, node<T> *dummy)
 {
-    for (int c = num; c>0; --c)
+    for (int c = num; c>0; --c) //perform the insertion operatoin for num times, which means all the elements has been inserted to a new sorted list;
     {
         node<T> *minnode;
         minnode = getminimum(firstnode, lastnode);
@@ -316,9 +316,9 @@ template<class T> node<T> *DListsort<T>::ssort(int num, node<T> *firstnode, node
         }
         else
         {
-            cut(firstnode, lastnode, minnode);
+            cut(firstnode, lastnode, minnode);  //remove the minnode from the current unsorted list
         }
-        add(minnode, outlastnode, dummy);
+        add(minnode, outlastnode, dummy);   //add the minimum to the new sorted list
         outlastnode = minnode;
     }
     return outlastnode;
@@ -329,7 +329,8 @@ template<class T> void DListsort<T>::add(node<T> *minadd, node<T> *outlastnode, 
     (*minadd).setprevious(outlastnode);
     (*minadd).setnext(dummy);
     (*outlastnode).setnext(minadd);
-    (*dummy).setprevious(minadd);
+    (*dummy).setprevious(minadd);   //the min node will always inserted after the outlastnode, and the outlastnode will be assigned to the previous min node;
+                                    //so the sort algorithem can be implemented successfully. and finally the outlastnode is actually the last element in the list
     return;
 }
 
@@ -376,14 +377,15 @@ template<class T> void DListsort<T>::mergesort(int thr)
         thr = 100;
     if (numitems <= thr)
     {
-        selectionsort();
+        selectionsort();    //if the list number is smalled than the input thr, the algorithem will call insertion sort instead of mergesort, because the list is small.
         return;
     }
+    //implementing the merge sort;
     node<T> *firstnode;
     firstnode = (*dummy).getnext();
     node<T> *lastnode;
     lastnode = (*dummy).getprevious();
-    node<T> *out;
+    node<T> *out;   //the outlast node 
     out = dummy;
     out = msort(numitems, firstnode, lastnode, thr, dummy, out);
     return;
@@ -393,7 +395,7 @@ template<class T> node<T> *DListsort<T>::msort(int num, node<T> *first, node<T> 
 {
     if (num <= thr)
     {
-        outlastnode = ssort(num, first, last, outlastnode, dummy);
+        outlastnode = ssort(num, first, last, outlastnode, dummy);      //when the given elements length is smaller than the thr, using the insertion sort
         return outlastnode;
     }
     node<T> *splitnode;
@@ -401,11 +403,11 @@ template<class T> node<T> *DListsort<T>::msort(int num, node<T> *first, node<T> 
     node<T> *succnode;
     succnode = (*splitnode).getnext();
     node<T> *out1;
-    node<T> *out2;
+    node<T> *out2;  //out1 and out2 point to the last node in the list1 and list2
     out1 = msort(num/2, first, splitnode, thr, dummy, outlastnode);
-    out2 = msort((num+1)/2, succnode, last, thr, dummy, out1);
-    first = (*outlastnode).getnext();
-    succnode = (*out1).getnext();
+    out2 = msort((num+1)/2, succnode, last, thr, dummy, out1);  //out1 is the last element in list1
+    first = (*outlastnode).getnext();   //the first node is the next elements to the outlastnode
+    succnode = (*out1).getnext();   //first node in out2 list
     outlastnode = merge(first, out1, succnode, out2, dummy, outlastnode);
     return outlastnode;
 }
@@ -423,7 +425,7 @@ template<class T> node<T> *DListsort<T>::merge(node<T> *first1, node<T> *last1, 
             first1 = temp;
             outlast = merge(first1, last1, first2, last2, dummy, outlast);
         }
-        else
+        else        //all the elements in first list has been added to the new sorted list, so just add list2 after it
         {
             while (first2 != last2)
             {
