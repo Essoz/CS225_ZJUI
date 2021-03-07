@@ -67,7 +67,7 @@ template <class T> int Solution<T>::set_item(vector<T> lst){
 // Modify the following to finish ex1.1
 template <class T> vector<T> Solution<T>::MergeSort_k(vector<T> lst, int k){
     // vec_print(lst);
-    int numitems = Solution<T>::number_item;    // Total number of items in the vector
+    int numitems = int(lst.size());    // Total number of items in the vector
     int eachlength = numitems / k;              // The length of each subvector
     // Divide the input vector into k subvectors. Since k may not divide numitems, the last
     // subvector might have a different length:
@@ -85,7 +85,7 @@ template <class T> vector<T> Solution<T>::MergeSort_k(vector<T> lst, int k){
 
     // Now for merge operation:
     vector<T> Merged_list = merge(concentrate);
-    vec_print(Merged_list);
+    // vec_print(Merged_list);
     return Merged_list;
 };
 
@@ -102,7 +102,7 @@ template <class T> vector<vector<T>> Solution<T>::divide_k(vector<T> lst, int k,
 
     // Fill in the new vector:
     // First, we need to check if the vector can be split into k subvectors:
-    if (int(lst.size()) < k){
+    if (0 == l){ //int(lst.size()) < k
         // If so, change the divisor k to the number of items in the vector:
         return divide_k(lst, int(lst.size()), 1);
     }
@@ -219,7 +219,7 @@ template<class T> int Solution<T>::compare_time(vector<T> lst){
     SelfSort(lst);
     end1 = clock();
     double endtime1 = (double)(end1-start1)/CLOCKS_PER_SEC;
-    cout << endtime1 << endl;
+    // cout << endtime1 << endl;
 
     // For Mergesort:
     clock_t start2, end2;
@@ -227,15 +227,15 @@ template<class T> int Solution<T>::compare_time(vector<T> lst){
     MergeSort_k(lst, 2);
     end2 = clock();
     double endtime2 = (double)(end2-start2)/CLOCKS_PER_SEC;
-    cout << endtime2;
+    // cout << endtime2 << endl;
 
     // Compare and output the result:
-    cout << "For the vector with length " << int(lst.size()) << ":" << endl;
+    // cout << "For the vector with length " << int(lst.size()) << ":" << endl;
     if (endtime1 >= endtime2){
-        cout << "Mergesort is faster." << endl;
+        // cout << "Mergesort is faster." << endl;
         return 1;
     } else {
-        cout << "Selection sort is faster." << endl;
+        // cout << "Selection sort is faster." << endl;
         return 0;
     }
 }
@@ -244,7 +244,7 @@ template<class T> int Solution<T>::compare_time(vector<T> lst){
 // Find the t value for the best performance:
 template<class T> void Solution<T>::find_t(int max){
     int cur_result = 0;
-    int pre_result = 0;
+    int pre_result;
     
     // Loop through the vectors with all possible lengths to find the t:
     // Note: Starting from i = 10 since in small length, the uncertainty is significant.
@@ -254,16 +254,16 @@ template<class T> void Solution<T>::find_t(int max){
         for (int j = 0; j < i; j++){
             test.push_back(rand() % MAX);
         }
-        cout << int(test.size())<<endl;
+        // cout << int(test.size()) << endl;
 
         // Create a class instance and call the functions:
         Solution<int> Test = Solution<int>(test);
         pre_result = cur_result;
-        // cur_result = Test.compare_time(Test.data);
+        cur_result = Test.compare_time(Test.data);
 
         // When the two results are different, we find the t value:
         if (pre_result != cur_result){
-            cout << "The best t is: " << i-1;
+            cout << "The best t is: " << i-1 << endl;
             break;
         }
     }

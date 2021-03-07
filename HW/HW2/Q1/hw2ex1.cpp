@@ -9,7 +9,7 @@ int main(){
     Solution<int> test1 = Solution<int>(vector<int>({1, 3, 2,8, 0, 10, 4, 100, 90}));
     cout << "Test 1:" << endl << "Input: ";
     test1.vec_print(test1.data);
-    cout << "Gold Output:" << "0  1  2  3  4  8  10  90  100" << endl << endl; 
+    cout << "Gold Output:" << "0  1  2  3  4  8  10  90  100" << endl << "--------------" << endl; 
     test1.test(4, 2);
 
     // ============ test 2 ==============
@@ -21,7 +21,8 @@ int main(){
 
     // You could add your own test example
     // ========= test for (iii) ===========
-    Solution<int>::find_t(80);
+    cout << "---------------" << endl;
+    Solution<int>::find_t(3000);
 
     return 0;
 }
