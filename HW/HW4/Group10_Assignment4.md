@@ -33,7 +33,7 @@
 ### So the total complexity is $lgn+O(lglgn)$
 
 ## --***Exercise 2***--
-Please refer to the program in "Q2" to recover our choice of the associative array and the implementation.
+Please refer to the program and pdf files in "Q2" to recover our choice of the associative array and the implementation.
 
 ## --***Exercise 3***--
 #### 3.1
