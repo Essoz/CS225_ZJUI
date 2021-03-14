@@ -10,8 +10,7 @@
 typedef struct Node_t
 {
     int key;
-    int value1;     // Two values in the relation pair, note value1 is the first value in the pair
-    int value2;
+    std::pair<int,int> relation_pair;
 } Node_t;
 
 template<class T> class NumSet
@@ -24,11 +23,11 @@ private:
     int *Set_A; 
     int Set_length;
 
-    // Function that distribute the Relation Set_A into the hash table with length L:
+    // Function that distribute the Relation Set_A (number of pairs is N) into the hash table with length N/L:
     std::vector<std::vector<Node_t*> > Build_Hash(std::vector<std::pair<int,int> > R, int L);
-    // Calculate the key value for a relation pair:
+    // Calculate the key value of a relation pair:
     int Calculate_Key(std::pair<int,int> P);
-    // Build the structure for one pair:
+    // Build the structure for one relation pair:
     Node_t* Build_Str(int key, std::pair<int,int> P);
 };
 
