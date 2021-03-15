@@ -5,7 +5,7 @@
 using std::cout;
 using std::cin;
 
-template<class T> T &AList<T>::operator[](int index)
+template<class T> T &AList<T>::operator[](int index)    //the index starts from 1
 {
     return reprarray[index - 1];
 }
@@ -64,7 +64,7 @@ template<class T> void AList<T>::insert(int index, T value)
     }
     else
     {
-        append(value);
+        append(value);  //insert into the last location
         return;
     }
 }
@@ -82,16 +82,17 @@ template<class T> void AList<T>::allocate(void)
     maxsize = newsize;
     return;
 }
-
-template<class T> void AList<T>::remove(int index)
+//modified by Guo, since here the index start from 0
+//different from the template version
+template<class T> void AList<T>::remove(int index)  
 {
     if ((numitems == maxsize / 4) && (maxsize > minsize))
         deallocate();
-    if (index < numitems)
+    if (index <= numitems)
     {
-        for (int j = index; j < numitems; ++j)
+        for (int j = index; j <= numitems; ++j)
         {
-            reprarray[j-1] = reprarray[j];
+            reprarray[j-2] = reprarray[j-1];
         }
         --numitems;
         return;
@@ -187,27 +188,61 @@ template<class T> bool AList<T>::sublist(AList<T> &list)
 
 //build the max heap using elements in the input array.
 template<class T> void MaxHeap<T>::build_heap(AList<T> &array){
-    //put your code below
+    for (int i = 1; i <= array.getlength(); i++)
+    {
+        this->append(array.getitem(i));   //add elements into heap
+    }
+    for (int i = this->getlength()/2; i >0; i--)
+    {
+        sift_down(i,this->getlength());  //build the max heap
+    }
+    
+    
 }
 
 //sift down the element with index i within the first num_elements elements.
-template<class T> void MaxHeap<T>::sift_down(int i, int num_elements){
-    //put your code below
+template<class T> void MaxHeap<T>::sift_down(int index, int num_elements){
+    int parent = index;
+    int child = 2*parent;    // left child for the default
+    while (child <= num_elements)
+    {
+        if (child + 1 <= num_elements && this->getitem(child) < this->getitem(child + 1))
+        {
+            child++;   //find the biggest child
+        }
+        if (this->getitem(parent) < this->getitem(child) )
+        {
+            swap(parent, child);
+        }
+        parent = child;
+        child = 2*parent;   //swich to the next line 
+    }
+     
+    
 }
 
 //sort the input array using max heap.
 template<class T> void MaxHeap<T>::heap_sort(AList<T> &array){
-    //put your code below
+    //build the max heap
+    this->build_heap(array);
+    for (int i = this->getlength(); i > 1; i--)
+    {
+        swap(1,i);
+        sift_down(1, i-1);
+    }
+    
 }
 
 //swap elements with indices i and j.
 template<class T> void MaxHeap<T>::swap(int i, int j){
-    //put your code below    
+    T temp = this->getitem(i);
+    this->setitem(i,this->getitem(j));
+    this->setitem(j,temp);
 }
 
 //return the root element. 
 template<class T> T MaxHeap<T>::max(){
-    //put your code below
+    return this->getitem(1);
 }
 
 //print all elements in the heap in sequential order.
@@ -224,7 +259,7 @@ int main(){
 
     cout << "\npart1 test\n";
     //please feel free to add more test cases
-    int input_list[10] = {5, 3, 9, 46, 15, 22, 91, 8, 29, 77};
+    int input_list[10] = {77,5, 3, 9, 46, 15, 22, 91, 8, 29, };
     AList<int> input_array;
     for (int i=0; i<10; i++){
         input_array.append(input_list[i]);
@@ -241,9 +276,10 @@ int main(){
     for (int i=0; i<15; i++){
         input_array_2.append(input_list_2[i]);
     }
-    MaxHeap<int> max_heap_2;
+    MaxHeap<int> max_heap_2;    
     max_heap_2.heap_sort(input_array_2);
     max_heap_2.print_elements();
+    cout<<"\n";
 
     return 0;
 }
