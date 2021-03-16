@@ -18,6 +18,11 @@ public:
 // element and member checks, if the element is in the hashtable
     void add(T item);
     void remove(T item);
+
+    // Ex10:
+    void add_new(T item);
+    void delete_new(T item);
+
     bool member(T item);
 // The function display is only used for testing purposes. It shows the size of
 // the hashtable, the number of elements, and displays all entries

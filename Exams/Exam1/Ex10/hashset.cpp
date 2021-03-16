@@ -13,6 +13,9 @@ using std::cout;
 using std::cin;
 using std::hash;
 
+#define UNDEFINED -999999
+#define PLACEHOLDER 999999
+
 /* This defines a constructor */
 template<class T> hashset<T>::hashset(int size)
 {
@@ -91,6 +94,74 @@ template<class T> void hashset<T>::add(T item)
         rehash(newsize);
     }
     return;
+}
+
+template<class T> void hashset<T>::add_new(T item)
+{
+    // Here, kd calls the standard library in C++
+    hash<T> hashfunction; // use the predefined hashfunction to get "key" values
+    int index;
+    index = hashfunction(item) % maxsize; // First determine the position index in the hash table, where the new value is stored, if free.
+    int location1 = -1;  // used to distinguish between undefined entries (null pointer) and placeholders
+    int location2 = -1;
+
+    while (reprarray[index] != 0) // loop through the hash table
+    {
+        // array found, loop through it:
+        for (int i = 0; i < 4; i++)
+        {
+            if (reprarray[index][i] != PLACEHOLDER && reprarray[index][i] == item){
+                return;   // item found; no insertion
+            }
+            
+            // The "location" is used to find the index of first placeholder, since we do not know if the item exists after that placeholder,
+            // we need to store this index first. If no item found, we use this place.
+            if (location1 < 0 && location2 < 0 && reprarray[index][i] == PLACEHOLDER){ // a placeholder object is found; i.e. if the item is not in the hashtable, this will be the place for the insertion
+                location1 = index;
+                location2 = i;
+            }
+
+            // Empty place found
+            if (UNDEFINED == reprarray[index][i])
+            {
+                // No placeholder before
+                if (location1 < 0 && location2 < 0)
+                {
+                    reprarray[index][i] = item;
+                    ++ numitems;
+                }
+                else
+                {
+                    reprarray[location1][location2] = item;
+                    ++ numitems;
+                }
+                return;
+            }
+        }
+
+        // Place not found:
+        index = (index + 1) % maxsize;  // Increase the index
+    }
+
+    // NULL pointer found, no array in that place:
+    T* arr = new T[4];
+    arr[0] = item;
+    for (int i = 1; i < 4; i++)
+    {
+        arr[i] = UNDEFINED;
+    }
+    reprarray[index] = arr;
+    ++ numitems;
+    return;
+
+/* Check for rehash:
+    int load = 100 * numitems / maxsize;
+    if (load >= 75)             // max load factor is exceeded; double the size
+    {
+        int newsize = 2 * numitems;
+        rehash(newsize);
+    }
+*/
 }
 
 template<class T> void hashset<T>::remove(T item)
