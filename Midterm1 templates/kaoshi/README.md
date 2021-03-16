@@ -1,0 +1,8 @@
+- Write your code in ```solution.h``` 
+- If you need additional function, define in the ```solution.h``` also, but modify the other head file accordingly. 
+- File Description:
+  - ```solution.h```: put your solution here.
+  - ```*.h``` : the template deceleration 
+  - ```*_f.h```: template definition except your solution.
+  - ```*.cpp```: test file.
+- Use makefile to compile you code via ```make```.
