@@ -57,13 +57,13 @@ template<class T> void hashset<T>::add(T item)
     hash<T> hashfunction; // use the predefined hashfunction to get "key" values
     int index;
     index = hashfunction(item) % maxsize; // First determine the position index in the hash table, where the new value is stored, if free.
-    int location = -1;  // used to distinguish between undefined entries (null pointer) and placeholders
+    int location = -1;  // location for final insertion
     while (reprarray[index] != 0) // We first check, if the item is already in the hashtable
     {
         if (reprarray[index] != pt_nil && *reprarray[index] == item)
             return;   // item found; no insertion
         if (location < 0 && reprarray[index] == pt_nil) // a placeholder object is found; i.e. if the item is not in the hashtable, this will be the place for the insertion
-            location = index;
+            location = index; // the (potential) loc for inserting the element (if the element is not found in the rest of the sequence) 
         index = (index + 1) % maxsize;
     }
     // after leaving the while loop we either have location < 1, i.e. we store the item at the last examined index (which contains a null pointer),
