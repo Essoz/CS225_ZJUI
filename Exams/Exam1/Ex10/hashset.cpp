@@ -13,22 +13,26 @@ using std::cout;
 using std::cin;
 using std::hash;
 
+#define UNDEFINED -999999
+#define PLACEHOLDER 999999
+
 /* This defines a constructor */
 template<class T> hashset<T>::hashset(int size)
 {
     maxsize = size;
-    if (size < 20)
+    if (size < 20){
         maxsize = 20; // default size is 20; no smaller hashtables are considered
+    }
     numitems = 0; // initially, the hashtable is empty
     reprarray = new T*[maxsize];  // allocate space for the array of pointers
     // the for loop initialises all table entries to be undefined
     for (int i = 0; i < maxsize; i++)
     {
-        reprarray[i] = 0;
+        reprarray[i] = 0;   // We use 0 (NULL) as the undefined pointer (the value of pointer is 0)
     }
     T *pt0 = new T;  // This defines the fixed placeholder pointer
     *pt0 = 0;
-    pt_nil = pt0;
+    pt_nil = pt0;   // The placeholder pointer is the fixed pointer to a declared "zero"
 }
 
 // template<class T> hashset<T>::~hashset(void)
@@ -36,6 +40,10 @@ template<class T> hashset<T>::hashset(int size)
 //     delete[] reprarray;
 // }
 
+// What you need to know for this reload is that kd changes the index again and it return the dereference value
+// 这类运算符重构的调用条件是对实例直接用该符号[]
+// hashset<T> instance;
+// instance[i];
 template<class T> T & hashset<T>::operator[](int index)
 {
     if (index <= 0 || index > maxsize)
@@ -54,25 +62,30 @@ template<class T> T & hashset<T>::operator[](int index)
 
 template<class T> void hashset<T>::add(T item)
 {
+    // Here, kd calls the standard library in C++
     hash<T> hashfunction; // use the predefined hashfunction to get "key" values
     int index;
     index = hashfunction(item) % maxsize; // First determine the position index in the hash table, where the new value is stored, if free.
-    int location = -1;  // location for final insertion
+    int location = -1;  // used to distinguish between undefined entries (null pointer) and placeholders
     while (reprarray[index] != 0) // We first check, if the item is already in the hashtable
     {
         if (reprarray[index] != pt_nil && *reprarray[index] == item)
             return;   // item found; no insertion
+        // The "location" is used to find the index of first placeholder, since we do not know if the item exists after that placeholder,
+        // we need to store this index first. If no item found, we use this place.
         if (location < 0 && reprarray[index] == pt_nil) // a placeholder object is found; i.e. if the item is not in the hashtable, this will be the place for the insertion
-            location = index; // the (potential) loc for inserting the element (if the element is not found in the rest of the sequence) 
-        index = (index + 1) % maxsize;
+            location = index;
+        index = (index + 1) % maxsize;  // Increase the index
     }
     // after leaving the while loop we either have location < 1, i.e. we store the item at the last examined index (which contains a null pointer),
     // otherwise, if location >= 0 holds, we found a placeholder, so the item will be stored at the location of this placeholder
-    if (location < 0)
+    // No placeholder found, we store the index of the NULL pointer
+    if (location < 0){
         location = index;
+    }
     T *pt = new T;
     *pt = item;
-    reprarray[location] = pt;   // store item in the hashtable
+    reprarray[location] = pt;   // store item in the hashtable, we store the pointer of the item
     ++ numitems;
     int load = 100 * numitems / maxsize;
     if (load >= 75)             // max load factor is exceeded; double the size
@@ -81,6 +94,74 @@ template<class T> void hashset<T>::add(T item)
         rehash(newsize);
     }
     return;
+}
+
+template<class T> void hashset<T>::add_new(T item)
+{
+    // Here, kd calls the standard library in C++
+    hash<T> hashfunction; // use the predefined hashfunction to get "key" values
+    int index;
+    index = hashfunction(item) % maxsize; // First determine the position index in the hash table, where the new value is stored, if free.
+    int location1 = -1;  // used to distinguish between undefined entries (null pointer) and placeholders
+    int location2 = -1;
+
+    while (reprarray[index] != 0) // loop through the hash table
+    {
+        // array found, loop through it:
+        for (int i = 0; i < 4; i++)
+        {
+            if (reprarray[index][i] != PLACEHOLDER && reprarray[index][i] == item){
+                return;   // item found; no insertion
+            }
+            
+            // The "location" is used to find the index of first placeholder, since we do not know if the item exists after that placeholder,
+            // we need to store this index first. If no item found, we use this place.
+            if (location1 < 0 && location2 < 0 && reprarray[index][i] == PLACEHOLDER){ // a placeholder object is found; i.e. if the item is not in the hashtable, this will be the place for the insertion
+                location1 = index;
+                location2 = i;
+            }
+
+            // Empty place found
+            if (UNDEFINED == reprarray[index][i])
+            {
+                // No placeholder before
+                if (location1 < 0 && location2 < 0)
+                {
+                    reprarray[index][i] = item;
+                    ++ numitems;
+                }
+                else
+                {
+                    reprarray[location1][location2] = item;
+                    ++ numitems;
+                }
+                return;
+            }
+        }
+
+        // Place not found:
+        index = (index + 1) % maxsize;  // Increase the index
+    }
+
+    // NULL pointer found, no array in that place:
+    T* arr = new T[4];
+    arr[0] = item;
+    for (int i = 1; i < 4; i++)
+    {
+        arr[i] = UNDEFINED;
+    }
+    reprarray[index] = arr;
+    ++ numitems;
+    return;
+
+/* Check for rehash:
+    int load = 100 * numitems / maxsize;
+    if (load >= 75)             // max load factor is exceeded; double the size
+    {
+        int newsize = 2 * numitems;
+        rehash(newsize);
+    }
+*/
 }
 
 template<class T> void hashset<T>::remove(T item)
@@ -111,6 +192,7 @@ template<class T> void hashset<T>::remove(T item)
             }
             return;
         }
+        // item not found
         index = (index + 1) % maxsize;
     }
     cout << item << " is not in the hashtable.\n";
@@ -143,8 +225,10 @@ template<class T> void hashset<T>::rehash(int newsize)
     }
     for (int i = 0; i < maxsize; i++)  // we need to copy all existing entries to the new hash table
     {
+        // The current position in the old hash table is not a NULL pointer nor a placeholder
         if (reprarray[i] != 0 && reprarray[i] != pt_nil)
         {
+            // get that current item
             T item = *reprarray[i];
             hash<T> hashfunction;
             int index = hashfunction(item) % newsize;
