@@ -32,6 +32,7 @@ int main(){
 
     /* Test for all required operation on both inputs, missing operation would be deducted points */
     /* Test for part(i) */
+    std::cout << "Tests for part(i):" << std::endl;
     MultiSet<int>* test1 = new MultiSet<int>(input1, 5);
     MultiSet<int>* test2 = new MultiSet<int>(input2, 11);
     test1->create_hashtable();
@@ -41,15 +42,41 @@ int main(){
     test1->display();
     test1->deletion(1);
     test1->display();
-    pair<int, int>* result = test1->retrieval(1);
-    cout << "Return value is " << result->first << endl;
-    cout << "The multiplicity is " << result->second << endl;
+    test1->retrieval(1);
+
+    test2->insertion(1);
+    test2->display();
+    test2->deletion(1);
+    test2->display();
+    test2->retrieval(1);
 
     MultiSet<int>::setunion(input1, input2, 5, 11);
     MultiSet<int>::intersection(input1, input2, 5, 11);
     MultiSet<int>::difference(input2, input1, 11, 5);
 
     /* Test for part(ii) */
-        // MultiSet_chaining<int> test3, test4;
+    std::cout << "Tests for part(ii):" << std::endl;
+    MultiSet_Chaining<int>* test3 = new MultiSet_Chaining<int>(input1, 5);
+    MultiSet_Chaining<int>* test4 = new MultiSet_Chaining<int>(input2, 11);
+
+    test3->create_hashtable();
+    test4->create_hashtable();
+
+    test3->insertion(1);
+    test3->display();
+    test3->deletion(1);
+    test3->display();
+    test3->retrieval(1);
+
+    test4->insertion(1);
+    test4->display();
+    test4->deletion(1);
+    test4->display();
+    test4->retrieval(1);
+
+    MultiSet_Chaining<int>::setunion(input1, input2, 5, 11);
+    MultiSet_Chaining<int>::intersection(input1, input2, 5, 11);
+    MultiSet_Chaining<int>::difference(input2, input1, 11, 5);
+
     return 0;
 }

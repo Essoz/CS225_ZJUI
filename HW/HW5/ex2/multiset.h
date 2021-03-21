@@ -39,27 +39,33 @@ template<class T> class MultiSet
         std::pair<T, int>* placeholder;     // used as placeholder
 };
 
-/*
-template<class T> MultiSet_Chaining{
+template<class T> class MultiSet_Chaining
+{
     public:
-        MultiSet_Chaining();
-        /* You should add other functions to make the structure work  */
-
-
+        MultiSet_Chaining(T* input_set, int length);
+        /* You should add other functions to make the structure work */
+        void create_hashtable();            // Create a new hashtable with chaining
+        int calculate_hashvalue(T item, int size);
+        void display();
 
         /* The following is required for this assignment */
         /* It is not complete, you should design the APIs by yourself */
-/*        void insertion();
-        void deletion();
-        T retrieval();
+        void insertion(T item);
+        void deletion(T item);
+        std::pair<T, int>* retrieval(T item);
 
-        T* setunion();
-        T* intersection();
-        T* difference();
+        static std::vector<T>** setunion(T* set1, T* set2, int length1, int length2);
+        static std::vector<T>** intersection(T* set1, T* set2, int length1, int length2);
+        static std::vector<T>** difference(T* set1, T* set2, int length1, int length2);
 
     private:
-    int numitems;
-    T* reparray;
+        int set_size;                       // The number of items in the original set
+        T* ori_set;                         // The set after construction
+
+        std::vector<T>** hashtable;      // The hashtable after reorganization
+        int hash_numitems;                   // length of hashtable
+        int hash_maxsize;                   // defines the size of the hashtable
+        void rehash(int newsize);
 };
-*/
+
 #endif /* multiset_h */

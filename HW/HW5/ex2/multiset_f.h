@@ -144,12 +144,14 @@ template<class T> std::pair<T, int>* MultiSet<T>::retrieval(T item)
     while (hashtable[index] != NULL) // again we search for item starting from the index position until we find a null pointer
     {
         if (hashtable[index] != placeholder && hashtable[index]->first == item){
+            cout << "Return value is " << hashtable[index]->first << endl;
+            cout << "The multiplicity is " << hashtable[index]->second << endl << endl;
             return hashtable[index];  // item was found
         }
         index = (index + 1) % hash_maxsize;
     }
 
-    cout << item << " is not in the hashtable.\n";
+    cout << item << " is not in the hashtable.\n" << endl;
     return NULL;  // a null pointer was found, so item is not in the hashtable
 }
 
@@ -315,6 +317,7 @@ template<class T> void MultiSet<T>::display(void)
             cout << "The multiplicity of this element is " << hashtable[i]->second << endl;
         }
     }
+    cout << endl;
     return;
 }
 
@@ -323,3 +326,247 @@ template<class T> void MultiSet<T>::display(void)
 // Tianyu Zhang
 //
 // Constructor:
+template<class T> MultiSet_Chaining<T>::MultiSet_Chaining(T* input_set, int length)
+{
+    // Initalize the attributes of the multiset
+    set_size = length;
+    ori_set = input_set;
+
+    // Initalize the attributes of the hashtable
+    hash_maxsize = length;
+    if (length < 20){
+        hash_maxsize = 20;  // Default size for hashtable
+    }
+    hash_numitems = 0;   // The current number of pairs in hashtable
+    hashtable = new vector<T>*[hash_maxsize];
+    for (int i = 0; i < hash_maxsize; i++){
+        hashtable[i] = NULL;
+    }
+}
+
+// Create the needed hashtable:
+template<class T> void MultiSet_Chaining<T>::create_hashtable()
+{
+    // Loop through all the items in the multiset:
+    for (int i = 0; i < set_size; i++)
+    {
+        T cur_number = ori_set[i];  // Get the current number
+        insertion(cur_number);   // Now we can add the items into the hashtable:
+    }
+    return;
+}
+
+// Calculate the hashvalue:
+template<class T> int MultiSet_Chaining<T>::calculate_hashvalue(T item, int size)
+{
+    hash<T> hashfunction; // use the predefined hashfunction to get "key" values
+    return hashfunction(item) % size;
+}
+
+// Insert a value:
+template<class T> void MultiSet_Chaining<T>::insertion(T item)
+{
+    int index = calculate_hashvalue(item, hash_maxsize); // Calculate the hashvalue
+    // If the corresponding entry is not defined, define it:
+    if (hashtable[index] == NULL){
+        vector<T>* entry = new vector<T>;
+        hashtable[index] = entry;
+        hash_numitems++;
+    }
+    hashtable[index]->push_back(item);   // Add that item into the entry
+    return;
+}
+
+// Delete a value:
+template<class T> void MultiSet_Chaining<T>::deletion(T item)
+{
+    int index = calculate_hashvalue(item, hash_maxsize); // Calculate the hashvalue
+    // If the corresponding entry is not defined, just return:
+    if (hashtable[index] == NULL){
+        cout << item << " is not in the hashtable." << endl;
+        return;
+    } else {
+        // Loop through that vector entry:
+        for (int i = 0; i < int(hashtable[index]->size()); i++)
+        {
+            if (item == hashtable[index]->at(i)){
+                // item found
+                hashtable[index]->erase(hashtable[index]->begin() + i);
+                // If now the entry is empty, undefine that entry:
+                if (0 >= int(hashtable[index]->size())){
+                    hashtable[index] = NULL;
+                    hash_numitems--;
+                }
+                return;
+            }
+        }
+        // item not found
+        cout << item << " is not in the hashtable." << endl;
+        return;
+    }
+}
+
+// Retrieve a value pair:
+template<class T> std::pair<T, int>* MultiSet_Chaining<T>::retrieval(T item)
+{
+    int index = calculate_hashvalue(item, hash_maxsize); // Calculate the hashvalue
+    // If the corresponding entry is not defined, just return:
+    if (hashtable[index] == NULL){
+        cout << item << " is not in the hashtable." << endl << endl;
+        return NULL;
+    } else {
+        int counter = 0;    // The number of that element
+        // Loop through that vector entry:
+        for (int i = 0; i < int(hashtable[index]->size()); i++){
+            if (item == hashtable[index]->at(i)){
+                // item found
+                counter++;
+            }
+        }
+        if (0 == counter){  // Not found item
+            cout << item << " is not in the hashtable." << endl << endl;
+            return NULL;
+        }
+
+        // Create a pair for result:
+        pair<T, int>* result = new pair<T, int>;
+        result->first = item;
+        result->second = counter;
+        cout << "Return value is " << item << endl;
+        cout << "The multiplicity is " << counter << endl << endl;
+        return result;
+    }
+}
+
+// Combine two multisets:
+template<class T> std::vector<T>** MultiSet_Chaining<T>::setunion(T* set1, T* set2, int length1, int length2)
+{
+    // Create a new array with the total length:
+    T* newarray = new T[length1 + length2];
+    // Add all the values into that array:
+    for (int i = 0; i < length1; i++)
+    {
+        newarray[i] = set1[i];
+    }
+
+    for (int i = 0; i < length2; i++)
+    {
+        newarray[length1 + i] = set2[i];
+    }
+
+    // Create a new hashtable:
+    MultiSet_Chaining<T>* Union = new MultiSet_Chaining<T>(newarray, length1 + length2); // ????????
+    Union->create_hashtable();
+    Union->display();
+    return Union->hashtable;
+}
+
+// Intersect two multisets:
+template<class T> std::vector<T>** MultiSet_Chaining<T>::intersection(T* set1, T* set2, int length1, int length2)
+{
+    // Convert the two sets into hashtables:
+    MultiSet_Chaining<T>* multiset1 = new MultiSet_Chaining<T>(set1, length1);
+    MultiSet_Chaining<T>* multiset2 = new MultiSet_Chaining<T>(set2, length2);
+    multiset1->create_hashtable();
+    multiset2->create_hashtable();
+
+    // loop through the first hashtable:
+    for (int i = 0; i < multiset1->hash_maxsize; i++)
+    {
+        if (multiset1->hashtable[i] != NULL)
+            // there is a valid vector, start from the first element:
+        {
+            for (int j = 0; j < int(multiset1->hashtable[i]->size()); j++)
+            {
+                T item = multiset1->hashtable[i]->at(j);
+                // Calculate the position where it shoold be in set2:
+                int index2 = multiset2->calculate_hashvalue(item, multiset2->hash_maxsize);
+                // Check if there is any vector here:
+                int check = 0;
+                if (multiset2->hashtable[index2] != NULL)
+                {
+                    // There is, loop through that vector:
+                    for (int k = 0; k < int(multiset2->hashtable[index2]->size()); k++)
+                    {
+                        // item found, delete that element in vector of the set2:
+                        if (item == multiset2->hashtable[index2]->at(k)){
+                            multiset2->hashtable[index2]->erase(multiset2->hashtable[index2]->begin() + k);
+                            check = 1;
+                            break;  // Go to the next item in the vector of set1
+                        }
+                    }
+                }
+                if (0 == check)
+                {
+                    // Item not found, delete the element in the vector of set1:
+                    multiset1->hashtable[i]->erase(multiset1->hashtable[i]->begin() + j);
+                    j--;
+                }
+            }
+        }
+    }
+    multiset1->display();
+    return multiset1->hashtable;
+}
+
+// Difference two multisets:
+template<class T> std::vector<T>** MultiSet_Chaining<T>::difference(T* set1, T* set2, int length1, int length2)
+{
+    // Convert the two sets into hashtables:
+    MultiSet_Chaining<T>* multiset1 = new MultiSet_Chaining<T>(set1, length1);
+    MultiSet_Chaining<T>* multiset2 = new MultiSet_Chaining<T>(set2, length2);
+    multiset1->create_hashtable();
+    multiset2->create_hashtable();
+
+    // loop through the first hashtable:
+    for (int i = 0; i < multiset1->hash_maxsize; i++)
+    {
+        if (multiset1->hashtable[i] != NULL)
+            // there is a valid vector, start from the first element:
+        {
+            for (int j = 0; j < int(multiset1->hashtable[i]->size()); j++)
+            {
+                T item = multiset1->hashtable[i]->at(j);
+                // Calculate the position where it shoold be in set2:
+                int index2 = multiset2->calculate_hashvalue(item, multiset2->hash_maxsize);
+                // Check if there is any vector here:
+                if (multiset2->hashtable[index2] != NULL)
+                {
+                    // There is, loop through that vector:
+                    for (int k = 0; k < int(multiset2->hashtable[index2]->size()); k++)
+                    {
+                        // item found, delete that element in vector of both sets:
+                        if (item == multiset2->hashtable[index2]->at(k)){
+                            multiset1->hashtable[i]->erase(multiset1->hashtable[i]->begin() + j);
+                            multiset2->hashtable[index2]->erase(multiset2->hashtable[index2]->begin() + k);
+                            j--;
+                            break;  // Go to the next item in the vector of set1
+                        }
+                    }
+                }
+            }
+        }
+    }
+    multiset1->display();
+    return multiset1->hashtable;
+}
+
+// Only for test purposes
+template<class T> void MultiSet_Chaining<T>::display(void)
+{
+    // cout << "The size of the hashtable is: " << hash_maxsize << "\n";
+    cout << "The number of elements in the hashtable is: " << hash_numitems << endl;
+    for (int i = 0; i < hash_maxsize; i++)
+    {
+        if (hashtable[i] != NULL && int(hashtable[i]->size()) > 0){
+            cout << "The entry " << i + 1 << " contains the elements：";
+            for (int j = 0; j < int(hashtable[i]->size()); j++)
+            {
+                cout << hashtable[i]->at(j) << " ";
+            }
+            cout << endl;
+        }
+    }
+    cout << endl;
+    return;
+}
