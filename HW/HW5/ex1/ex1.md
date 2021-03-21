@@ -97,9 +97,39 @@ void FibHeap<T>::Prune(int r){
         // move to the next node
         leaf = leaf->right;
     }
-    
-    
-    
 }
 ```
+
+
+
+> ***Amortized Analysis***
+
+From the procedure described above, we state that the amortized complexity of $Prune(r)$ is $O(1)$. 
+
+First, in terms of the actual time complexity $Prune(r) = O(r) + \text{Cascading Cuts}$
+
+In the following part, we first show that the amortized complexity of $Prune(r)$ with a leaf list is $O(n)$, then the change in operation complexities caused by maintaining the leaf list is discussed.
+$$
+Insert(x) = O(1) +=
+\begin{cases}
+\begin{aligned}
+& O(1) - \text{Pruning node x}\\
+& O(1) - \text{Remove x from the leaf list} \\
+& O(1) - \text{Marking the first non-marked parent Z of x} \\
+& O(1) - \text{Adding the first non-marked parent Z of x to the leaf list} \\
+& O(1) - \text{Cascaded Cuts (possible)}
+\end{aligned}
+\end{cases}
+$$
+First, we charge Insert(x) for the O(1+1) cost when the node x is being removed from the leaf list and pruned. Then we charge Insert(x) O(1+1) for marking the first non-marked parent Z of x and adding Z to the leaf list. Finally, during $Prune(r)$, each node will only have one chance to be cascaded-cut into the root list, thus we charge $Insert$ O(1) for each node. In total we have charged Insert O(5), which maintained Insert's original complexity.  And the operation $Prune(r)$ is only left with $O(1)$.
+
+Next we will show that using a proper method we can maintain a leaf list without affecting the complexities of methods of Fibonacci heaps.
+
+> For $Insert$, it suffices to link the node to be inserted to the leaf list, which takes an extra O(1) complexity. Thus $Insert$ still have complexity $O(1)$.
+
+> For $Union$, it suffices to further link the leaf lists of two heaps, which takes an extra O(1) complexity. Thus $Union$ still have complexity $O(1)$.
+
+> For $Extract\_Min$, when the two nodes of degree 0 are linked, one leaf is removed from the leaf list. Whatever operation is charged for the link is also charged for that leaf list removal. This means that if Y becomes the child of X, then the operation charged for that leaf list removal. This means that if Y becomes the child of X, then the operation charged is the one responsible for Y (for instance, the INSERT of Y) and that "Y" operation is the one paying for X to be removed from the leaf list. This adds O(1) to the cost of the operation that is responsible for Y. 
+
+> For $Decrease\_Key$, all insertions into the leaf list must be due to cascaded-cuts and re-insertions. Thus all insertions into the leaf list can be distributed evenly to each re-insertion by an O(1) complexity. And finally, the first "non-marked" parent of x is going to be marked and inserted into the leaf list, which adds an additional $O(1)$ complexity to $Decrease\_Key$.
 
