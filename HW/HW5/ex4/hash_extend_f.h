@@ -7,7 +7,6 @@ using std::cout;
 using std::cin;
 using std::hash;
 /* Put your implementation here */
-<<<<<<< HEAD
 
 
 /* inthis defines a constructor */
@@ -329,5 +328,3 @@ void HashSet_RH::display(void) // only for test purposes
     }
     return;
 }
-=======
->>>>>>> aae4578d063820c5f35143b6b721115953c023aa
