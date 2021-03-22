@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 class HashSet_RH
 {
     /* Refer to the given code to design the new hashset */
@@ -37,3 +38,30 @@ public:
 // rehash is an internal function to enlarge or shrink the hashtable,
 // if the fill factors 0.75 or 0.25 are exceeded or undershot, resp.
 };
+=======
+
+
+template<class T> HashSet_LCFS{
+    /* Refer to the given code to design the new hashset */
+    public:
+
+
+
+
+
+    private:
+
+};
+
+template<class T> HashSet_RH{
+    /* Refer to the given code to design the new hashset */
+    public:
+
+
+
+
+
+    private:
+
+};
+>>>>>>> aae4578d063820c5f35143b6b721115953c023aa
