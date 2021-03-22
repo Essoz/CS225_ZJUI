@@ -66,6 +66,8 @@ void HashSet_LCFS::add(int item)
         {
            location = index;    //these location has a redident, but it must move out to the new location, the newly input element will occupy this location
            int new_index=index;
+/*modified here*/
+
            while (reprarray[new_index]!=0)
            {
                if(reprarray[new_index] == pt_nil)
@@ -80,6 +82,7 @@ void HashSet_LCFS::add(int item)
     }
     // after leaving the while loop we either have location < 1, i.e. we store the item at the last examined index (which contains a null pointer),
     // otherwise, if location >= 0 holds, we found a placeholder, so the item will be stored at the location of this placeholder
+/*modified down*/
     if (location < 0)
         location = index;
     int *pt = new int;
@@ -109,6 +112,7 @@ void HashSet_RH::add(int item)
             location = index;
         else
         {
+/*modified here*/
            this->add(index, item, distance, reprarray,disarray);
         }
     }
@@ -129,6 +133,9 @@ void HashSet_RH::add(int item)
     }
     return;
 }
+
+/*this is the new add recursive function that I write, it is used in rehash and normal add function*/
+/*It accepts two array, and I send the pointer to it when it is called, so it can modify both reprarray and new array established when rehash is called*/
 void HashSet_RH::add(int index, int item, int distance,int **HashArray, int* DistArray)
     {
 
@@ -141,8 +148,8 @@ void HashSet_RH::add(int index, int item, int distance,int **HashArray, int* Dis
             return;
         }
         else if (distance<=DistArray[index])
-            this->add((index+1)%maxsize,item,distance+1,HashArray, DistArray);
-        else    //now we need to swap the elements, and keep the recursion going
+            this->add((index+1)%maxsize,item,distance+1,HashArray, DistArray);  //find the next line, linear probing
+        else    //now we need to swap the elements, and keep the recursion going,since the robinHood value is bigger for the inseriong element
         {
             int new_distance=DistArray[index];
             int new_item=*HashArray[index]; //take out the resident element
@@ -150,10 +157,12 @@ void HashSet_RH::add(int index, int item, int distance,int **HashArray, int* Dis
             *pt = item;
             HashArray[index] = pt; 
             DistArray[index]=distance;   //enter the new element
-            this->add((index+1)%maxsize,new_item,new_distance+1,HashArray, DistArray);
+            this->add((index+1)%maxsize,new_item,new_distance+1,HashArray, DistArray); // the elemet that poped out need to continue probing in the robinHood manner
         }
         return;
 }
+
+/*didn't change it */
 void HashSet_LCFS::remove(int item)
 {
     hash<int> hashfunction;  // use again the predefined hashfunction
@@ -187,7 +196,8 @@ void HashSet_LCFS::remove(int item)
     cout << item << " is not in the hashtable.\n";
     return;
 }
-void HashSet_RH::remove(int item)
+/*didn't change it */
+void HashSet_RH::remove(int item)   
 {
     hash<int> hashfunction;  // use again the predefined hashfunction
     int index;
@@ -246,6 +256,7 @@ void HashSet_LCFS::rehash(int newsize)
 
             if (newarray[index]!=0)
             {
+/*modified here*/
                 new_index=index;
                 while (newarray[new_index]!=0)
                 {
@@ -255,6 +266,7 @@ void HashSet_LCFS::rehash(int newsize)
             }
             newarray[index] = reprarray[i];  // do the actual copying
             ++ newnum;
+/*modified down*/            
         }
     }
     numitems = newnum;   // change the number of stored elements
@@ -283,7 +295,7 @@ void HashSet_RH::rehash(int newsize)
             hash<int> hashfunction;
             int index = hashfunction(item) % newsize;
                 // recompute the new hash value
-
+/*modified here*/
             if (newarray[index]!=0)
             {
                 this->add(index, item, distance, newarray, newdisarray);
@@ -291,6 +303,7 @@ void HashSet_RH::rehash(int newsize)
             newarray[index] = reprarray[i];  // do the actual copying
             newdisarray[index]=0;
             ++ newnum;
+/*modified down*/
         }
     }
     numitems = newnum;   // change the number of stored elements
@@ -313,6 +326,8 @@ void HashSet_LCFS::display(void) // only for test purposes
     }
     return;
 }
+/*didn't change, since I use another list array to store the robinHood value, so the display way is the same as before, */
+/*as I didn't actully change the structure of hashset*/
 void HashSet_RH::display(void) // only for test purposes
 {
     cout << "inthe size of the hashtable is: " << maxsize << "\n";

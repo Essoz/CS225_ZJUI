@@ -10,7 +10,7 @@ class HashSet_RH
         void display(void);
         int numitems;           // contains the number of elements in the hashtable
         int **reprarray;
-        int *disarray;
+        int *disarray;  // this disarray is used to store the robinHood value of an element, which is ccoresponding to the element in the reprarray
 /* reprarray defines a pointer to (an array of) pointers to values of type T. We will use a null pointer, if an entry is undefined, and a fixed pointer as placeholder for free entries (after remove) */
         int *pt_nil;              // used as placeholder
         int maxsize;            // defines the size of the hashtable
@@ -29,7 +29,7 @@ public:
     void display(void);
     int numitems;           // contains the number of elements in the hashtable
     int **reprarray;
-    int *disarray;
+    int *disarray;  // although it is not used here,   this disarray is used to store the robinHood value of an element, which is ccoresponding to the element in the reprarray
 /* reprarray defines a pointer to (an array of) pointers to values of type T. We will use a null pointer, if an entry is undefined, and a fixed pointer as placeholder for free entries (after remove) */
     int *pt_nil;              // used as placeholder
     int maxsize;            // defines the size of the hashtable
