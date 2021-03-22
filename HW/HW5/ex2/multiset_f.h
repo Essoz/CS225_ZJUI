@@ -67,6 +67,7 @@ template<class T> void MultiSet<T>::insertion(T item)
     {
         if (hashtable[index] != placeholder && hashtable[index]->first == item){
             hashtable[index]->second++; // item found; increase the multiplicity by 1
+            // std::cout << "yes" << std::endl;
             return;
         }
 
@@ -93,6 +94,7 @@ template<class T> void MultiSet<T>::insertion(T item)
         int hash_newsize = 2 * hash_numitems;
         rehash(hash_newsize);
     }
+    // std::cout << "no" << std::endl;
     return;
 }
 
@@ -158,24 +160,53 @@ template<class T> std::pair<T, int>* MultiSet<T>::retrieval(T item)
 // Combine two multisets:
 template<class T> std::pair<T, int>** MultiSet<T>::setunion(T* set1, T* set2, int length1, int length2)
 {
-    // Create a new array with the total length:
-    T* newarray = new T[length1 + length2];
-    // Add all the values into that array:
-    for (int i = 0; i < length1; i++)
-    {
-        newarray[i] = set1[i];
-    }
+    // Convert the two sets into hashtables:
+    MultiSet<T>* multiset1 = new MultiSet<T>(set1, length1);
+    MultiSet<T>* multiset2 = new MultiSet<T>(set2, length2);
+    multiset1->create_hashtable();
+    multiset2->create_hashtable();
 
-    for (int i = 0; i < length2; i++)
+    // loop through the second hashtable:
+    for (int i = 0; i < multiset2->hash_maxsize; i++)
     {
-        newarray[length1 + i] = set2[i];
+        if (multiset2->hashtable[i] != NULL && multiset2->hashtable[i] != multiset2->placeholder)
+            // there is a valid pair, then search for the first hashtable starting from the corresponding index
+        {
+            T item = multiset2->hashtable[i]->first;
+            int index1 = multiset1->calculate_hashvalue(item, multiset1->hash_maxsize); // Calculate the hashvalue of the current item in the other hashtable
+            int check = 0;  // check if the item is in the hashtable
+            for (int j = index1; j < multiset1->hash_maxsize; j++)
+            {
+                // std::cout << "check" << std::endl;
+                if (multiset1->hashtable[j] != NULL && multiset1->hashtable[j] != multiset1->placeholder 
+                    && multiset2->hashtable[i]->first == multiset1->hashtable[j]->first)
+                    // Match pair found, update the first hashtable
+                {
+                    if (multiset2->hashtable[i]->second > multiset1->hashtable[j]->second)
+                    {
+                        multiset1->hashtable[j]->second = multiset2->hashtable[i]->second;
+                    }
+                    check = 1;
+                    break;
+                }
+                // std::cout << "???" << std::endl;
+            }
+            // No match pair found, insert that pair into the hashtable1:
+            if (0 == check)
+            {
+                // We need to do insertion for several times:
+                for (int mult = 0; mult < multiset2->hashtable[i]->second; mult++)
+                {
+                    // std::cout << multiset2->hashtable[i]->second << std::endl;
+                    // std::cout << "zz" << std::endl;
+                    multiset1->insertion(item);
+                    // std::cout << "zz" << std::endl;
+                }
+            }
+        }
     }
-
-    // Create a new hashtable:
-    MultiSet<T>* Union = new MultiSet<T>(newarray, length1 + length2); // ????????
-    Union->create_hashtable();
-    Union->display();
-    return Union->hashtable;
+    multiset1->display();
+    return multiset1->hashtable;
 }
 
 // Intersect two multisets:
@@ -191,10 +222,12 @@ template<class T> std::pair<T, int>** MultiSet<T>::intersection(T* set1, T* set2
     for (int i = 0; i < multiset1->hash_maxsize; i++)
     {
         if (multiset1->hashtable[i] != NULL && multiset1->hashtable[i] != multiset1->placeholder)
-            // there is a valid pair, then search for the second hashtable
+            // there is a valid pair, then search for the second hashtable starting from the corresponding index
         {
-            int check = 0;
-            for (int j = 0; j < multiset2->hash_maxsize; j++)
+            T item = multiset1->hashtable[i]->first;
+            int index2 = multiset2->calculate_hashvalue(item, multiset2->hash_maxsize); // Calculate the hashvalue of the current item in the other hashtable
+            int check = 0;  // check if the item is in the hashtable
+            for (int j = index2; j < multiset2->hash_maxsize; j++)
             {
                 // std::cout << "check" << std::endl;
                 if (multiset2->hashtable[j] != NULL && multiset2->hashtable[j] != multiset2->placeholder 
@@ -245,7 +278,9 @@ template<class T> std::pair<T, int>** MultiSet<T>::difference(T* set1, T* set2, 
         if (multiset1->hashtable[i] != NULL && multiset1->hashtable[i] != multiset1->placeholder)
             // there is a valid pair, then search for the second hashtable
         {
-            for (int j = 0; j < multiset2->hash_maxsize; j++)
+            T item = multiset1->hashtable[i]->first;
+            int index2 = multiset2->calculate_hashvalue(item, multiset2->hash_maxsize); // Calculate the hashvalue of the current item in the other hashtable
+            for (int j = index2; j < multiset2->hash_maxsize; j++)
             {
                 if (multiset2->hashtable[j] != NULL && multiset2->hashtable[j] != multiset2->placeholder 
                     && multiset1->hashtable[i]->first == multiset2->hashtable[j]->first)
@@ -441,24 +476,63 @@ template<class T> std::pair<T, int>* MultiSet_Chaining<T>::retrieval(T item)
 // Combine two multisets:
 template<class T> std::vector<T>** MultiSet_Chaining<T>::setunion(T* set1, T* set2, int length1, int length2)
 {
-    // Create a new array with the total length:
-    T* newarray = new T[length1 + length2];
-    // Add all the values into that array:
-    for (int i = 0; i < length1; i++)
-    {
-        newarray[i] = set1[i];
-    }
+    // Convert the two sets into hashtables:
+    MultiSet_Chaining<T>* multiset1 = new MultiSet_Chaining<T>(set1, length1);
+    MultiSet_Chaining<T>* multiset2 = new MultiSet_Chaining<T>(set2, length2);
+    multiset1->create_hashtable();
+    multiset2->create_hashtable();
 
-    for (int i = 0; i < length2; i++)
+    // loop through the second hashtable:
+    for (int i = 0; i < multiset2->hash_maxsize; i++)
     {
-        newarray[length1 + i] = set2[i];
+        // std::cout << "test" << std::endl;
+        if (multiset2->hashtable[i] != NULL)
+            // there is a valid vector, start from the first element:
+        {
+            while (0 < int(multiset2->hashtable[i]->size()))
+            {
+                T item = multiset2->hashtable[i]->at(0);
+                // Calulate the number of this element in the vector
+                int count = 0;
+                for (int c = 0; c < int(multiset2->hashtable[i]->size()); c++){
+                    if (multiset2->hashtable[i]->at(c) == item){
+                        count++;
+                        multiset2->hashtable[i]->erase(multiset2->hashtable[i]->begin() + c);   // delete the item that has been counted
+                        c--;
+                    }
+                }
+                // Calculate the position where this item shoold be in set1:
+                int index1 = multiset1->calculate_hashvalue(item, multiset1->hash_maxsize);
+                // Check if there is any vector here:
+                if (multiset1->hashtable[index1] != NULL)
+                {
+                    // There is, loop through that vector:
+                    for (int k = 0; k < int(multiset1->hashtable[index1]->size()); k++)
+                    {
+                        // item found, decrease the counter by 1:
+                        if (item == multiset1->hashtable[index1]->at(k)){
+                            count--;
+                            if (0 >= count)
+                            // no need to loop now since set1 has larger multiplicity
+                            {
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (0 < count)
+                {
+                    // Item in set2 has larger multiplicity, insert this element with remaining multiplicity in the vector of set1:
+                    for (int mult = 0; mult < count; mult++)
+                    {
+                        multiset1->insertion(item);
+                    }
+                }
+            }
+        }
     }
-
-    // Create a new hashtable:
-    MultiSet_Chaining<T>* Union = new MultiSet_Chaining<T>(newarray, length1 + length2); // ????????
-    Union->create_hashtable();
-    Union->display();
-    return Union->hashtable;
+    multiset1->display();
+    return multiset1->hashtable;
 }
 
 // Intersect two multisets:
