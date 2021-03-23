@@ -52,6 +52,7 @@ int main(){
 
     MultiSet<int>::setunion(input1, input2, 5, 11);
     MultiSet<int>::intersection(input1, input2, 5, 11);
+    // Difference here means set2 - set1:
     MultiSet<int>::difference(input2, input1, 11, 5);
 
     /* Test for part(ii) */
@@ -76,6 +77,7 @@ int main(){
 
     MultiSet_Chaining<int>::setunion(input1, input2, 5, 11);
     MultiSet_Chaining<int>::intersection(input1, input2, 5, 11);
+    // Difference here means set2 - set1:
     MultiSet_Chaining<int>::difference(input2, input1, 11, 5);
 
     return 0;
