@@ -2,13 +2,19 @@
 
 ## -- ***Exercise 1***  --
 
-#### 1.1
+#### - ***1.1*** -
 
-To implement $Change\_Key$, we make use of $Decrease\_Key$. Note that although $Decrease\_Key$ anticipated $k<x.key$, we assume that it can accept input $k>x.key$ and correctly modify the value of x.key despite further cut might be necessary.
+ <!-- To implement $Change\_Key$, we make use of $Decrease\_Key$. Note that although $Decrease\_Key$ anticipated $k<x.key$, we assume that it can accept input $k>x.key$ and correctly modify the value of x.key despite further cut might be necessary. -->
 
 > **Algorithm Description**
+1. If $k < x\rightarrow key$, call $DecreaseKey$.
+2. If $k = x\rightarrow key$, do nothing.
+3. If $k > x\rightarrow key$, execute the following steps   
+   1. Cut the subtree rooted at x and re-insert x into the heap.
+   2. Traverse through the child list of x. For $child_i$, check the condition $child_i\rightarrow key \geq x\rightarrow key$. 
+   3. If the condition fails, cut the subtree rooted at $child_i$ and re-insert $child_i$ into the heap.
 
-```c
+<!-- ```c
 if (k < x->key){
     // this situation is handled by decrease_key
     DecreaseKey(x,k);
@@ -35,7 +41,7 @@ if (k < x->key){
         }	        
     }
 }
-```
+``` -->
 
 > Amortized Analysis
 
@@ -43,17 +49,18 @@ For the case where $k<x\rightarrow key$, the operation degenerates to $DecreaseK
 
 For the case where $k = x\rightarrow key$, the operation is in $O(1)$ since no actual operations are executed and $\phi(H') - \phi(H) = 0$
 
-For the case where $k > x \rightarrow key$, the operation is in $O(\log(n))$ where n denotes the number of items. 
+**For the case where $k > x \rightarrow key$, the operation is in $O(x\rightarrow degree$, further bounded $O(\log(n))$ where n denotes the number of items, since it suffices to traverse the entire child list of x.**
 
-> Traversing through the root
+> Further Explanation
+
+If the child list can be pre-sorted in ascending order, then we can have amortized complexity of $O(1)$ since only children smaller than x needs to be checked and we can charge the cost to the insertion of $child_i$ respectively. **However, maintaining the order of every child list will affect the complexity of consolidation**. 
+
+In addition, we cannot charge the cost of checking child lists to insertions within a bounded, constant amount. Hence the worst-case (k>x.key and x.degree = log(n)) actual cost of $ChangeKey$ has to be at least $O(\log(n))$. And it is trivial to see that all other operations' amortized complexity remains unchanged.
 
 
 
 
-
-Another option: just concatenate the child list of x to the root list, which obviously takes $O(1)$  
-
-#### 1.2
+#### - ***1.2*** -
 
 > Preparations
 
@@ -129,7 +136,7 @@ Next we will show that using a proper method we can maintain a leaf list without
 
 > For $Union$, it suffices to further link the leaf lists of two heaps, which takes an extra O(1) complexity. Thus $Union$ still have complexity $O(1)$.
 
-> For $Extract\_Min$, when the two nodes of degree 0 are linked, one leaf is removed from the leaf list. Whatever operation is charged for the link is also charged for that leaf list removal. This means that if Y becomes the child of X, then the operation charged for that leaf list removal. This means that if Y becomes the child of X, then the operation charged is the one responsible for Y (for instance, the INSERT of Y) and that "Y" operation is the one paying for X to be removed from the leaf list. This adds O(1) to the cost of the operation that is responsible for Y. 
+> For $Extract\_Min$, extra costs are possibly taken because during consolidation, half of nodes that are both in the root list and the leaf list (i.e. heaps with degree = 0) will be removed from the leaf list. However, since we know that if a degree-0 node is in the root list, there must have been a previous insertion (either insertion or re-insertions caused by extract-min, decrease-key or delete). Hence we can charge the extra cost of removing nodes from the leaf list to the insertions that are responsible for nodes respectively (O(1) for each node). Hence the complexity is not affected.
 
 > For $Decrease\_Key$, all insertions into the leaf list must be due to cascaded-cuts and re-insertions. Thus all insertions into the leaf list can be distributed evenly to each re-insertion by an O(1) complexity. And finally, the first "non-marked" parent of x is going to be marked and inserted into the leaf list, which adds an additional $O(1)$ complexity to $Decrease\_Key$.
 
