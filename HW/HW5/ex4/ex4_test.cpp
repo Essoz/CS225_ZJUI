@@ -52,7 +52,7 @@ int main(){
     }
 //    testExample0.display();   //if you want to see the content
     finish0=clock();
-    cout<<"time of RH hashing add performance : "<<(finish0-start0)<<"ms"<<endl;
+    cout<<"time of ordinary hashing add performance : "<<(finish0-start0)<<"ms"<<endl;
 
     return 0; 
 }
