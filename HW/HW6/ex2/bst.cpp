@@ -177,11 +177,6 @@ template<class T> void BST<T>::_display(node<T> * pt)
 }
 
 
-
-
-
-
-
 /* ASSIGNMENT 6 - EXERCISE 2 
  * The delete operation on binary search trees presented in the lectures merges the two successor trees, 
  * when an element labelling a non-leaf vertex is deleted. One might as well re-insert all the elements.
@@ -189,18 +184,56 @@ template<class T> void BST<T>::_display(node<T> * pt)
  * 
  * The input and output here are the same as _delete. 
  * You may follow the structure of _delete but re-inserting all the elements instead of merging. */
- template<class T> node<T> *BST<T>::_delete_with_reinsert(node<T> *pt, T val)
+template<class T> node<T> *BST<T>::_delete_with_reinsert(node<T> *pt, T val)
 {
-    
 
-   
+    /* _delete_with_reinsert searches recursively for the node with the given value val. If a nullpointer is reached, 
+        val does not appear in the BST, so no change is made. */
+    if (pt == 0)
+    {
+        return pt;
+    }
+    /* If the value val is found, all nodes in the left and right successor trees must be reinserted. */
+    if ((*pt).getdata() == val)
+    {
+        // First, cut the left and right subtree out:
+        node<T>* left = pt->getleft();
+        node<T>* right = pt->getright();
+        // Second, delete this node:
+        delete pt;
+        pt = NULL;      
+        
+        // Recursively reinsert all the elements that are in the left subtree:
+        // NOTE: With the property of BST, all the nodes in the left and right subtrees will start reinserting from the position pointed by pt:
+        while (left != NULL)
+        {
+            pt = _insert(pt, left->getdata());
+            left = _delete_with_reinsert(left, left->getdata());
+        }
+
+        // Also for the right subtree:
+        while (right != NULL)
+        {
+            pt = _insert(pt, right->getdata());
+            right = _delete_with_reinsert(right, right->getdata());
+        }
+        return pt;
+    }
+    /* The recursive descent follows the left subtree or the right subtree. */
+    if (val < (*pt).getdata())
+    {
+        pt->setleft(_delete_with_reinsert((*pt).getleft(), val));
+    }
+    else
+    {
+        pt->setright(_delete_with_reinsert((*pt).getright(), val));
+    }
+    return pt;
 }
 
 /* analogous to BST<T>::remove */
 template<class T> void BST<T>::remove_with_reinsert(T item)
 {
-
+    root = _delete_with_reinsert(root, item);
     return;
 }
-
-
