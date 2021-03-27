@@ -12,6 +12,7 @@
 using std::cout;
 using std::cin;
 using std::hash;
+using std::endl;
 
 /* This defines a constructor */
 template<class T> hashset<T>::hashset(int size)
@@ -19,10 +20,12 @@ template<class T> hashset<T>::hashset(int size)
     maxsize = size;
     if (size < 20)
         maxsize = 20; // default size is 20; no smaller hashtables are considered
+/*modified here*/
+    extrasize=maxsize/2;    //set the m' size, set it to the possible maxsize;
     numitems = 0; // initially, the hashtable is empty
-    reprarray = new T*[maxsize];  // allocate space for the array of pointers
+    reprarray = new T*[maxsize+extrasize];  // allocate space for the array of pointers
     // the for loop initialises all table entries to be undefined
-    for (int i = 0; i < maxsize; i++)
+    for (int i = 0; i < maxsize+extrasize; i++)
     {
         reprarray[i] = 0;
     }
@@ -38,7 +41,7 @@ template<class T> hashset<T>::hashset(int size)
 
 template<class T> T & hashset<T>::operator[](int index)
 {
-    if (index <= 0 || index > maxsize)
+    if (index <= 0 || index > maxsize+extrasize)
     {
         cout << "Index error: index out of range\n";
         exit(EXIT_FAILURE);
@@ -64,7 +67,8 @@ template<class T> void hashset<T>::add(T item)
             return;   // item found; no insertion
         if (location < 0 && reprarray[index] == pt_nil) // a placeholder object is found; i.e. if the item is not in the hashtable, this will be the place for the insertion
             location = index;
-        index = (index + 1) % maxsize;
+/*modified here*/
+        index++;
     }
     // after leaving the while loop we either have location < 1, i.e. we store the item at the last examined index (which contains a null pointer),
     // otherwise, if location >= 0 holds, we found a placeholder, so the item will be stored at the location of this placeholder
@@ -86,14 +90,14 @@ template<class T> void hashset<T>::add(T item)
 template<class T> void hashset<T>::remove(T item)
 {
     hash<T> hashfunction;  // use again the predefined hashfunction
-    int index;
-    index = hashfunction(item) % maxsize;
-    while (reprarray[index] != 0)  // same as for add we search for item in the hashtable; the search starts at the designated hash value, and stops when we find a null pointer
+/*modified here*/
+    int index=0;    // in the new hash table, we need to serch from the header
+    while (index < maxsize+extrasize)  // same as for add we search for item in the hashtable; the search starts at the designated hash value, and stops when we find a null pointer
     {
-        if (reprarray[index] != pt_nil && *reprarray[index] == item)
+        if (reprarray[index] != pt_nil && reprarray[index]!=0 && *reprarray[index] == item)
                     // item found
         {
-            int nextindex = (index + 1) % maxsize;
+            int nextindex = index+1;
             /* check the next entry, if it is a null pointer; if yes, we can overwrite item by a null pointer; otherwise we use a placeholder, i.e. the pointer pt_nil */
             if (reprarray[nextindex] == 0)
                 reprarray[index] = 0;
@@ -111,7 +115,7 @@ template<class T> void hashset<T>::remove(T item)
             }
             return;
         }
-        index = (index + 1) % maxsize;
+        index++;
     }
     cout << item << " is not in the hashtable.\n";
     return;
@@ -120,13 +124,13 @@ template<class T> void hashset<T>::remove(T item)
 template<class T> bool hashset<T>::member(T item)
 {
     hash<T> hashfunction;  // use the "key" function for the type T (if defined)
-    int index;
-    index = hashfunction(item) % maxsize;
-    while (reprarray[index] != 0) // again we search for item starting from the index position until we find a null pointer
+    int index=0;
+    while (index < maxsize+extrasize) // again we search for item starting from the index position until we find a null pointer
     {
-        if (reprarray[index] != pt_nil && *reprarray[index] == item)
+        if (reprarray[index]!=pt_nil && reprarray[index]!= 0 && *reprarray[index] == item){
             return true;  // item was found
-        index = (index + 1) % maxsize;
+        }
+        index++;
     }
     return false;  // a null pointer was found, so item is not in the hashtable
 }
@@ -136,12 +140,13 @@ template<class T> void hashset<T>::rehash(int newsize)
     if (newsize < 20)
         newsize = 20;
     int newnum = 0;
-    T **newarray = new T*[newsize];   // allocate space for a new hashtable of the given new size
-    for (int i = 0; i < newsize; i++)
+    int newextra=newsize/2;
+    T **newarray = new T*[newsize+newextra];   // allocate space for a new hashtable of the given new size
+    for (int i = 0; i < newsize+newextra; i++)
     {
         newarray[i] = 0;   // initialise the new hashtable with only null pointers
     }
-    for (int i = 0; i < maxsize; i++)  // we need to copy all existing entries to the new hash table
+    for (int i = 0; i < maxsize+extrasize; i++)  // we need to copy all existing entries to the new hash table
     {
         if (reprarray[i] != 0 && reprarray[i] != pt_nil)
         {
@@ -151,7 +156,7 @@ template<class T> void hashset<T>::rehash(int newsize)
                 // recompute the new hash value
             while (newarray[index] != 0)  // find the first free place, where the entry can be stored in the new hashtable
             {
-                index = (index + 1) % newsize;
+                index++;
             }
             newarray[index] = reprarray[i];  // do the actual copying
             ++ newnum;
@@ -160,11 +165,13 @@ template<class T> void hashset<T>::rehash(int newsize)
     numitems = newnum;   // change the number of stored elements
     reprarray = newarray;   // make the new hashtable the one of the hashset object
     maxsize = newsize;   // update the size
+    extrasize=newextra;
 }
 
 template<class T> void hashset<T>::display(void) // only for test purposes
 {
     cout << "The size of the hashtable is: " << maxsize << "\n";
+    cout << "The size of the extratable is: " << extrasize << "\n";
     cout << "The number of elements in the hashtable is: " << numitems << "\n";
     for (int i = 0; i < maxsize; ++i)
     {
@@ -174,6 +181,16 @@ template<class T> void hashset<T>::display(void) // only for test purposes
             cout << "The entry " << i + 1 << " is free.\n";
         else
             cout << "The entry " << i + 1 << " is " << *reprarray[i] << " .\n";
+    }
+    cout<<"extrasize:"<<endl;
+    for (int i = 0; i < extrasize; ++i)
+    {
+        if (reprarray[maxsize+i] == 0)
+            cout << "The entry " << maxsize+i + 1 << " is undefined.\n";
+        else if (reprarray[maxsize+i] == pt_nil)
+            cout << "The entry " << maxsize+i + 1 << " is free.\n";
+        else
+            cout << "The entry " << maxsize+i + 1 << " is " << *reprarray[maxsize+i] << " .\n";
     }
     return;
 }

@@ -187,8 +187,45 @@ template<class T> void hashset<T>::display(void) // only for test purposes
  * element into the freed space. 
  * 
  * You may follow the structure of remove. */
+
+/*modified from the normal remove case, just made change from line 206*/
 template<class T> void hashset<T>::remove_modified(T item)
 {
-    
+    hash<T> hashfunction;  // use again the predefined hashfunction
+    int index;
+    index = hashfunction(item) % maxsize;
+    while (reprarray[index] != 0)  // same as for add we search for item in the hashtable; the search starts at the designated hash value, and stops when we find a null pointer
+    {
+        if (*reprarray[index] == item)
+                    // item found
+        {
+            int nextindex = (index + 1) % maxsize;
+            /* check the next entry, if it is a null pointer; if yes, we can overwrite item by a null pointer; otherwise we use a placeholder, i.e. the pointer pt_nil */
+            if (reprarray[nextindex] == 0)
+                reprarray[index] = 0;
+//modified here, if the next pointer is not empty, we have to move all parts that start from this next index by one position forward;
+            else
+                reprarray[index] = 0;
+                while (reprarray[nextindex] != 0)
+                {
+                    reprarray[(nextindex-1)% maxsize]=reprarray[nextindex];
+                    nextindex++;
+                }
+                reprarray[(nextindex-1)% maxsize]=0;    //remove the last elements in this segment part;
+            --numitems;
+            int load = 100 * numitems / maxsize;
+            if (load <= 25)
+                // if the min load factor is undershot, we shrink the hashtable, but the size shall always be >= 20
+            {
+                int newsize = numitems;
+                if (newsize < 20)
+                    newsize = 20;
+                rehash(newsize);
+            }
+            return;
+        }
+        index = (index + 1) % maxsize;
+    }
+    cout << item << " is not in the hashtable.\n";
+    return;
 }
-

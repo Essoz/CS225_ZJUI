@@ -29,6 +29,7 @@ private:
 /* reprarray defines a pointer to (an array of) pointers to values of type T. We will use a null pointer, if an entry is undefined, and a fixed pointer as placeholder for free entries (after remove) */
     T *pt_nil;              // used as placeholder
     int maxsize;            // defines the size of the hashtable
+    int extrasize;
     void rehash(int newsize);
 // rehash is an internal function to enlarge or shrink the hashtable,
 // if the fill factors 0.75 or 0.25 are exceeded or undershot, resp.
