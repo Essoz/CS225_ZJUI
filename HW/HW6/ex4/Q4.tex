@@ -53,24 +53,34 @@
 \section*{Q4.(iv)}
     The AVL tree mentioned in this task has height $h$.\\
     For \emph{insert} operation, the worst case happens when we need to reorganize the subtree every time we increase or decrease "number\_balance".
-    At the root node with height $h$, we need to apply one \emph{reorganize} operation at height $h-1$. At the root node with height $h-1$, we need to 
-    apply one \emph{reorganize} operation at height $h-2$. So on and so forth, until we complete insertion at leaf node.\\
+    At the root node with height $h$, we need to apply one \emph{reorganize} operation at height $h$. At the root node with height $h-1$, we need to 
+    apply one \emph{reorganize} operation at height $h-1$. So on and so forth, until we complete insertion at leaf node.\\
     For \emph{delete} operation, the worst case also happens when we need to reorganize the subtree every time we increase or decrease 
-    "number\_balance". At the root node with height $h$, we need to apply one \emph{reorganize} operation at height $h-1$. At the root node with height 
-    $h-1$, we need to apply one \emph{reorganize} operation at height $h-2$. So on and so forth.\\
+    "number\_balance". At the root node with height $h$, we need to apply one \emph{reorganize} operation at height $h$. At the root node with height 
+    $h-1$, we need to apply one \emph{reorganize} operation at height $h-1$. So on and so forth.\\
     Furthermore, every \emph{reorganize} operation contains an \emph{insert} operation and a \emph{delete} operation at the same level. 
     So we have following recurrence equation:
 \begin{align*}
-    I(h) &= R(h-1) + R(h-2) + \ldots + R(1) + C_{1}\\
-    D(h) &= R(h-1) + R(h-2) + \ldots + R(1) + C_{2}\\
+    I(h) &= R(h) + R(h-1) + R(h-2) + \ldots + R(1) + C_{1}\\
+    D(h) &= R(h) + R(h-1) + R(h-2) + \ldots + R(1) + C_{2}\\
     R(h) &= D(h) + I(h) + C_{3}
 \end{align*}
     By solving the above equations, we get:
 \begin{align*}
-    R(h) &= C * \sum_{i = 1}^{h-1} i!\\
-    I(h) &= D(h) = C * \sum_{i = 1}^{h-1} \sum_{j = 1}^{i} j! + C'
+    R(h) &= C * \sum_{i = 1}^{h} i!\\
+    I(h) &= D(h) = C * \sum_{i = 1}^{h} \sum_{j = 1}^{i} j! + C'
+\end{align*}
+    For AVL tree with median property, it is perfectly balanced, so we have: $h = log_{2}n$. And the complexity can be rewritten as:
+\begin{align*}
+    I(h) &= D(h) = C * \sum_{i = 1}^{log_{2}n} \sum_{j = 1}^{i} j! + C'
 \end{align*}
     Besides, before reorganization, both \emph{insert} and \emph{delete} operations has complexity $O(log_{2}n)$, so the worst case complexity for 
-    \emph{insert} and \emph{delete} is 
-$$O(\sum_{i = 1}^{h-1} \sum_{j = 1}^{i} j!)$$
+    \emph{insert} and \emph{delete} is:
+\begin{align*}
+    O(C * \sum_{i = 1}^{log_{2}n} \sum_{j = 1}^{i} j! + C' + log_{2}n)
+    &= O(\sum_{i = 1}^{log_{2}n} \sum_{j = 1}^{i} j!)
+\end{align*}
+    Note in this result, the \emph{reorganize} operations of the AVL tree has the largest complexity. The outer sum operator is the sum of 
+    all the \emph{reorganize} operations from depth 1 to $h$. The inner sum operator represents the adjustment of the tree by deleting the 
+    (pre)successor and reinsert the root node during one \emph{reorganize} operation at depth $i$.
 \end{document}
