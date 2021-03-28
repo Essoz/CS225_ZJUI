@@ -1,0 +1,76 @@
+\documentclass{article}
+\usepackage{amsmath}
+\begin{document}
+\section*{Q4.(i)}
+    We will use prove by contradiction to show that if an AVL tree satisfies the median property, then it's
+    perfectly balanced. To do this, we will show that the $h-1$ layer is fully filled.\\
+    Consider an AVL tree with depth $h$, since the tree satisfies median property, then for any parent node, its left 
+    subtree will have the same or one more node than that in tht right subtree.\\
+    There must be at least a leave node at depth $h$, taken its grandparent node at depth $h-2$ as node $A$. As defined for AVL tree,
+    node $A$ must have two children. Choose randomly another node at depth $h-2$ which has no or one children as node $B$, we will
+    have two conditions:
+\begin{itemize}
+    \item If the node $B$ have only one children, taken the ansector node of node $A$ and node $B$ as node $C$, then it's clear that
+          the difference of nodes between the two subtrees of node $C$ is no less than 2, violating the median property.
+    \item If the node $B$ have no children, then the difference of nodes mentioned before will at leat be 3.
+\end{itemize}
+    So we have proved that the $h-1$ layer of an AVL tree with median property is fully filled. Thus show that the tree is perfectly balanced.\\
+
+\section*{Q4.(ii)}
+    We define the modified \emph{insert} operation as below:\\
+    Instead of "balance" stored in one node, we use "number\_balance" to preserve the AVL tree. If the nodes in the left subtree is $k$
+    more than that in the right subtree, the "number\_balance" is set to $k$. So from this defination, the only vaild number for "number\_balance"
+    are 1 or 0.\\
+    Then we apply the previous \emph{insert} operation as usual. If the insertion happens to be in the left subtree, we increase the
+    "number\_balance" by 1, otherwise we decrease the "number\_balance" by 1. After inserting, we check "number\_balance" for all the nodes.\\
+    So, there are two exceptional cases:
+\begin{itemize}
+    \item If the "number\_balance" is 2 after increasing, we need to perform \emph{reorganize} operation. First, find the presuccessor of the 
+          current root node. Then, we replace the current root node with its presuccessor (Apply new \emph{delete} operation on the presuccessor) 
+          and insert this root node to the right subtree. After this step, we can decrease the "number\_balance" by 2 at the new root node and the "number\_balance" 
+          becomes 0, satisfying the median property. Then, we move on checking.
+    \item If the "number\_balance" is -1 after decreasing, the procedure is similar to the first case. We just find the successor instead of 
+          presuccessor and adjust the right subtree instead of left subtree.
+\end{itemize}
+
+\section*{Q4.(iii)}
+    We define the modified \emph{delete} operation as below:\\
+    We apply the previous \emph{delete} operation as usual. If the deletion happens to be in the left subtree, we decrease the
+    "number\_balance" by 1, otherwise we increase the "number\_balance" by 1. After we delete and merge its subtrees, we check the 
+    "number\_balance" of all nodes.\\
+    So, there are two exceptional cases as well:
+\begin{itemize}
+    \item If the "number\_balance" is 2 after increasing, we need to we need to perform \emph{reorganize} operation. First, find the presuccessor 
+          of the current root node. Then, we replace the current root node with its presuccessor (Apply new \emph{delete} operation on the 
+          presuccessor) and insert this root node to the right subtree. After this step, we can decrease the "number\_balance" by 2 at the new 
+          root node and the "number\_balance" becomes 0, satisfying the median property. After we delete the presuccessor, the median property 
+          in the left subtree may no longer hold. So we need to first dispel the influence of the left subtree after deleting the presuccessor 
+          by recursively applying the new \emph{reorganize} operation. When the effect is dispelled, we move on checking.
+    \item If the "number\_balance" is -1 after decreasing, the procedure is similar to the first case. We just find the successor instead of 
+          presuccessor and adjust the right subtree instead of left subtree.
+\end{itemize}
+
+\section*{Q4.(iv)}
+    The AVL tree mentioned in this task has height $h$.\\
+    For \emph{insert} operation, the worst case happens when we need to reorganize the subtree every time we increase or decrease "number\_balance".
+    At the root node with height $h$, we need to apply one \emph{reorganize} operation at height $h-1$. At the root node with height $h-1$, we need to 
+    apply one \emph{reorganize} operation at height $h-2$. So on and so forth, until we complete insertion at leaf node.\\
+    For \emph{delete} operation, the worst case also happens when we need to reorganize the subtree every time we increase or decrease 
+    "number\_balance". At the root node with height $h$, we need to apply one \emph{reorganize} operation at height $h-1$. At the root node with height 
+    $h-1$, we need to apply one \emph{reorganize} operation at height $h-2$. So on and so forth.\\
+    Furthermore, every \emph{reorganize} operation contains an \emph{insert} operation and a \emph{delete} operation at the same level. 
+    So we have following recurrence equation:
+\begin{align*}
+    I(h) &= R(h-1) + R(h-2) + \ldots + R(1) + C_{1}\\
+    D(h) &= R(h-1) + R(h-2) + \ldots + R(1) + C_{2}\\
+    R(h) &= D(h) + I(h) + C_{3}
+\end{align*}
+    By solving the above equations, we get:
+\begin{align*}
+    R(h) &= C * \sum_{i = 1}^{h-1} i!\\
+    I(h) &= D(h) = C * \sum_{i = 1}^{h-1} \sum_{j = 1}^{i} j! + C'
+\end{align*}
+    Besides, before reorganization, both \emph{insert} and \emph{delete} operations has complexity $O(log_{2}n)$, so the worst case complexity for 
+    \emph{insert} and \emph{delete} is 
+$$O(\sum_{i = 1}^{h-1} \sum_{j = 1}^{i} j!)$$
+\end{document}
