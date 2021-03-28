@@ -17,15 +17,18 @@ public:
     avlnode(T item = 0, int bal = 0, avlnode<T> *left = 0, avlnode<T> *right = 0);
     T getdata(void);
     int getbalance(void);
+    int get_num_balance(void);      // For HW6
     avlnode<T> *getleft(void);
     avlnode<T> *getright(void);
     void setdata(T item);
     void setbalance(int bal);
+    void set_num_balance(int bal);      // For HW6
     void setleft(avlnode<T> *pt);
     void setright(avlnode<T> *pt);
 private:
     T data;
     int balance;
+    int num_balance;        // Added for HW6
     avlnode<T> *pt_left;
     avlnode<T> *pt_right;
 };
@@ -55,6 +58,15 @@ private:
     /* alternatively, we can search for the minimum in the right successor tree, swap it with the value in the node pointed to by the first argument and propagate balance changes back upwards; this alternative is not implemented here */
 //    avlnode<T> *findswapright(avlnode<T> *pt_swap, avlnode<T> *here);
     void _display(avlnode<T> * pt);
+
+    // For Homework Assignment 6:
+    avlnode<T>* _insert_new(avlnode<T> *pt, T val);
+    avlnode<T>* _delete_new(avlnode<T> *pt, T val);
+    void _reset(T val, int mode);
+    avlnode<T>* _check(avlnode<T> *pt);
+    avlnode<T>* _reorganize(avlnode<T> *pt);
+    avlnode<T>* _find_presuccessor(avlnode<T> *pt, T val);
+    avlnode<T>* _find_successor(avlnode<T> *pt, T val);
 };
 
 #endif /* avl_h */

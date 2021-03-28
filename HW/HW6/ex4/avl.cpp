@@ -4,11 +4,17 @@
 //
 //  Created by KD on 18.03.21.
 //
-
+//
+//
+//  To see HW6, scroll down to the bottom of this file.
+//
+//
+//
 #include <stdio.h>
 #include <iostream>
 #include <cstdlib>
 #include "avl.h"
+using namespace std;
 using std::cout;
 using std::cin;
 
@@ -30,6 +36,12 @@ template<class T> T avlnode<T>::getdata(void)
 template<class T> int avlnode<T>::getbalance(void)
 {
     return balance;
+}
+
+// For HW6:
+template<class T> int avlnode<T>::get_num_balance(void)
+{
+    return num_balance;
 }
 
 template<class T> avlnode<T> *avlnode<T>::getleft(void)
@@ -55,6 +67,13 @@ template<class T> void avlnode<T>::setbalance(int bal)
     return;
 }
 
+// For HW6:
+template<class T> void avlnode<T>::set_num_balance(int bal)
+{
+    num_balance = bal;
+    return;
+}
+
 template<class T> void avlnode<T>::setleft(avlnode<T> *pt)
 {
     pt_left = pt;
@@ -76,13 +95,15 @@ template<class T> AVL<T>::AVL(void)
 /* insert, remove and find are implemented recursively using the auxiliary functions _insert, _delete and _find; the first argument poits to the root of the tree of interest */
 template<class T> void AVL<T>::insert(T item)
 {
-    root = _insert(root, item);
+    root = _insert_new(root, item);     // Changed for HW6
+    root = _check(root);
     return;
 }
 
 template<class T> void AVL<T>::remove(T item)
 {
-    root = _delete(root, item);
+    root = _delete_new(root, item);     // Changed for HW6
+    root = _check(root);
     return;
 }
 
@@ -546,7 +567,7 @@ template<class T> void AVL<T>::_display(avlnode<T> * pt)
         _display((*pt).getleft());
         cout << "Node:\n";
         cout << "Value: " << (*pt).getdata() << "\n";
-        cout << "Balance: " << (*pt).getbalance() << "\n";
+        cout << "Number_balance: " << (*pt).get_num_balance() << "\n";      // For HW6 
         avlnode<T> *pt_l;
         pt_l = (*pt).getleft();
         if (pt_l != 0)
@@ -561,4 +582,240 @@ template<class T> void AVL<T>::_display(avlnode<T> * pt)
         _display((*pt).getright());
     }
     return;
+}
+
+
+// Homework Assignment 6:
+// New insertion function:
+template<class T> avlnode<T> *AVL<T>::_insert_new(avlnode<T> *pt, T val)
+{
+    if (pt == 0)  // if the tree is empty, we have to create a root node
+    {
+        avlnode<T> *newnode = new avlnode<T>;
+        (*newnode).setdata(val);  // the stored value is the one given as argument
+        (*newnode).set_num_balance(0);  // the num_balance must be 0
+        // note that left and right pointer are 0 by default
+        return newnode;
+    }
+    if (val == (*pt).getdata())
+    {
+        /* the first case is the do-nothing case, when the given value already occurs in the AVL tree */
+        cout << val << " is already in the tree!" << endl;
+        _reset(val, 1);         // clear the changes to num_balance
+        return pt;
+    }
+    if (val < (*pt).getdata()) // the case for insertion into the left successor tree
+    {
+        pt->set_num_balance(pt->get_num_balance()+1);   // Increase the num_balance by 1
+        avlnode<T> *pt_new;
+        /* the recursive call returns a pointer to an updated left successor tree; it remains to adjust the balance */
+        pt_new = _insert_new((*pt).getleft(), val);
+        (*pt).setleft(pt_new);
+        /* the first case is the do-nothing case; the insertiion into the left successor did not alter the height */
+        return pt;
+    }
+    else // if (val > (*pt).getdata())
+        // the dual case for insertion into the right successor tree
+    {
+        pt->set_num_balance(pt->get_num_balance()-1);   // Decrease the num_balance by 1
+        avlnode<T> *pt_new;
+        /* the recursive call returns a pointer to an updated right successor tree; it remains to adjust the balance */
+        pt_new = _insert_new((*pt).getright(), val);
+        (*pt).setright(pt_new);
+        /* the first case is the do-nothing case; the insertiion into the right successor did not alter the height */
+        return pt;
+    }
+}
+
+// New delete function:
+template<class T> avlnode<T> *AVL<T>::_delete_new(avlnode<T> *pt, T val)
+{
+    // nothing needs to be done for an empty tree
+    if (pt == 0)
+    {
+        cout << val << " is not in the tree!" << endl;
+        _reset(val, -1);    // clear the changes to num_balance
+        return pt;
+    }
+    /* the first case occurs, when the sought value has been found */
+    if (val == (*pt).getdata())
+    {
+        /* in case there is no left successor tree, the result of the delete is the right successor tree */
+        if ((*pt).getleft() == 0)
+        {
+            return (*pt).getright();
+        }
+        /* in case there is no right successor tree, the result of the delete is the left successor tree */
+        if ((*pt).getright() == 0)
+        {
+            return (*pt).getleft();
+        }
+        /* if both left and right successor trees are not empty, we merge them. */
+        avlnode<T> *newnode;
+        newnode = _find_presuccessor(pt, pt->getdata());    // Find the presuccessor
+        T data = newnode->getdata();
+        pt = _delete_new(pt, data);            // Need to delete the presuccessor in this subtree
+        pt->setdata(data);                    // Update the attributes
+        pt = _check(pt);         // We need to reorgnize this subtree rooted at pt
+        return pt;
+    }
+    /* as long as the sought value has not been found a recursive descent is required; the first case continues the search in the left successor tree */
+    if (val < (*pt).getdata())
+    {
+        pt->set_num_balance(pt->get_num_balance()-1);   // Decrease the num_balance by 1
+        avlnode<T> *pt_new;
+        /* the recursive call returns an updated left successor tree, in which the sought value (if in there) has been deleted */
+        pt_new = _delete_new((*pt).getleft(), val);
+        (*pt).setleft(pt_new);
+        return pt;
+    }
+    /* the second case continues the search in the right successor tree */
+    else // if (val > (*pt).getdata())
+    {
+        pt->set_num_balance(pt->get_num_balance()+1);   // Increase the num_balance by 1
+        avlnode<T> *pt_new;
+        /* the recursive call returns an updated right successor tree, in which the sought value (if in there) has been deleted */
+        pt_new = _delete_new((*pt).getright(), val);
+        (*pt).setright(pt_new);
+        /* mode indicates, if balance adjustments are still needed; the first case is the no-action case */
+        return pt;
+    }
+}
+
+// If we insert an existing element or delete a non-existing element, we need to reset the num_balance:
+template<class T> void AVL<T>::_reset(T val, int mode)
+{
+    avlnode<T>* pt = root;
+    // mode: insert
+    if (mode == 1)
+    {
+        while (pt != 0 && pt->getdata() != val)
+        {
+            if (val < (*pt).getdata())
+            {
+                pt->set_num_balance(pt->get_num_balance()-1);   // Decrease the num_balance by 1
+                pt = pt->getleft();
+            }
+            else // if (val > (*pt).getdata())
+            {
+                pt->set_num_balance(pt->get_num_balance()+1);   // Increase the num_balance by 1
+                pt = pt->getright();
+            }
+        }
+    }
+    // mode: delete
+    else if (mode == -1)
+    {
+        while (pt != 0)
+        {
+            if (val > (*pt).getdata())
+            {
+                pt->set_num_balance(pt->get_num_balance()-1);   // Decrease the num_balance by 1
+                pt = pt->getright();
+            }
+            else // if (val < (*pt).getdata())
+            {
+                pt->set_num_balance(pt->get_num_balance()+1);   // Increase the num_balance by 1
+                pt = pt->getleft();
+            }
+        }
+    }
+}
+
+// Check if the AVL tree rooted at pt after deletion or insertion still satisfies all the properties:
+template<class T> avlnode<T> *AVL<T>::_check(avlnode<T> *pt)
+{
+    // If the tree is empty, done
+    if (pt == 0)
+    {
+        return pt;
+    }
+    // Otherwise, check the value of num_balance:
+    int bal = pt->get_num_balance();
+    // If the num_balance is larger than 1 or smaller than 0, we reorganize the whole tree
+    if (bal > 1 || bal < 0)
+    {
+        pt = _reorganize(pt);
+    }
+    // If the root satisfies, go and check the subtrees
+    else
+    {
+        pt->setleft(_check(pt->getleft()));
+        pt->setright(_check(pt->getright()));
+    }
+    return pt;
+}
+
+// Reorganize the AVL tree recursively:
+template<class T> avlnode<T> *AVL<T>::_reorganize(avlnode<T> *pt)
+{
+    int bal = pt->get_num_balance();
+    // Divide into two cases:
+    // The left subtree has too many nodes:
+    if (bal > 1)
+    {
+        avlnode<T> *newnode;
+        newnode = _find_presuccessor(pt, pt->getdata());    // Find the presuccessor
+        T data = pt->getdata();
+        T pre_data = newnode->getdata();
+        pt = _delete_new(pt, pre_data);            // Need to delete the presuccessor in the left subtree
+        pt->setleft(_check(pt->getleft()));         // We need to reorgnize the left subtree
+        pt->setdata(pre_data);                    // Update the attributes
+        pt = _insert_new(pt, data);                  // Insert the original root into the right subtree
+        pt->setright(_check(pt->getright()));         // We need to reorgnize the right subtree
+        return pt;
+    }
+    // The right subtree has too many nodes:
+    else if (bal < 0)
+    {
+        avlnode<T> *newnode;
+        newnode = _find_successor(pt, pt->getdata());    // Find the successor
+        T data = pt->getdata();
+        T succ_data = newnode->getdata();
+        pt = _delete_new(pt, succ_data);            // Need to delete the successor in the right subtree
+        pt->setright(_check(pt->getright()));         // We need to reorgnize the right subtree
+        pt->setdata(succ_data);                    // Update the attributes
+        pt = _insert_new(pt, data);              // Insert the original root into the left subtree
+        pt->setleft(_check(pt->getleft()));     // We need to reorgnize the left subtree
+        return pt;
+    }
+    // Do nothing for balanced tree:
+    else
+    {
+        return pt;
+    }
+}
+
+// Find the presuccessor of the given node and return the pointer of presuccessor:
+template<class T> avlnode<T> *AVL<T>::_find_presuccessor(avlnode<T> *pt, T val)
+{
+    // If given node has no left node, the presuccessor is itself
+    if (pt->getleft() == 0)
+    {
+        return pt;
+    }
+    // Otherwise, go and find that:
+    avlnode<T>* pre = pt->getleft();
+    while (pre->getright() != 0)
+    {
+        pre = pre->getright();
+    }
+    return pre;
+}
+
+// Find the successor of the given node and return the pointer of successor:
+template<class T> avlnode<T> *AVL<T>::_find_successor(avlnode<T> *pt, T val)
+{
+    // If given node has no right node, the successor is itself
+    if (pt->getright() == 0)
+    {
+        return pt;
+    }
+    // Otherwise, go and find that:
+    avlnode<T>* succ = pt->getright();
+    while (succ->getleft() != 0)
+    {
+        succ = succ->getleft();
+    }
+    return succ;
 }
