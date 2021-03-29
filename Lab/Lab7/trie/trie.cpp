@@ -196,6 +196,7 @@ template<class T> trie<T>::trie(void)
 /* the insert and intrie functions are realised recursively starting from the start using the corresponding auxiliary functions */
 template<class T> void trie<T>::insert(AList<T> list)
 {
+    // copy the input list into a new Alist and use it as the input parameter of the function _insert
     AList<T> newlist;
     for (int i = 1; i <= list.getlength(); i++)
     {
@@ -207,6 +208,7 @@ template<class T> void trie<T>::insert(AList<T> list)
 
 template<class T> bool trie<T>::intrie(AList<T> list)
 {
+    // copy the input list into a new Alist and use it as the input parameter of the function _contains
     AList<T> newlist;
     for (int i = 1; i <= list.getlength(); i++)
     {
@@ -217,34 +219,37 @@ template<class T> bool trie<T>::intrie(AList<T> list)
 /* auxiliary function for insertion */
 template<class T> trienode<T> *trie<T>::_insert(trienode<T> *pt, AList<T> list)
 {
-    if (list.getlength() == 0)
+    if (list.getlength() == 0)  // empty input list, do nothing
         return 0;
     T key = list[1];  // take the first element of the new list
     if (pt == 0)  // case of null pointer: create a new trienode
     {
-        list.remove(1);
+        list.remove(1);     // remove the first entry of the list while creating a new node
         trienode<T> *newnode = new trienode<T>;
         (*newnode).setdata(key);  // set the value of the new trienode
         /* mark the trienode as final, if the inout list is used up */
-        if (list.getlength() == 0)
+        if (list.getlength() == 0)      // The input string list is just one character
             (*newnode).setlast(true);
         /* recursively proceed with the next element of the input list */
+        // continue to insert the rest of the string characters
         (*newnode).setfollow(_insert((*newnode).getfollow(), list));
         return newnode;
     }
     if ((*pt).getdata() == key) // case of a prefix already in the trie
     {
-        list.remove(1);
+        list.remove(1);     // remove the current first entry of the list since it is already in the trie
         if (list.getlength() == 0)
         {
-            (*pt).setlast(true);
+            (*pt).setlast(true);        // this means the input string is a substring of the trie entries
             return pt;
         }
         /* just skip over the prefix */
+        // continue searching until the input list becomes empty or we meet a different character
         (*pt).setfollow(_insert((*pt).getfollow(), list));
     }
     else
         /* otherwise follow the next pointer */
+        // meet a different character, you need to search or build a subentry in the trie
         (*pt).setnext(_insert((*pt).getnext(), list));
     return pt;
 }
@@ -280,8 +285,8 @@ template<class T> void trie<T>::_display(trienode<T> * pt, AList<T> list)
 {
     if (pt != 0)
     {
-        list.append((*pt).getdata());
-        if ((*pt).getlast() == true)
+        list.append((*pt).getdata());   // add the character into the new list
+        if ((*pt).getlast() == true)    // meet a last node, that means we need to print a whole string in the trie
         {
             cout << "Trie entry: ";
             for (int i = 1; i <= list.getlength(); i++)
@@ -292,14 +297,26 @@ template<class T> void trie<T>::_display(trienode<T> * pt, AList<T> list)
                 else
                     cout << "\n";
             }
-            if ((*pt).getfollow() != 0)
+            if ((*pt).getfollow() != 0)     // this last node may not be the final node in this entry, we need to continue searching if it is not
                 _display((*pt).getfollow(),list);
         }
         else
-            _display((*pt).getfollow(), list);
-        list.remove(list.getlength());
-        if ((*pt).getnext() != 0)
+            _display((*pt).getfollow(), list);  // not a last node, move on the current entry
+        // When reach here, that means the main entry is already printed
+        list.remove(list.getlength());      // Delete the last entry in the list one by one and check if there is an subentry
+        if ((*pt).getnext() != 0)           // there is! print the subentry
             _display((*pt).getnext(), list);
     }
     return;
 }
+
+// What is a substring? What is a subentry?
+// e.g.
+//      r - a - b - b - i - t
+//          |
+//          o - w
+//
+// If the input string is "rab" or "ro", then the insert operation is terminated at the character "b" and "o",
+// meaning the two input strings are the substrings of the trie entries.
+// 
+// Here, "rabbit" in the trie is an "entry". And "row" is a subentry in the trie.
