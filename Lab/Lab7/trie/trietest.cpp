@@ -14,6 +14,7 @@ using std::cin;
 
 int main()
 {
+    // The test file inserts 8 strings (using Alist) into the trie
     trie<char> mytrie = trie<char>();
     AList<char> mylist1 = AList<char>(10);
     AList<char> mylist2 = AList<char>(10);
@@ -59,6 +60,7 @@ int main()
     mylist8.append('k');
     mytrie.insert(mylist1);
     mytrie.display();
+    // Check if the mylist1 and mylist2 is in the trie
     cout << "\n" << mytrie.intrie(mylist1) << "\n";
     cout << mytrie.intrie(mylist2) << "\n\n";
     mytrie.insert(mylist2);

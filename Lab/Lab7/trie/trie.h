@@ -44,10 +44,15 @@ public:
     void setfollow(trienode<T> *pt_follow);
 private:
     T data;
-    bool last;
-    trienode<T> *next;
-    trienode<T> *follow;
+    bool last;                  // Whether the node is the last character of a string (not NULL-ended)
+    trienode<T> *next;          // The next character of a different string
+    trienode<T> *follow;        // The next character of the same string
 };
+
+// e.g.             c - o - w - b - o - y
+//                          |
+//                          p - p - e - r
+// For node w, the next node is p, the follow node is b.
 
 template<class T> class trie
 {
