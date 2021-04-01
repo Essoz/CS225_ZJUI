@@ -28,12 +28,49 @@ int main(){
         assert(fib_heap_1->Minimum()->key == -8);
         fib_heap_1->PrintTree();
 
+    /* <==== A Test For Consolidate ====> */
+
+
+
+    /* <==== A Test for Cut ====> */
+
+    /* <==== A Test for DecreaseKey ====> */	
+	
+
+    if (false){
+    /* PASSED <==== A Test for HeapLink ====> */ 
+        // Test1: Trivial Case, Branch 1 (child == NULL)
+    fib_heap_1->HeapLink(fib_heap_1->Minimum(), fib_heap_1->Minimum()->right);
+    assert(fib_heap_1->GetNum() == 18);
+    assert(fib_heap_1->Minimum()->degree == 1);
+    assert(fib_heap_1->Minimum()->key == -8);
+    fib_heap_1->PrintTree();
+
+        // Test2: Branch 2 (child != NULL), Iterative Test
+for (int i = 1; i < fib_heap_1->GetNum() - 1; i++){
+        
+        fib_heap_1->HeapLink(fib_heap_1->Minimum(), fib_heap_1->Minimum()->right);
+        assert(fib_heap_1->GetNum() == 18);
+        assert(fib_heap_1->Minimum()->degree == 1 + i);
+	assert(fib_heap_1->Minimum()->key == -8);
+	//fib_heap_1->PrintTree();
+    }
+    fib_heap_1->PrintTree();    
+    
+    }
+
+
+    cout << fib_heap_1->GetNum();
     FibNode<int>* min = fib_heap_1->ExtractMin();
-    cout << min->key <<endl;
-//    fib_heap_1->PrintTree();
+    cout << min->key << "\n";
+    fib_heap_1->FindMin();
+    cout << fib_heap_1->Minimum()->key << endl;
+    //fib_heap_1->PrintTree();
  
-    min = fib_heap_1->ExtractMin();
-    cout << min->key <<endl;
- 
+    //min = fib_heap_1->ExtractMin();
+    //cout << min->key <<endl;
+
+
+
     return 0;
 }

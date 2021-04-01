@@ -34,6 +34,7 @@ template<class T> void FibHeap<T>::Insert(FibNode<T>* fib_node){
         min_ptr = fib_node;
         fib_node->left = fib_node;
         fib_node->right = fib_node;
+	numitems = 0;
     }
     numitems++;
 }
@@ -65,6 +66,8 @@ template<class T> void FibHeap<T>::DecreaseKey(FibNode<T>* handle, T new_key){
         if not, mark the parent, decrement degree.
     2. node handle is 
  */
+
+
 template<class T> void FibHeap<T>::Cut(FibNode<T>* handle){
     FibNode<T>* par_ptr = handle->parent;
     if (handle->left == handle){
@@ -100,6 +103,7 @@ template<class T> void FibHeap<T>::Cut(FibNode<T>* handle){
  */
 template<class T> void FibHeap<T>::Consolidate(){
     int D_n = log(GetNum())/log(2);
+    D_n++;
     // initiate the auxillary array
     FibNode<T>** arr = new FibNode<T>* [D_n];
     for(int i = 0; i < D_n; i++){
@@ -109,8 +113,8 @@ template<class T> void FibHeap<T>::Consolidate(){
     FibNode<T>* node_y; 
     int x_degree = 0;
     FibNode<T>* current_node = min_ptr->right;  // this pointer is initiated for traversing through the rootlist
+    // debug note : the for loop should be replaced by a while loop, and the above line should be 
     for (int i = 0; i <= D_n; i++){
-        current_node = current_node->right;
         node_x = current_node;
         x_degree = node_x->degree;
         while(arr[x_degree] != NULL){
@@ -120,24 +124,31 @@ template<class T> void FibHeap<T>::Consolidate(){
                 FibNode<T>* temp_ptr = node_x;
                 node_x = node_y;
                 node_y = temp_ptr;
+
             }
             // merge the two heaps
             HeapLink(node_x, node_y); // add node_y as a child of x
             arr[x_degree] = NULL;
-            x_degree++;
+   	    x_degree++;
+        current_node = current_node->right;
         } 
         arr[x_degree] = node_x;
     }
-
+    // PrintTree();
+    min_ptr = NULL;
+    for (int i = 0; i < D_n; i++){
+	if (arr[i]) Insert(arr[i]); // all cases are handled by this insert function
+    } 
+    
 }
 /* FibHeap - HeapLink
  * Input
- 1. node_x - A heap structure with smaller min
- 2. node_y - A heap structure with larger min
+ 1. heap1 - A heap structure with smaller min
+ 2. heap2 - A heap structure with larger min
  * Output: NONE
  * Effect
- 1. Unmark node_y
- 2.
+ 1. Unmark heap2
+ 2. heap2 will be linked to heap1 as a child of heap1
  */
 template<class T> FibNode<T>* FibHeap<T>::HeapLink(FibNode<T>* heap1, FibNode<T>* heap2){
     FibNode<T>* temp = heap1->child;
@@ -145,18 +156,18 @@ template<class T> FibNode<T>* FibHeap<T>::HeapLink(FibNode<T>* heap1, FibNode<T>
     heap2->right->left = heap2->left;
     
     if (temp != 0){
-        temp = temp->left;
+	// link the second heap to the left of the child list 
+	temp = temp->left;
         heap1->child->left = heap2;
-        heap2->parent = heap1;
         heap2->right = heap1->child;
         heap2->left = temp;
         temp->right = heap2;
     } else {
         heap1->child = heap2;
         heap2->right = heap2->left = heap2;
-        heap2->parent = heap1;
     }
     heap1->degree++;
+    heap2->parent = heap1;
     heap2->mark = false;
     return heap1;
 }
@@ -189,11 +200,17 @@ template<class T> FibNode<T>* FibHeap<T>::ExtractMin(){
         numitems--;
         if (min_ptr == min_ptr->right){
             min_ptr = NULL;
-        } else {
+	} else {
+            min_ptr->right->left = min_ptr->left;
+            min_ptr->left->right = min_ptr->right;
             min_ptr = min_ptr->right;
+
             Consolidate();
             // TODO: Fill the definition for FINDMIN()
-            FindMin();
+            
+	    //since finding the new min is handled by consolidation, no need for FindMin here
+	    //FindMin();
+	    
         }
         return current_node;
     } else {
@@ -223,6 +240,7 @@ template<class T> void FibHeap<T>::FindMin(){
             }
 	    current_node = current_node->left;
         } 
+	min_ptr = current_min;
     } else {
         // else do nothing
         ;
@@ -251,7 +269,7 @@ template<class T> FibHeap<T>* FibHeap<T>::Union(FibHeap<T>* heap1, FibHeap<T>* h
     // determine new min from the two heap structures
     new_heap->min_ptr = heap1->min_ptr;
     if (heap2->min_ptr && heap1->min_ptr && heap2->min_ptr->key < new_heap->key){
-        new_hea->min_ptr = heap2->min_ptr;
+        new_heap->min_ptr = heap2->min_ptr;
     } 
     
     // concatenate the root lists
@@ -282,6 +300,8 @@ template<class T> int FibHeap<T>::GetNum(){
 
 /* This Function is for Testing */
 template<class T> void FibHeap<T>::PrintTree(){
+    cout << "\n=========================\n"; 
+	
     if (min_ptr == NULL){
         cout << "The Heap Structure is Empty" <<endl;
         return;
@@ -309,4 +329,5 @@ template<class T> void FibHeap<T>::_PrintTree(FibNode<T>* node){
         _PrintTree(node_pt->child);
         node_pt = node_pt->right;
     }while(node_pt != node);
+    cout << "]";
 }
