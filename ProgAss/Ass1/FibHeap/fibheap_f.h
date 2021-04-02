@@ -11,13 +11,17 @@ using std::endl;
 #define INFIMUM -100000
 /* FibHeap - Insert
  * Input
- 1. a pointer to the node being inserted
+ 1. a pointer to the node being inserted (the node is assumed to be without child)
  2. the heap structure
  * Output: NONE
  * Effect: 
  1. numitems ++
  2. the node is inserted to the left of the min node
+ 
+
  */
+
+
 
 /* <===> Test Passed <===> */
 template<class T> void FibHeap<T>::Insert(FibNode<T>* fib_node){
@@ -49,12 +53,13 @@ template<class T> void FibHeap<T>::Insert(FibNode<T>* fib_node){
 //  4. execute consolidate
  */
 template<class T> void FibHeap<T>::DecreaseKey(FibNode<T>* handle, T new_key){
+    int num = GetNum();
     handle->key = new_key;
-    
     if(handle->parent && new_key < handle->parent->key){
         Cut(handle);
     }
     // Consolidate();
+    numitems = num; //since insertions within Cut modifies Cut 
 }
 /* FibHeap - Cut
  * Input
@@ -104,21 +109,21 @@ template<class T> void FibHeap<T>::Cut(FibNode<T>* handle){
 template<class T> void FibHeap<T>::Consolidate(){
     int D_n = log(GetNum())/log(2);
     D_n++;
+    int num = GetNum();
     // initiate the auxillary array
     FibNode<T>** arr = new FibNode<T>* [D_n];
     for(int i = 0; i < D_n; i++){
         arr[i] = NULL;
     }
-    FibNode<T>* node_x;
+    FibNode<T>* node_x = min_ptr;
     FibNode<T>* node_y; 
     int x_degree = 0;
-    FibNode<T>* current_node = min_ptr->right;  // this pointer is initiated for traversing through the rootlist
     // debug note : the for loop should be replaced by a while loop, and the above line should be 
-    for (int i = 0; i <= D_n; i++){
-        node_x = current_node;
+    for (int i = 0; i <= num; i++){
         x_degree = node_x->degree;
         while(arr[x_degree] != NULL){
             node_y = arr[x_degree];
+            if (node_x == node_y) break;
             if (node_x->key > node_y->key){
                 // exchanging two pointers if necessary, making sure that node x has a smaller key.
                 FibNode<T>* temp_ptr = node_x;
@@ -130,16 +135,16 @@ template<class T> void FibHeap<T>::Consolidate(){
             HeapLink(node_x, node_y); // add node_y as a child of x
             arr[x_degree] = NULL;
    	    x_degree++;
-        current_node = current_node->right;
         } 
         arr[x_degree] = node_x;
+        node_x = node_x->right;
     }
     // PrintTree();
     min_ptr = NULL;
     for (int i = 0; i < D_n; i++){
-	if (arr[i]) Insert(arr[i]); // all cases are handled by this insert function
+        if (arr[i]) Insert(arr[i]); // all cases are handled by this insert function
     } 
-    
+    numitems = num; //since the insert operation will change numitems
 }
 /* FibHeap - HeapLink
  * Input
@@ -268,7 +273,7 @@ template<class T> FibHeap<T>* FibHeap<T>::Union(FibHeap<T>* heap1, FibHeap<T>* h
 
     // determine new min from the two heap structures
     new_heap->min_ptr = heap1->min_ptr;
-    if (heap2->min_ptr && heap1->min_ptr && heap2->min_ptr->key < new_heap->key){
+    if (heap2->min_ptr && heap1->min_ptr && heap2->min_ptr->key < new_heap->min_ptr->key){
         new_heap->min_ptr = heap2->min_ptr;
     } 
     

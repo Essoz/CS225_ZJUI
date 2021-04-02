@@ -1,5 +1,7 @@
 #include "fibheap_f.h"
+#include "alist.cpp"
 #include <assert.h>
+
 
 int main(){
 
@@ -12,8 +14,10 @@ int main(){
     FibHeap<int>* fib_heap_1 = new FibHeap<int>;
     // FibHeap<int>* fib_heap_2 = new FibHeap<int>;
     FibNode<int>* fib_nodes = NULL;
+    AList<FibNode<int>*> node_list_1;
     for (auto i: input1) {
         fib_nodes = new FibNode<int>(i);
+        node_list_1.append(fib_nodes);
 
         if (fib_nodes == NULL){
             cout << "out of memory, terminating\n" << endl;
@@ -28,14 +32,6 @@ int main(){
         assert(fib_heap_1->Minimum()->key == -8);
         fib_heap_1->PrintTree();
 
-    /* <==== A Test For Consolidate ====> */
-
-
-
-    /* <==== A Test for Cut ====> */
-
-    /* <==== A Test for DecreaseKey ====> */	
-	
 
     if (false){
     /* PASSED <==== A Test for HeapLink ====> */ 
@@ -60,17 +56,50 @@ for (int i = 1; i < fib_heap_1->GetNum() - 1; i++){
     }
 
 
+
+    /* PASSED <==== A Test for ExtractMin & Consolidate ====> */ 
+    
     cout << fib_heap_1->GetNum();
     FibNode<int>* min = fib_heap_1->ExtractMin();
-    cout << min->key << "\n";
-    fib_heap_1->FindMin();
+    fib_heap_1->PrintTree();
     cout << fib_heap_1->Minimum()->key << endl;
-    //fib_heap_1->PrintTree();
+    cout << min->key << "\n";
+    assert(fib_heap_1->GetNum() == 17);
+    assert(fib_heap_1->Minimum()->degree == 4);
+    assert(fib_heap_1->Minimum()->key == -7);
  
+    /* PASSED <==== A Test for DecreaseKey ====> */	
+    fib_heap_1->DecreaseKey(node_list_1[2], -10); //decrease -4 to -10
+    fib_heap_1->PrintTree();
+    assert(fib_heap_1->GetNum() == 17);
+    assert(fib_heap_1->Minimum()->degree == 3);
+    assert(node_list_1[12]->degree == 3);   //examine the degree of node -7
+    assert(fib_heap_1->Minimum()->key == -10);
+
+
     //min = fib_heap_1->ExtractMin();
     //cout << min->key <<endl;
 
 
+    /* <==== A Test for Union ====> */
+    int input2[] = {20,30,5,-20};
+    FibHeap<int>* fib_heap_2 = new FibHeap<int>; 
+    for (auto i: input2) {
+        fib_nodes = new FibNode<int>(i);
 
+        if (fib_nodes == NULL){
+            cout << "out of memory, terminating\n" << endl;
+            return 3;
+        }
+        fib_heap_2->Insert(fib_nodes);
+    }   
+    fib_heap_2->PrintTree();
+
+    FibHeap<int>* fib_heap_new; 
+    fib_heap_new = FibHeap<int>::Union(fib_heap_1,fib_heap_2);
+
+    assert(fib_heap_new->Minimum()->key == -20);
+    assert(fib_heap_new->GetNum() == 17 + 4);
+    fib_heap_new->PrintTree();
     return 0;
 }
