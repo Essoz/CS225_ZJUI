@@ -83,8 +83,9 @@ public:
 
 private:
     // helper function you may or may not use
-    bool contains_extend(trienode<T> *pt, AList<T> list, AList<T> path, AList<string> &result);
-    bool contains_diff(trienode<T> *pt, AList<T> list, AList<T> path, AList<string> &result, int diff);
+    trienode<T>* find_last_exist(trienode<T> *pt, AList<T> list);
+    // trienode<T>* find_last_nonexist(trienode<T> *pt, AList<T> list);
+    void find_diff(trienode<T> *pt, AList<T> list, AList<T> path, bool mark, AList<string> &result);
 };
 
 #endif /* trie_h */

@@ -17,7 +17,9 @@ vector<string> split(string str,string separator);
 
 int main() {
     /* You may change to smaller test text for debugging */
-    string text = "In computer science, a trie, also called digital tree or prefix tree, is a kind of search tree an ordered tree data structure used to store a dynamic set or associative array where the keys are usually strings. Unlike a binary search tree, no node in the tree stores the key associated with that node; instead, its position in the tree defines the key with which it is associated. All the descendants of a node have a common prefix of the string associated with that node, and the root is associated with the empty string. Keys tend to be associated with leaves, though some inner nodes may correspond to keys of interest. Hence, keys are not necessarily associated with every node. For the space-optimized presentation of prefix tree, see compact prefix tree.";
+    string text = "Food Foo In computer strang science, a trie, also called digital tree or prefix tree, is a kind of search tree an ordered tree data structure used to store a dynamic set or associative array where the keys are usually strings. Unlike a binary search tree, no node in the tree stores the key associated with that node; instead, its position in the tree defines the key with which it is associated. All the descendants of a node have a common prefix of the string associated with that node, and the root is associated with the empty string. Keys tend to be associated with leaves, though some inner nodes may correspond to keys of interest. Hence, keys are not necessarily associated with every node. For the space-optimized presentation of prefix tree, see compact prefix tree.";
+    // string text = "String for foo food";
+    
     string temp;
     trie<char> MyDict;
 
@@ -47,14 +49,14 @@ int main() {
 
     /* Comment or uncomment different cases to sea if outputs are correct */
 
-    /* ========== Tests for part (i) ========== */
+    /* NOT PASSED ========== Tests for part (i) ========== */
 //      Given test 1:       associate
 //      Expected output:    associated
-    Str2CharList(in_str, "associate");
+    // Str2CharList(in_str, "associate");
 
-//      Given test 2:       fo
-//      Expected output:    for
-//    Str2CharList(in_str, "fo");
+//      Modified test 2:       fo
+//      Expected output:    for, foo
+   Str2CharList(in_str, "fo");
 
     cout << "Test for part (i)" << endl;
     // Clear result list
@@ -64,15 +66,19 @@ int main() {
     for (int i = 0; i < result.getlength(); ++i)
         cout << result[i+1] << ' ';
 
-    /* ========== Tests for part (ii) ========== */
+    /* PASSED ========== Tests for part (ii) ========== */
 //      Given test 1:       storeas
 //      Expected output:    store
-    Str2CharList(in_str, "storeas");
+    // Str2CharList(in_str, "storeas");
 
 //      Given test 2:       inn
 //      Expected output:    in
 //    Str2CharList(in_str, "ina");
 
+//      Written Test 1:     foode
+//      Expected Output:    food
+//                          foo
+   Str2CharList(in_str, "foode");
     cout << "\nTest for part (ii)" << endl;
     // Clear result list
     while (result.getlength())
@@ -81,7 +87,7 @@ int main() {
     for (int i = 0; i < result.getlength(); ++i)
         cout << result[i+1] << ' ';
 
-    /* ========== Tests for part (iii) ========== */
+    /* PASSED ========== Tests for part (iii) ========== */
 //      Given test 1:       strong
 //      Expected output:    string
     Str2CharList(in_str, "strong");
