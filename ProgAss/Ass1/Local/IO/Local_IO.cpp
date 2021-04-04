@@ -15,11 +15,11 @@ using std::cin;
  *  Outputs:
  *      None
  *  Return value:
- *		None
+ *		The pointer of local registry queue
  *  Side Effects:
  *      Write a csv file containing all the information of patients.
  */
-std::queue<person_t*>* write_all(std::queue<person_t*>* queue)
+queue<Patient*>* IO::write_all(queue<Patient*>* queue)
 {
 	// open the file you want to write:
 	FILE* update;
@@ -34,11 +34,27 @@ std::queue<person_t*>* write_all(std::queue<person_t*>* queue)
 	// information into the update.csv:
 	while (0 == queue->empty())
 	{
-		fprintf(update, "%d %d %d %d %c %d %d\n",
-			queue->front()->id, queue->front()->risk, queue->front()->profession, queue->front()->time,
-			queue->front()->name, queue->front()->birthday, queue->front()->phone);
+		fprintf(update, "%d,%d,%d,%d,%d,",
+			queue->front()->getid(), queue->front()->getrisk(), queue->front()->getprof(),
+			queue->front()->getdate(), queue->front()->gettime());
+		fprintf(update, "%s,%s,%d,%d,", queue->front()->getinfo()->name,
+			queue->front()->getinfo()->email, queue->front()->getinfo()->phone,
+			queue->front()->getinfo()->birthday);
+		fprintf(update, "%d,%d,%d,", queue->front()->getwithdraw(), queue->front()->getddl(),
+			queue->front()->getpriority());
+		fprintf(update, "%s,%d,%d\n", queue->front()->getappoint()->location,
+			queue->front()->getappoint()->date, queue->front()->getappoint()->time);
+
 		// delete the first entry in the queue:
 		queue->pop();
+	}
+	// In the end, we close the file to finish writting:
+	int check = fclose(update);
+	// Check if the file is successfully closed:
+	if (0 == check)
+	{
+		cout << "Failed to close the update.csv." << endl;
+		exit(1);
 	}
 	return queue;
 }
@@ -55,10 +71,7 @@ std::queue<person_t*>* write_all(std::queue<person_t*>* queue)
  *  Side Effects:
  *      Write a csv file containing the information of one patient.
  */
-std::queue<person_t*>* write_one(std::queue<person_t*>* queue)
-{
-	return queue;
-}
+//std::queue<person_t*>* write_one(std::queue<person_t*>* queue)
 
 /*  Description:
  *      This function will read all the information of updated patients in a
@@ -73,10 +86,7 @@ std::queue<person_t*>* write_one(std::queue<person_t*>* queue)
  *  Side Effects:
  *      Read a csv file containing all the information of patients.
  */
-std::queue<person_t*>* read_all(FILE* csv, std::queue<person_t*>* queue)
-{
-
-}
+//std::queue<person_t*>* read_all(FILE* csv, std::queue<person_t*>* queue)
 
 /*  Description:
  *      This function will write information of one patient in the
@@ -90,8 +100,4 @@ std::queue<person_t*>* read_all(FILE* csv, std::queue<person_t*>* queue)
  *  Side Effects:
  *      Write a csv file containing the information of one patient.
  */
-std::queue<person_t*>* read_one(FILE* csv, std::queue<person_t*>* queue)
-{
-
-}
-
+//std::queue<person_t*>* read_one(FILE* csv, std::queue<person_t*>* queue)
