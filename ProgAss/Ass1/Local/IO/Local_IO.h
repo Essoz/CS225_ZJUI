@@ -1,9 +1,33 @@
 #ifndef Local_IO_h
 #define Local_IO_h
 #include "Patient.h"
+#include "Local_Queue.h"
 #include <queue>
 #include <vector>
 using namespace std;
+
+
+
+
+class IO
+{
+public:
+	IO();
+	~IO();
+
+private:
+
+};
+
+IO::IO()
+{
+}
+
+IO::~IO()
+{
+}
+
+
 
 /*  Description:
  *      This function will write all the information of updated patients from the
@@ -17,7 +41,7 @@ using namespace std;
  *  Side Effects:
  *      Write a csv file containing all the information of patients.
  */
-std::queue<Patient*>* write_all(std::queue<Patient*>* queue);
+queue<Patient*>* write_all(queue<Patient*>* queue);
 
 /*  Description:
  *      This function will write information of one patient from the
@@ -31,7 +55,7 @@ std::queue<Patient*>* write_all(std::queue<Patient*>* queue);
  *  Side Effects:
  *      Write a csv file containing the information of one patient.
  */
-std::queue<Patient*>* write_one(std::queue<Patient*>* queue);
+queue<Patient*>* write_one(queue<Patient*>* queue);
 
 /*  Description:
  *      This function will read all the information of updated patients in a
@@ -46,7 +70,7 @@ std::queue<Patient*>* write_one(std::queue<Patient*>* queue);
  *  Side Effects:
  *      Read a csv file containing all the information of patients.
  */
-std::queue<Patient*>* read_all(FILE* csv, std::queue<Patient*>* queue);
+queue<Patient*>* read_all(FILE* csv, queue<Patient*>* queue);
 
 /*  Description:
  *      This function will write information of one patient in the
@@ -60,6 +84,6 @@ std::queue<Patient*>* read_all(FILE* csv, std::queue<Patient*>* queue);
  *  Side Effects:
  *      Write a csv file containing the information of one patient.
  */
-std::queue<Patient*>* read_one(FILE* csv, std::queue<Patient*>* queue);
+queue<Patient*>* read_one(FILE* csv, queue<Patient*>* queue);
 
 #endif /* Local_IO_h */

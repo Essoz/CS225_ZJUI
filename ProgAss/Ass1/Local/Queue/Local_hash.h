@@ -1,5 +1,5 @@
-#ifndef hash_h
-#define hash_h
+#ifndef Local_hash_h
+#define Local_hash_h
 #include "Patient.h"
 #include <iostream>	
 #include <math.h>
@@ -21,12 +21,14 @@ using namespace std;
 
 class Hash_Chaining
 {
+    friend class Queue;
 public:
-    Hash_Chaining(Patient** input_set, int length);
+    Hash_Chaining(int length);
     int calculate_hashvalue(int id, int size);
     void insertion(Patient* item);
     void deletion(Patient* item);
-    bool check(Patient* item);
+    // Return the pointer of the patient instance in the hash table:
+    Patient* retrieval(int id);
 
 private:
     std::vector<Patient*>** hashtable;  // The hashtable
@@ -34,4 +36,4 @@ private:
     int hash_maxsize;                   // defines the size of the hashtable
 };
 
-#endif /* hash_h */
+#endif /* Local_hash_h */

@@ -13,6 +13,14 @@
  *  access to the class fields.
  */
 
+enum Risk {
+    no, low, medium, high
+};
+
+enum Profession {
+    children, adolescent, youngadult, adult, senior, elderly, old
+};
+
 // Structure of info which is not used in the priority issue:
 typedef struct
 {
@@ -22,13 +30,13 @@ typedef struct
     int birthday;
 } Information;
 
-enum Risk {
-    no, low, medium, high
-};
-
-enum Profession {
-    children, adolescent, youngadult, adult, senior, elderly, old
-};
+// Info about the appointment processing:
+typedef struct
+{
+    char location[10];
+    int date;       // The format is the same as the registration
+    int time;
+} Appointment;
 
 class Patient
 {
@@ -36,15 +44,19 @@ private:
     int identificaiton;
     Risk risk;
     Profession profession;
-    Information information;
+    Information* information;
     //char name[10];
     //char email[10];
     //int  phone[10];
     int date; // The registeration date /*the format is YearMonthDate, Eg.20001204*/
     int time; // The precise registeration time /*the format is HourMinSec, Eg.184059*/
+    bool withdraw;  // If the patient has withdrew before
+    int letter_ddl; // The deadline of the priority letter, should be -1 if no letter is handed in
+    int priority;   // The priority of treatment
+    Appointment* appoint;
+
 public:
-    Patient();  // default constructor
-    Patient(int id, Risk risk, Profession prof, Information info, int date, int time);
+    Patient(int id, Risk risk, Profession prof, Information* info, int date, int time, int ddl);      // Constructor for new patient
     //~Patient();
 
     /*set functions*/
@@ -57,7 +69,7 @@ public:
     void setprof(Profession prof) {
         profession = prof;
     }
-    void setinfo(Information info) {
+    void setinfo(Information* info) {
         name = info.name;
 
     }
@@ -66,6 +78,22 @@ public:
     }
     void settime(int T) {
         time = T;
+    }
+    void setwithdraw(bool W)
+    {
+        withdraw = W;
+    }
+    void setddl(int ddl)
+    {
+        letter_ddl = ddl;
+    }
+    void setpriority(int prio)
+    {
+        priority = prio;
+    }
+    void setappoint(Appointment* appo)
+    {
+        appoint = appo;
     }
     /*get functions*/
     int getid() {
@@ -86,9 +114,28 @@ public:
     int gettime() {
         return time;
     }
+    bool getwithdraw()
+    {
+        return withdraw;
+    }
+    int getddl()
+    {
+        return letter_ddl;
+    }
+    int getpriority()
+    {
+        return priority;
+    }
+    Appointment* getappoint()
+    {
+        return appoint;
+    }
+
+    // Other helper functions:
+    int calculate_prio();     // Calculate the priority
 };
 
-Patient::Patient(int id, Risk risk, Profession prof, Information info, int date, int time)
+Patient::Patient(int id, Risk risk, Profession prof, Information* info, int date, int time, int ddl)
 {
     setid(id);
     setrisk(risk);
@@ -96,6 +143,18 @@ Patient::Patient(int id, Risk risk, Profession prof, Information info, int date,
     setinfo(info);
     setdate(date);
     settime(time);
+    setwithdraw(false); // The new patient has no withdraw
+    setddl(ddl);
+    // The priority needs to be calculated first:
+    int prio = calculate_prio();
+    setpriority(prio);
+    setappoint(NULL);   // No appoinment yet
 };
+
+int Patient::calculate_prio()
+{
+    int prio = 0;
+    return prio;
+}
 
 #endif /* Patient_h */

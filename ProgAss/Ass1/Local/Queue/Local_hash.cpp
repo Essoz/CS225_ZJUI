@@ -1,4 +1,4 @@
-#include "hash.h"
+#include "Local_hash.h"
 #include <iostream>	
 #include <math.h>
 #include <cstdlib>
@@ -18,7 +18,7 @@ using std::hash;
  */
 
 // Constructor:
-Hash_Chaining::Hash_Chaining(Patient** input_set, int length)
+Hash_Chaining::Hash_Chaining(int length)
 {
     // Initialize the attributes of the hashtable
     hash_maxsize = length;
@@ -92,24 +92,24 @@ void Hash_Chaining::deletion(Patient* item)
     }
 }
 
-// Check if the patient is in the hashtable:
-bool Hash_Chaining::check(Patient* item)
+// Return the pointer of the patient instance in the hash table:
+Patient* Hash_Chaining::retrieval(int id)
 {
-    int index = calculate_hashvalue(item->getid(), hash_maxsize); // Calculate the hashvalue
+    int index = calculate_hashvalue(id, hash_maxsize); // Calculate the hashvalue
     // If the corresponding entry is not defined, just return:
     if (hashtable[index] == NULL) {
-        cout << item << " is not in the hashtable." << endl;
-        return false;
+        cout << "The patient of id " << id << " is not in the hashtable." << endl;
+        return NULL;
     }
     else {
         // Loop through that vector entry:
         for (int i = 0; i < int(hashtable[index]->size()); i++) {
-            if (item == hashtable[index]->at(i)) {
+            if (id == hashtable[index]->at(i)->getid()) {
                 // item found
-                return true;
+                return hashtable[index]->at(i);
             }
         }
-        cout << item << " is not in the hashtable." << endl;
-        return false;
+        cout << "The patient of id " << id << " is not in the hashtable." << endl;
+        return NULL;
     }
 }
