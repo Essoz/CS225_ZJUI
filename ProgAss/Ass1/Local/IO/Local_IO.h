@@ -6,29 +6,10 @@
 #include <vector>
 using namespace std;
 
-
-
-
 class IO
 {
+	friend class Queue;
 public:
-	IO();
-	~IO();
-
-private:
-
-};
-
-IO::IO()
-{
-}
-
-IO::~IO()
-{
-}
-
-
-
 /*  Description:
  *      This function will write all the information of updated patients from the
  *      local registry queue into a csv file named update.csv. One person per line.
@@ -41,7 +22,8 @@ IO::~IO()
  *  Side Effects:
  *      Write a csv file containing all the information of patients.
  */
-queue<Patient*>* write_all(queue<Patient*>* queue);
+	static queue<Patient*>* write_all(queue<Patient*>* queue);
+};
 
 /*  Description:
  *      This function will write information of one patient from the
@@ -55,7 +37,7 @@ queue<Patient*>* write_all(queue<Patient*>* queue);
  *  Side Effects:
  *      Write a csv file containing the information of one patient.
  */
-queue<Patient*>* write_one(queue<Patient*>* queue);
+//queue<Patient*>* write_one(queue<Patient*>* queue);
 
 /*  Description:
  *      This function will read all the information of updated patients in a
@@ -70,7 +52,7 @@ queue<Patient*>* write_one(queue<Patient*>* queue);
  *  Side Effects:
  *      Read a csv file containing all the information of patients.
  */
-queue<Patient*>* read_all(FILE* csv, queue<Patient*>* queue);
+//queue<Patient*>* read_all(FILE* csv, queue<Patient*>* queue);
 
 /*  Description:
  *      This function will write information of one patient in the
@@ -84,6 +66,6 @@ queue<Patient*>* read_all(FILE* csv, queue<Patient*>* queue);
  *  Side Effects:
  *      Write a csv file containing the information of one patient.
  */
-queue<Patient*>* read_one(FILE* csv, queue<Patient*>* queue);
+//queue<Patient*>* read_one(FILE* csv, queue<Patient*>* queue);
 
 #endif /* Local_IO_h */

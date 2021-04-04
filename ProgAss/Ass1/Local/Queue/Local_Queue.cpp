@@ -89,6 +89,6 @@ void Queue::update(int id, int up_type, auto info)
 // Report data to centralised treatment queue:
 queue<Patient*>* Queue::report(queue<Patient*>* l_queue)
 {
-	l_queue = write_all(l_queue);
+	l_queue = IO::write_all(l_queue);
 	return l_queue;
 }
