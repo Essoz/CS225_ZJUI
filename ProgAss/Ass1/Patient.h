@@ -47,6 +47,7 @@ class Patient
 private:
     int identificaiton;
     Risk risk;
+    int profession;
     Age age;
     Information* information;
     //char name[10];
@@ -60,12 +61,15 @@ private:
     //int date;       // The registeration date /*the format is YearMonthDate, Eg.20001204*/
     //int time;       // The precise registeration time /*the format is HourMinSec, Eg.184059*/
 public:
-    Patient(int id, Risk risk, Age a, Information *info, Appointment *appo, int ddl);      // Constructor for new patient
+    Patient(int id,int professionLevel, Risk risk, Age a, Information *info, Appointment *appo, int ddl);      // Constructor for new patient
     //~Patient();
 
     /*set functions*/
     void setid(int id) {
         identificaiton = id;
+    };
+    void setpro(int professionLevel) {
+        profession=professionLevel;
     };
     void setrisk(Risk R) {
         risk = R;
@@ -113,6 +117,9 @@ public:
     int getid() {
         return identificaiton;
     };
+    int getpro() {
+        return profession;
+    };
     Risk getrisk() {
         return risk;
     };
@@ -153,7 +160,7 @@ public:
     int calculate_prio();     // Calculate the priority
 };
 
-Patient::Patient(int id, Risk risk, Age a, Information *info, Appointment *appo, int ddl)
+Patient::Patient(int id, int professionLevel, Risk risk, Age a, Information *info, Appointment *appo, int ddl)
 {
     setid(id);
     setrisk(risk);
