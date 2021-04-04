@@ -7,17 +7,21 @@
  *  Writter: Guo Moyang
  * 
  *  Description:
-    This header file contains the class of "Patient", which has all the info 
- *  like "id number", "risk status" of each patient. 
- *  The file also defines some "set" and "get" helper functions to prevent direct
- *  access to the class fields.
+    This header file contains the class of "Patient", which has all the information:
+    identification,risk,age,ddl,priority,withdraw,
+    also with trivial Information : name,email,phone,birthday
+    and appointment : date, time, locaiton
+    All above have their get and set funcitons
+    for Appointment, There are extra funciton : settime gettime; setdate getdate
+    for quick search and change of time & date; 
+ *  
  */
 
 enum Risk {
     no, low, medium, high
 };
 
-enum Profession {
+enum Age {
     children, adolescent, youngadult, adult, senior, elderly, old
 };
 
@@ -34,8 +38,8 @@ typedef struct
 typedef struct
 {
     char location[10];
-    int date;       // The format is the same as the registration
-    int time;
+    int date;       // The registeration date /*the format is YearMonthDate, Eg.20001204*/
+    int time;       // The precise registeration time /*the format is HourMinSec, Eg.184059*/
 } Appointment;
 
 class Patient
@@ -43,20 +47,20 @@ class Patient
 private:
     int identificaiton;
     Risk risk;
-    Profession profession;
+    Age age;
     Information* information;
     //char name[10];
     //char email[10];
     //int  phone[10];
-    int date; // The registeration date /*the format is YearMonthDate, Eg.20001204*/
-    int time; // The precise registeration time /*the format is HourMinSec, Eg.184059*/
     bool withdraw;  // If the patient has withdrew before
     int letter_ddl; // The deadline of the priority letter, should be -1 if no letter is handed in
     int priority;   // The priority of treatment
-    Appointment* appoint;
-
+    Appointment* appointment;
+    //char location[10];
+    //int date;       // The registeration date /*the format is YearMonthDate, Eg.20001204*/
+    //int time;       // The precise registeration time /*the format is HourMinSec, Eg.184059*/
 public:
-    Patient(int id, Risk risk, Profession prof, Information* info, int date, int time, int ddl);      // Constructor for new patient
+    Patient(int id, Risk risk, Age a, Information *info, Appointment *appo, int ddl);      // Constructor for new patient
     //~Patient();
 
     /*set functions*/
@@ -66,18 +70,8 @@ public:
     void setrisk(Risk R) {
         risk = R;
     };
-    void setprof(Profession prof) {
-        profession = prof;
-    }
-    void setinfo(Information* info) {
-        name = info.name;
-
-    }
-    void setdate(int D) {
-        date = D;
-    }
-    void settime(int T) {
-        time = T;
+    void setage(Age a) {
+        age = a;
     }
     void setwithdraw(bool W)
     {
@@ -91,9 +85,29 @@ public:
     {
         priority = prio;
     }
-    void setappoint(Appointment* appo)
+    void setinfo(Information *info) {
+        information->phone = info->phone;
+        information->phone = info->phone;
+        for (int i = 0; i < 10; i++)
+        {
+            information->name[i]=info->name[i];
+            information->email[i]=info->email[i];
+        }
+    }
+    void setappoint(Appointment *appo)
     {
-        appoint = appo;
+       appointment->date = appo->date;
+       appointment->time = appo->time;
+        for (int i = 0; i < 10; i++)
+        {
+            appointment->location[i]=appo->location[i];
+        }
+    }
+    void settime(int T){
+        appointment->time=T;
+    }
+    void setdate(int D){
+        appointment->date=D;
     }
     /*get functions*/
     int getid() {
@@ -102,17 +116,8 @@ public:
     Risk getrisk() {
         return risk;
     };
-    Profession getprof() {
-        return profession;
-    }
-    Information* getinfo() {
-        return information;
-    };
-    int getdate() {
-        return date;
-    }
-    int gettime() {
-        return time;
+    Age getage() {
+        return age;
     }
     bool getwithdraw()
     {
@@ -126,29 +131,42 @@ public:
     {
         return priority;
     }
-    Appointment* getappoint()
-    {
-        return appoint;
+
+    Information* getinfo() {
+        return information;
     }
 
+    Appointment* getappoint()
+    {
+        return appointment;
+    }
+    int getdate() {
+        return appointment->date;
+    }
+    int gettime() {
+        return appointment->time;
+    }
+    char* getlocation(){
+        return appointment->location;
+    }
     // Other helper functions:
     int calculate_prio();     // Calculate the priority
 };
 
-Patient::Patient(int id, Risk risk, Profession prof, Information* info, int date, int time, int ddl)
+Patient::Patient(int id, Risk risk, Age a, Information *info, Appointment *appo, int ddl)
 {
     setid(id);
     setrisk(risk);
-    setprof(prof);
+    setage(a);
     setinfo(info);
-    setdate(date);
-    settime(time);
+    //setdate(date);
+    //settime(time);
     setwithdraw(false); // The new patient has no withdraw
     setddl(ddl);
     // The priority needs to be calculated first:
     int prio = calculate_prio();
     setpriority(prio);
-    setappoint(NULL);   // No appoinment yet
+    setappoint(appo);   // No appoinment yet
 };
 
 int Patient::calculate_prio()
