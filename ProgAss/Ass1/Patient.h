@@ -10,9 +10,9 @@
     This header file contains the class of "Patient", which has all the information:
     identification,risk,age,ddl,priority,withdraw,
     also with trivial Information : name,email,phone,birthday
-    and appointment : date, time, locaiton
-    All above have their get and set funcitons
-    for Appointment, There are extra funciton : settime gettime; setdate getdate
+    and appointment : date, time, location
+    All above have their get and set functions
+    for Appointment, There are extra functions : settime gettime; setdate getdate
     for quick search and change of time & date; 
  *  
  */
@@ -20,7 +20,9 @@
 enum Risk {
     no, low, medium, high
 };
-
+enum Profession{
+    I,II,III,IV,V,VI,VII,VIII
+};
 enum Age {
     children, adolescent, youngadult, adult, senior, elderly, old
 };
@@ -47,9 +49,11 @@ class Patient
 private:
     int identificaiton;
     Risk risk;
-    int profession;
+    Profession profession;
     Age age;
     Information* information;
+    int date;// The registeration date /*the format is YearMonthDate, Eg.20001204*/
+    int time;// The precise registeration time /*the format is HourMinSec, Eg.184059*/
     //char name[10];
     //char email[10];
     //int  phone[10];
@@ -58,17 +62,17 @@ private:
     int priority;   // The priority of treatment
     Appointment* appointment;
     //char location[10];
-    //int date;       // The registeration date /*the format is YearMonthDate, Eg.20001204*/
-    //int time;       // The precise registeration time /*the format is HourMinSec, Eg.184059*/
+    //int date;       // The appointment date /*the format is YearMonthDate, Eg.20001204*/
+    //int time;       // The appointment time /*the format is HourMinSec, Eg.184059*/
 public:
-    Patient(int id,int professionLevel, Risk risk, Age a, Information *info, Appointment *appo, int ddl);      // Constructor for new patient
+    Patient(int id,Profession professionLevel, Risk risk, Age a, Information *info, Appointment *appo,int date,int time, int ddl);      // Constructor for new patient
     //~Patient();
 
     /*set functions*/
     void setid(int id) {
         identificaiton = id;
     };
-    void setpro(int professionLevel) {
+    void setpro(Profession professionLevel) {
         profession=professionLevel;
     };
     void setrisk(Risk R) {
@@ -117,7 +121,7 @@ public:
     int getid() {
         return identificaiton;
     };
-    int getpro() {
+    Profession getpro() {
         return profession;
     };
     Risk getrisk() {
@@ -148,10 +152,10 @@ public:
         return appointment;
     }
     int getdate() {
-        return appointment->date;
+        return date;
     }
     int gettime() {
-        return appointment->time;
+        return time;
     }
     char* getlocation(){
         return appointment->location;
@@ -160,9 +164,12 @@ public:
     int calculate_prio();     // Calculate the priority
 };
 
-Patient::Patient(int id, int professionLevel, Risk risk, Age a, Information *info, Appointment *appo, int ddl)
+Patient::Patient(int id,Profession professionLevel, Risk risk, Age a, Information *info, Appointment *appo,int date,int time, int ddl)
 {
     setid(id);
+    setpro(professionLevel);
+    setdate(date);
+    settime(time);
     setrisk(risk);
     setage(a);
     setinfo(info);
