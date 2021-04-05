@@ -1,9 +1,8 @@
+#include "Local_Queue.h"
 #include "Local_IO.h"
-#include "Local_IO.cpp"
+#include "Local_hash.h"
 #include <stdio.h>
-#include <iostream>
 #include <cstdlib>
-#include <queue>
 using namespace std;
 using std::cout;
 using std::cin;
@@ -11,4 +10,5 @@ using std::cin;
 int main()
 {
 
+	return 0;
 }

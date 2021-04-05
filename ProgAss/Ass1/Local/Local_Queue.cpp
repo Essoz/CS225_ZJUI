@@ -24,19 +24,21 @@ Queue::Queue()
 	l_queue = new queue<Patient*>;
 	Hashtable = new Hash_Chaining(100);		// The default length of hashtable is 100
 	id_num = 0;
+	io = new IO();	// Add a new IO class for this stream
 }
 
 // Create a new patient member:
-void Queue::new_patient(Risk risk, Profession prof, Information info, int date, int time, int ddl)
+void Queue::new_patient(Risk risk, Profession prof, Age a, Information* info, int year, int date, int ddl)
 {
 	id_num++;
 	int id = id_num;	// Allocate a new id number to him
 	Patient* patient;	// Create a new patient instance in the MEM heap
-	patient = new Patient(id, risk, prof, info, date, time, ddl);
+	patient = new Patient(id, risk, prof, a, info, year, date, 0, ddl);
 	// Add the patient into the local queue:
 	l_queue->push(patient);
 	// Add the patient into the hash table:
 	Hashtable->insertion(patient);
+	return;
 }
 
 // Update the information of a patient with unique id number, up_type determines what info will be changed:
@@ -54,25 +56,46 @@ void Queue::update(int id, int up_type, auto info)
 	switch (up_type)
 	{
 	case 0:		// Risk
-		patient->setrisk(info);
+		if (info > patient->getrisk())
+		{
+			patient->setrisk(info);
+		}
 		break;
 	case 1:		// Profession
-		patient->setprof(info);
+		if (info > patient->getpro())
+		{
+			patient->setpro(info);
+		}
 		break;
-	case 2:		// Information
-		patient->setinfo(info);
+	case 2:		// Age
+		if (info > patient->getage())
+		{
+			patient->setage(info);
+		}
 		break;
-	case 3:		// Registration date
-		patient->setdate(info);
+	case 3:		// Registration year
+		if (info < patient->getyear())
+		{
+			patient->setyear(info);
+		}
 		break;
-	case 4:		// Ragistration time
-		patient->settime(info);
+	case 4:		// Ragistration date
+		if (info < patient->getdate())
+		{
+			patient->setdate(info);
+		}
 		break;
 	case 5:		// Withdraw
-		patient->setwithdraw(info);
+		if (info > patient->getwithdraw())
+		{
+			patient->setwithdraw(info);
+		}
 		break;
 	case 6:		// Letter_ddl
 		patient->setddl(info);
+		break;
+	case 7:		// Information
+		patient->setinfo(info);
 		break;
 	default:
 		std::cout << "The type number is invaild!" << endl;
@@ -89,6 +112,6 @@ void Queue::update(int id, int up_type, auto info)
 // Report data to centralised treatment queue:
 queue<Patient*>* Queue::report(queue<Patient*>* l_queue)
 {
-	l_queue = IO::write_all(l_queue);
+	l_queue = io->write_all(l_queue);
 	return l_queue;
 }

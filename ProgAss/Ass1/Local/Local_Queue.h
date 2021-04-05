@@ -37,21 +37,22 @@ using namespace std;
 class Queue
 {
 public:
-	Queue();	// Default constructor for empty queue
-	//~Queue();
-
+	Queue();	// Default constructor for empty queue and empty IO stream class.
 	// Create a new patient member:
-	void new_patient(Risk risk, Profession prof, Information info, int date, int time, int ddl);
+	void new_patient(Risk risk, Profession prof, Age a, Information* info, int year, int date, int ddl);
 	// Update the information of a patient with unique id number, up_type determines what info will be changed:
 	void update(int id, int up_type, auto info);
 	// Report data to centralised treatment queue:
 	queue<Patient*>* report(queue<Patient*>* l_queue);
 
 private:
-	std::queue<Patient*>* l_queue;		// The local queue
-	Hash_Chaining* Hashtable;			// The hash table
+	IO* io;							// The IO stream for this queue
+	queue<Patient*>* l_queue;		// The local queue
+	Hash_Chaining* Hashtable;		// The hash table
 	// This file scope variable track the id number so that no two patients have the same id number.
 	static int id_num;
+	// This is used as time counter, 0.5 stands for half day.
+	static double counter;
 };
 
 #endif /* Local_Queue_h */

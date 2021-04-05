@@ -1,5 +1,7 @@
 #ifndef Patient_h
 #define Patient_h
+#include <string>
+using namespace std;
 
 /*
  *  File: Patient.h
@@ -30,8 +32,8 @@ enum Age {
 // Structure of info which is not used in the priority issue:
 typedef struct
 {
-    char name[10];
-    char email[10];
+    string name;
+    string email;
     int phone;
     int birthday;
 } Information;
@@ -39,7 +41,7 @@ typedef struct
 // Info about the appointment processing:
 typedef struct
 {
-    char location[10];
+    string location;
     int year;       // The appointment year
     int date;       // The appointment date, from 1-365
 } Appointment;
@@ -119,22 +121,25 @@ public:
         priority = prio;
     }
     void setinfo(Information* info) {
+        information->name = info->name;
+        information->email = info->email;
         information->phone = info->phone;
-        information->phone = info->phone;
-        for (int i = 0; i < 10; i++)
-        {
-            information->name[i] = info->name[i];
-            information->email[i] = info->email[i];
-        }
+        information->birthday = info->birthday;
+        //for (int i = 0; i < 10; i++)
+        //{
+        //    information->name[i] = info->name[i];
+        //    information->email[i] = info->email[i];
+        //}
     }
     void setappoint(Appointment* appo)
     {
+        appointment->location = appo->location;
         appointment->year = appo->year;
         appointment->date = appo->date;
-        for (int i = 0; i < 10; i++)
-        {
-            appointment->location[i] = appo->location[i];
-        }
+        //for (int i = 0; i < 10; i++)
+        //{
+        //   appointment->location[i] = appo->location[i];
+        //}
     }
 
     /*get functions*/
@@ -175,7 +180,7 @@ public:
     {
         return appointment;
     }
-    char* getlocation() {
+    string getlocation() {
         return appointment->location;
     }
     // Other helper functions:
@@ -196,7 +201,7 @@ Patient::Patient(int id, Risk risk, Profession professionLevel, Age a, Informati
     // The priority needs to be calculated first:
     int prio = calculate_prio();
     setpriority(prio);
-    setappoint(NULL);   // No appointment yet
+    setappoint(NULL);   // No appoinment yet
 };
 
 // The priotiry is represented by a int number, different fields occupy different places (letter_ddl is not considered):
