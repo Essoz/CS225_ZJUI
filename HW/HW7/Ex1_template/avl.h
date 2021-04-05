@@ -2,6 +2,7 @@
 #define avl_h
 
 #include "alist_f.h"
+#include "fifo.h"
 
 template<class T> class AVL;
 
@@ -69,7 +70,10 @@ private:
 /*
 *   you can declare your helper function here (optional):
 */
-
+    // These two helper functions are used recursively to insert the 
+    // elements into the dynamically created alist.
+    void DFS_add(avlnode<T>* node, AList<T>* list);
+    void BFS_add(fifo<avlnode<T>*>* queue, AList<T>* list);
 
 /**********************************************/
     avlnode<T> *root;
