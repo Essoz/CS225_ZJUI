@@ -196,7 +196,7 @@ Patient::Patient(int id, Risk risk, Profession professionLevel, Age a, Informati
     // The priority needs to be calculated first:
     int prio = calculate_prio();
     setpriority(prio);
-    setappoint(NULL);   // No appoinment yet
+    setappoint(NULL);   // No appointment yet
 };
 
 // The priotiry is represented by a int number, different fields occupy different places (letter_ddl is not considered):
@@ -204,13 +204,11 @@ int Patient::calculate_prio()
 {
     int prio = 0;
     // Start from the registration time, they occupy the last 5 digits:
-    prio = prio + date + 1000 * (year - 2000);
+    prio = prio + (1000 - date) + 1000 * (100 - (year - 2000));
     // Then for age group, it stands for the least 6 digit:
     prio = prio + 100000 * age;
-    // Then for profession, 7th digit:
+    // Finally for profession, 7th digit:
     prio = prio + 1000000 * profession;
-    // Finally the risk status, the 8th digit:
-    prio = prio + 10000000 * risk;
     return prio;
 }
 
