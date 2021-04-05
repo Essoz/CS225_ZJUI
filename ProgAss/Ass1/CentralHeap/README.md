@@ -25,3 +25,7 @@ To Be Done:
 
 7. The nodes that finished treating needs to be deleted from the hash table, but we will provide another way (similar to hash with chaining) to access it.  
     Specifically, we will use an array list whose entry can be accessed w.r.t to week, and hold a pointer to a linked list of all nodes treated that week.
+
+
+TBD:
+1. An Assignment 

@@ -65,7 +65,7 @@ void Queue::update(int id, int up_type, auto info)
 	case 3:		// Registration date
 		patient->setdate(info);
 		break;
-	case 4:		// Ragistration time
+	case 4:		// Registration time
 		patient->settime(info);
 		break;
 	case 5:		// Withdraw

@@ -6,6 +6,7 @@ template<class T> class FibNode;
 
 template<class T> class FibHeap{
     public:
+        friend class CentralIO;
         FibHeap();  // this operation builds the heap
         /* You should add other functions to make the structure as Fibonacci heap  */
         /* It is part of computing assignment, so we would not provide the basic implementation for you */
@@ -37,7 +38,6 @@ template<class T> class FibHeap{
 template<class T> FibHeap<T>::FibHeap(){
     min_ptr = NULL;
     numitems = 0;
-
 };
 
 template<class T> class FibNode{
