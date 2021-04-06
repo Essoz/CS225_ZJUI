@@ -1,6 +1,7 @@
 #ifndef _FIBHEAP_H
 #define _FIBHEAP_H
 /* Put your declaration here */
+#include "../Patient.h"
 
 template<class T> class FibNode;
 
@@ -40,7 +41,7 @@ template<class T> FibHeap<T>::FibHeap(){
     numitems = 0;
 };
 
-template<class T> class FibNode{
+template<class T> class FibNode: public Patient{
     public:
         friend class FibHeap<T>;
         FibNode(T key = 0);
@@ -53,14 +54,15 @@ template<class T> class FibNode{
         int degree;
 };
 
-template<class T> FibNode<T>::FibNode(T key){
+template<class T> FibNode<T>::FibNode(int id, Risk risk, Profession professionLevel, Age a, Information* info, int year, int date, int withdraw, int ddl): 
+Patient(id, risk, professionLevel, a, info, year, date, withdraw, ddl){
     parent = NULL;
     child = NULL;
     left = NULL;
     right = NULL;
     degree = 0;
     mark = false;       // default marking == false
-    FibNode::key = key;
-};
+    key = priority;
 
+};
 #endif

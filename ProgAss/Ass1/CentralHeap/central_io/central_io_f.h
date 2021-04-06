@@ -24,6 +24,15 @@ using namespace std;
 
  */
 template<class T> bool CentralIO<T>::Read2Heap(){
+    ifstream infile;
+    infile.open(path, ifstream::in);
+    if (infile.fail()) { 
+        cout << "File not found" <<endl; 
+        return false;
+    }
+
+        
+    
     //check hash set
 
     //if in hashset
@@ -44,6 +53,8 @@ template<class T> bool CentralIO<T>::ReportWeekly(int key){
      * 2. the registered people with a set appointment including their profession category, age category, risk status and their waiting time until now
      * 3. the queueing people without a set appointment including their profession category, age category, risk status and their waiting time until now
      */
+
+    
 }
 template<class T> bool CentralIO<T>::ReportMonthly(int key){
 
