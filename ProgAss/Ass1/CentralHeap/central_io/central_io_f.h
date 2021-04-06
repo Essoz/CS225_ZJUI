@@ -30,19 +30,69 @@ template<class T> bool CentralIO<T>::Read2Heap(){
         cout << "File not found" <<endl; 
         return false;
     }
-
+    vector<string> temp_list;
+    string temp;
+    string line;   
+    while (true){
+        ifstream::getline(infile, line);
         
+        // terminate the reading process on encountering an empty line
+        if (line.size() == 0) break; 
+        
+        // reading registrations from files generated from local registries
+        for (int i = 0, i < line.size(); i++) {
+            if (line[i] = ",") {
+                // put this string into the vector
+                temp_list.push_back(temp);
+                // clear the temp string for the next argument
+                temp.clear();
+                continue;
+            }
+            temp.push_back(line[i]);
+        }
     
+    // clear this list for next use
+    FibNode<int>* newnode = new FibNode<int>;
+    newnode->PatientCreate(temp_list);
+    temp_list.clear();    
     //check hash set
+    if (newnode->withdraw) {
+        if (newnode->withdraw == 1){
+            // withdraw == 1 (this indicates a withdraw has been prompted, we have to search this node in the hashtable and move the node from the heap to the withdrawn set, set withdraw = 2) 
+            // put this node into the withdrawn hashset 
+        } else {
+            
+
+            // withdraw == 2 (this indicates the node now needs an re-insertion into the heap with a 14-day extension )
+
+            
+            // remove this node from the withdrawn hashset
+            
+
+        }
+    }
+
+    if (inhashset(newnode)){
+        // the node is in hashtable
+
+
+        // do node swap and delete the original node
+
+
+    }
 
     //if in hashset
-
+    
     //do corresponding insertions
+    
     /*
      * Insert this node into the corresponding hash table
      * 
      */
+
+
         
+    }
     
     return true;
 }

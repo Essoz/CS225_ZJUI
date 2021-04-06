@@ -2,6 +2,8 @@
 #define _FIBHEAP_H
 /* Put your declaration here */
 #include "../Patient.h"
+#include <string>
+#include <vector>
 
 template<class T> class FibNode;
 
@@ -44,7 +46,8 @@ template<class T> FibHeap<T>::FibHeap(){
 template<class T> class FibNode: public Patient{
     public:
         friend class FibHeap<T>;
-        FibNode(T key = 0);
+        FibNode(int id, Risk risk, Profession professionLevel, Age a, Information* info, int year, int date, int withdraw, int ddl);
+        void PatientCreate(vector<string>* infolist);
         FibNode<T>* parent;
         FibNode<T>* child;
         FibNode<T>* left;

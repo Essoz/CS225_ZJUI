@@ -3,6 +3,8 @@
 #include <cstdlib>
 #include <cmath>
 #include "fibheap.h"
+// #include <string>
+// #include <vector>
 
 using std::cin;
 using std::cout;
@@ -336,3 +338,48 @@ template<class T> void FibHeap<T>::_PrintTree(FibNode<T>* node){
     }while(node_pt != node);
     cout << "]";
 }
+
+/* <=== Computing Assignment 1 Helper Function ===>*/
+/* String2Int 
+ * Input
+ * 1. key (key should be written in decimal form)
+ * Output
+ * 1. key in type int
+ */
+int String2Int(string key){
+    int key_int = 0;
+    
+    for (int i = key.size() - 1; i >= 0; i--){
+        key_int += key[i] * pow(10, key.size() - i) ; // an explicit type cast may be needed here
+    }
+
+    return key_int;
+};
+
+
+/* Patient Create 
+ * Input
+ * 1. a vector list containing all necessary information for creating a registration in the heap
+ * Output
+ * NONE
+ * Effect
+ * Nodes will be added into the central heap (or withdrawn, or update), respectively
+ */
+template<class T> void FibNode<T>::PatientCreate(vector<string>* infolist){
+    setid(String2Int(infolist[0]));
+    setrisk(String2Int(infolist[1]));
+    setpro(String2Int(infolist[2]));
+    setage(String2Int(infolist[3]));
+    setyear(String2Int(infolist[4]));
+    setdate(String2Int(infolist[5]));
+    setwithdraw(String2Int(infolist[6]));
+    setddl(String2Int(infolist[7]));
+    setpriority(String2Int(infolist[8]));
+
+    Infomation temp_info;
+    temp_info.name = infolist[9];
+    temp_info.email = infolist[10];
+    temp_info.phone = String2Int[infolist[11]];
+    temp_info.birthday = String2Int[infolist[12]];
+    setinfo(temp_info);
+};

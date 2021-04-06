@@ -49,7 +49,7 @@ typedef struct
 class Patient
 {
 private:
-    int identificaiton;
+    int identification;
     Risk risk;
     Profession profession;
     Age age;
@@ -67,7 +67,7 @@ public:
 
     /*set functions*/
     void setid(int id) {
-        identificaiton = id;
+        identification = id;
     };
     void setrisk(Risk R) {
         risk = R;
@@ -144,7 +144,7 @@ public:
 
     /*get functions*/
     int getid() {
-        return identificaiton;
+        return identification;
     };
     Risk getrisk() {
         return risk;
