@@ -1,6 +1,6 @@
 #ifndef Local_hash_h
 #define Local_hash_h
-#include "../Patient.h"
+#include "Local_Queue.h"
 #include <iostream>	
 #include <math.h>
 #include <cstdlib>
@@ -31,7 +31,7 @@ public:
     Patient* retrieval(int id);
 
 private:
-    std::vector<Patient*>** hashtable;  // The hashtable
+    std::vector<vector<Patient*>*>* hashtable;      // The hashtable
     int hash_numitems;                  // length of hashtable
     int hash_maxsize;                   // defines the size of the hashtable
 };

@@ -34,6 +34,8 @@ using namespace std;
  *	3. When it is ready to upload the updated info to the centralised treatment queue, use the 
  *		local queue to output a csv file, then send this to the center.
  */
+class IO;
+class Hash_Chaining;
 
 class Queue
 {
@@ -45,17 +47,29 @@ public:
 	void update(int id, int up_type, auto info);
 	// Report data to centralised treatment queue:
 	queue<Patient*>* report(queue<Patient*>* l_queue);
+	// Get io pointer:
+	IO* getio(){
+		return io;
+	}
+	// Get local queue pointer:
+	queue<Patient*>* getl_queue(){
+		return l_queue;
+	}
 
 private:
-	IO* io;							// The IO stream for this queue
+	IO* io;							// The IO class for this queue
 	queue<Patient*>* l_queue;		// The local queue
 	Hash_Chaining* Hashtable;		// The hash table
 	// This file scope variable track the id number so that no two patients have the same id number.
-	static int id_num;
+	//static int id_num;
+	int id_num;
 	// These two static variables are used to represent current date and year.
-	static int cur_year;
-	static int cur_date;
-	static int counter;				// Used to increase the date and year, even number means one day passed
+	//static int cur_year;
+	//static int cur_date;
+	//static int counter;				// Used to increase the date and year, even number means one day passed
+	int cur_year;
+	int cur_date;
+	int counter;
 };
 
 #endif /* Local_Queue_h */

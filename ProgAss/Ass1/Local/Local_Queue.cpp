@@ -1,5 +1,4 @@
 #include "Local_Queue.h"
-#include "Local_IO.h"
 #include <iostream>	
 #include <math.h>
 #include <time.h>
@@ -28,10 +27,14 @@ Queue::Queue()
 	io = new IO;							// Add a new IO class for this stream
 	id_num = 0;								// ID starts from 0
 	// Now deal with the year and date when the program starts:
-	time_t now = time(0);		// The time from the system
-	tm* ltm = localtime(&now);	// The local time
-	cur_year = 1900 + ltm->tm_year;						// The current year
-	cur_date = (1 + ltm->tm_mon) * 30 + ltm->tm_mday;	// The current date
+	time_t rawtime;
+	struct tm *info;
+	time(&rawtime);
+	info = gmtime(&rawtime);
+	cur_year = 1900 + info->tm_year;						// The current year
+	cur_date = (1 + info->tm_mon) * 30 + info->tm_mday;		// The current date
+	//cur_year = 2021;	// The current year
+	//cur_date = 96;		// The current date
 	counter = 0;		// The counter starts with 0
 }
 

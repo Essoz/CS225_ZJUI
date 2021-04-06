@@ -79,7 +79,7 @@ public:
         age = a;
     }
     void setyear(int Y) {
-        year = T;
+        year = Y;
     }
     void setdate(int D) {
         date = D;

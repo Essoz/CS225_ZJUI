@@ -50,12 +50,14 @@ queue<Patient*>* IO::write_all(queue<Patient*>* queue)
 	// information into the update.csv:
 	while (0 == queue->empty())
 	{
-		fprintf(update, "%d,%d,%d,%d,%d,%d,%d,%d,",
-			queue->front()->getid(), queue->front()->getrisk(), queue->front()->getpro(),
-			queue->front()->getage(), queue->front()->getyear(), queue->front()->getdate(),
+		fprintf(update, "%d,%d,%d,",
+			queue->front()->getid(), queue->front()->getrisk(), queue->front()->getpro());
+		fprintf(update, "%d,%d,%d,",
+			queue->front()->getage(), queue->front()->getyear(), queue->front()->getdate());
+		fprintf(update, "%d,%d,%d,",
 			queue->front()->getwithdraw(), queue->front()->getddl(),queue->front()->getpriority());
 		fprintf(update, "%s,%s,%d,%d,", 
-			queue->front()->getinfo()->name, queue->front()->getinfo()->email, 
+			queue->front()->getinfo()->name.c_str(), queue->front()->getinfo()->email.c_str(), 
 			queue->front()->getinfo()->phone, queue->front()->getinfo()->birthday);
 		// delete the first entry in the queue:
 		queue->pop();
@@ -89,35 +91,35 @@ queue<Patient*>* IO::read_all(string path, Queue* queue)
 	ifstream fin(path);		// open the stream
 	string line;
 	getline(fin, line);		// Skip the header line
-	while (getline(fin, line))		// ÕûÐÐ¶ÁÈ¡£¬»»ÐÐ·û¡°\n¡±Çø·Ö£¬Óöµ½ÎÄ¼þÎ²±êÖ¾eofÖÕÖ¹¶ÁÈ¡
+	while (getline(fin, line))		// ï¿½ï¿½ï¿½Ð¶ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½Ð·ï¿½ï¿½ï¿½\nï¿½ï¿½ï¿½ï¿½ï¿½Ö£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½Î²ï¿½ï¿½Ö¾eofï¿½ï¿½Ö¹ï¿½ï¿½È¡
 	{
-		istringstream sin(line);	// ½«ÕûÐÐ×Ö·û´®line¶ÁÈëµ½×Ö·û´®Á÷istringstreamÖÐ
-		vector<string> fields;		// ÉùÃ÷Ò»¸ö×Ö·û´®ÏòÁ¿
+		istringstream sin(line);	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½lineï¿½ï¿½ï¿½ëµ½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½istringstreamï¿½ï¿½
+		vector<string> fields;		// ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		string field;
-		while (getline(sin, field, ','))	// ½«×Ö·û´®Á÷sinÖÐµÄ×Ö·û¶ÁÈëµ½field×Ö·û´®ÖÐ£¬ÒÔ¶ººÅÎª·Ö¸ô·û
+		while (getline(sin, field, ','))	// ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½sinï¿½Ðµï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ëµ½fieldï¿½Ö·ï¿½ï¿½ï¿½ï¿½Ð£ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½Îªï¿½Ö¸ï¿½ï¿½ï¿½
 		{
-			fields.push_back(field);		// ½«¸Õ¸Õ¶ÁÈ¡µÄ×Ö·û´®Ìí¼Óµ½ÏòÁ¿fieldsÖÐ
+			fields.push_back(field);		// ï¿½ï¿½ï¿½Õ¸Õ¶ï¿½È¡ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Óµï¿½ï¿½ï¿½ï¿½ï¿½fieldsï¿½ï¿½
 		}
 		// Now we can declare several variables and create new patients:
-		Risk risk = atoi(Trim(fields[0]));
-		Profession prof = atoi(Trim(fields[1]));
-		Age a = atoi(Trim(fields[2]));
-		int ddl = atoi(Trim(fields[3]));
+		Risk risk = Risk(atoi(Trim(fields[0]).c_str()));
+		Profession prof = Profession(atoi(Trim(fields[1]).c_str()));
+		Age a = Age(atoi(Trim(fields[2]).c_str()));
+		int ddl = atoi(Trim(fields[3]).c_str());
 		Information* info = new Information;
 		info->name = Trim(fields[4]);
 		info->email = Trim(fields[5]);
-		info->phone = atoi(Trim(fields[6]));
-		info->birthday = atoi(Trim(fields[7]));
+		info->phone = atoi(Trim(fields[6]).c_str());
+		info->birthday = atoi(Trim(fields[7]).c_str());
 		// Create a new patient:
 		queue->new_patient(risk, prof, a, info, ddl);
 	}
-	return queue;
+	return queue->getl_queue();
 }
 
-//É¾³ý×Ö·û´®ÖÐ¿Õ¸ñ£¬ÖÆ±í·ûtabµÈÎÞÐ§×Ö·û:
+//É¾ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½Ð¿Õ¸ï¿½ï¿½Æ±ï¿½ï¿½ï¿½tabï¿½ï¿½ï¿½ï¿½Ð§ï¿½Ö·ï¿½:
 string IO::Trim(string& str)
 {
-	//str.find_first_not_of(" \t\r\n"),ÔÚ×Ö·û´®strÖÐ´ÓË÷Òý0¿ªÊ¼£¬·µ»ØÊ×´Î²»Æ¥Åä"-\t\r\n"µÄÎ»ÖÃ
+	//str.find_first_not_of(" \t\r\n"),ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½strï¿½Ð´ï¿½ï¿½ï¿½ï¿½ï¿½0ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Î²ï¿½Æ¥ï¿½ï¿½"-\t\r\n"ï¿½ï¿½Î»ï¿½ï¿½
 	str.erase(0, str.find_first_not_of("-\t\r\n"));
 	str.erase(str.find_last_not_of("-\t\r\n") + 1);
 	return str;

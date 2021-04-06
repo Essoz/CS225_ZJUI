@@ -1,6 +1,5 @@
 #ifndef Local_IO_h
 #define Local_IO_h
-#include "../Patient.h"
 #include "Local_Queue.h"
 #include <queue>
 #include <vector>
@@ -19,6 +18,7 @@ using namespace std;
  *	This header file declares all the functions related to I/O for local registry.
  *	Details are listed above each function.
  */
+class Queue;
 
 class IO
 {
@@ -51,7 +51,7 @@ public:
  *      Read a csv file containing all the information of new patients.
  */
 	static queue<Patient*>* read_all(string path, Queue* queue);
-//É¾³ý×Ö·û´®ÖÐ¿Õ¸ñ£¬ÖÆ±í·ûtabµÈÎÞÐ§×Ö·û
+//É¾ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½Ð¿Õ¸ï¿½ï¿½Æ±ï¿½ï¿½ï¿½tabï¿½ï¿½ï¿½ï¿½Ð§ï¿½Ö·ï¿½
 	static string Trim(string& str);
 };
 
