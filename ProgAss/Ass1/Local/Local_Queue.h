@@ -2,6 +2,7 @@
 #define Local_Queue_h
 #include "Patient.h"
 #include "Local_hash.h"
+#include "Local_IO.h"
 #include <queue>
 #include <vector>
 using namespace std;
@@ -39,7 +40,7 @@ class Queue
 public:
 	Queue();	// Default constructor for empty queue and empty IO stream class.
 	// Create a new patient member:
-	void new_patient(Risk risk, Profession prof, Age a, Information* info, int year, int date, int ddl);
+	void new_patient(Risk risk, Profession prof, Age a, Information* info, int ddl);
 	// Update the information of a patient with unique id number, up_type determines what info will be changed:
 	void update(int id, int up_type, auto info);
 	// Report data to centralised treatment queue:
@@ -51,8 +52,10 @@ private:
 	Hash_Chaining* Hashtable;		// The hash table
 	// This file scope variable track the id number so that no two patients have the same id number.
 	static int id_num;
-	// This is used as time counter, 0.5 stands for half day.
-	static double counter;
+	// These two static variables are used to represent current date and year.
+	static int cur_year;
+	static int cur_date;
+	static int counter;				// Used to increase the date and year, even number means one day passed
 };
 
 #endif /* Local_Queue_h */

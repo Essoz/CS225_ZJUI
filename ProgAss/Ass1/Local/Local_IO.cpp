@@ -102,16 +102,14 @@ queue<Patient*>* IO::read_all(string path, Queue* queue)
 		Risk risk = atoi(Trim(fields[0]));
 		Profession prof = atoi(Trim(fields[1]));
 		Age a = atoi(Trim(fields[2]));
-		int year = atoi(Trim(fields[3]));
-		int date = atoi(Trim(fields[4]));
-		int ddl = atoi(Trim(fields[5]));
+		int ddl = atoi(Trim(fields[3]));
 		Information* info = new Information;
-		info->name = Trim(fields[6]);
-		info->email = Trim(fields[7]);
-		info->phone = atoi(Trim(fields[8]));
-		info->birthday = atoi(Trim(fields[9]));
+		info->name = Trim(fields[4]);
+		info->email = Trim(fields[5]);
+		info->phone = atoi(Trim(fields[6]));
+		info->birthday = atoi(Trim(fields[7]));
 		// Create a new patient:
-		queue->new_patient(risk, prof, a, info, year, date, ddl);
+		queue->new_patient(risk, prof, a, info, ddl);
 	}
 	return queue;
 }

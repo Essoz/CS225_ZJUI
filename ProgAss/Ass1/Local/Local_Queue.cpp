@@ -2,6 +2,8 @@
 #include "Local_IO.h"
 #include <iostream>	
 #include <math.h>
+#include <time.h>
+#include <ctime>
 #include <cstdlib>
 #include <map>
 #include <queue>
@@ -21,17 +23,25 @@ using std::cin;
 // Default constructor:
 Queue::Queue()
 {
-	l_queue = new queue<Patient*>;
+	l_queue = new queue<Patient*>;			// New queue
 	Hashtable = new Hash_Chaining(100);		// The default length of hashtable is 100
-	id_num = 0;
-	io = new IO();	// Add a new IO class for this stream
+	io = new IO;							// Add a new IO class for this stream
+	id_num = 0;								// ID starts from 0
+	// Now deal with the year and date when the program starts:
+	time_t now = time(0);		// The time from the system
+	tm* ltm = localtime(&now);	// The local time
+	cur_year = 1900 + ltm->tm_year;						// The current year
+	cur_date = (1 + ltm->tm_mon) * 30 + ltm->tm_mday;	// The current date
+	counter = 0;		// The counter starts with 0
 }
 
 // Create a new patient member:
-void Queue::new_patient(Risk risk, Profession prof, Age a, Information* info, int year, int date, int ddl)
+void Queue::new_patient(Risk risk, Profession prof, Age a, Information* info, int ddl)
 {
 	id_num++;
-	int id = id_num;	// Allocate a new id number to him
+	int id = id_num;		// Allocate a new id number to him
+	int year = cur_year;	// Set the date and year from the system
+	int date = cur_date;
 	Patient* patient;	// Create a new patient instance in the MEM heap
 	patient = new Patient(id, risk, prof, a, info, year, date, 0, ddl);
 	// Add the patient into the local queue:
@@ -113,5 +123,17 @@ void Queue::update(int id, int up_type, auto info)
 queue<Patient*>* Queue::report(queue<Patient*>* l_queue)
 {
 	l_queue = io->write_all(l_queue);
+	// After report, increase the time counter:
+	counter++;
+	if (0 == counter % 2)
+	{
+		cur_date++;
+		// Increase year when date reaches 365:
+		if (cur_date >= 365)
+		{
+			cur_year++;
+			cur_date = cur_date % 365;
+		}
+	}
 	return l_queue;
 }
