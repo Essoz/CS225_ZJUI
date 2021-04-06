@@ -26,7 +26,7 @@ public:
     Hash_Chaining(int length);
     int calculate_hashvalue(int id, int size);
     void insertion(Patient* item);
-    void deletion(Patient* item);
+    //void deletion(Patient* item);
     // Return the pointer of the patient instance in the hash table:
     Patient* retrieval(int id);
 

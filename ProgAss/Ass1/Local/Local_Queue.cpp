@@ -31,8 +31,8 @@ Queue::Queue()
 	struct tm *info;
 	time(&rawtime);
 	info = gmtime(&rawtime);
-	cur_year = 1900 + info->tm_year;						// The current year
-	cur_date = (1 + info->tm_mon) * 30 + info->tm_mday;		// The current date
+	cur_year = 1900 + info->tm_year;					// The current year
+	cur_date = info->tm_mon * 30 + info->tm_mday;		// The current date
 	//cur_year = 2021;	// The current year
 	//cur_date = 96;		// The current date
 	counter = 0;		// The counter starts with 0

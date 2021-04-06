@@ -12,5 +12,6 @@ int main()
 	// Starts with a queue
 	Queue* test = new Queue();
 	test->getio()->read_all("test1.csv", test);
+	test->setl_queue(test->report(test->getl_queue()));
 	return 0;
 }

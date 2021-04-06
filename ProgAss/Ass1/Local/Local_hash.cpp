@@ -26,7 +26,7 @@ Hash_Chaining::Hash_Chaining(int length)
         hash_maxsize = 20;  // Default size for hashtable
     }
     hash_numitems = 0;   // The current number of pairs in hashtable
-    hashtable = new vector<vector<Patient*>*>[hash_maxsize];
+    hashtable = new vector<vector<Patient*>*>(hash_maxsize);
     for (int i = 0; i < hash_maxsize; i++) {
         hashtable->at(i) = NULL;
     }
@@ -61,7 +61,7 @@ void Hash_Chaining::insertion(Patient* item)
     hashtable->at(index)->push_back(item);   // Add that item into the entry
     return;
 }
-
+/*
 // Delete a value:
 void Hash_Chaining::deletion(Patient* item)
 {
@@ -91,7 +91,7 @@ void Hash_Chaining::deletion(Patient* item)
         return;
     }
 }
-
+*/
 // Return the pointer of the patient instance in the hash table:
 Patient* Hash_Chaining::retrieval(int id)
 {

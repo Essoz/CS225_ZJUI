@@ -56,7 +56,7 @@ queue<Patient*>* IO::write_all(queue<Patient*>* queue)
 			queue->front()->getage(), queue->front()->getyear(), queue->front()->getdate());
 		fprintf(update, "%d,%d,%d,",
 			queue->front()->getwithdraw(), queue->front()->getddl(),queue->front()->getpriority());
-		fprintf(update, "%s,%s,%d,%d,", 
+		fprintf(update, "%s,%s,%ld,%d\n", 
 			queue->front()->getinfo()->name.c_str(), queue->front()->getinfo()->email.c_str(), 
 			queue->front()->getinfo()->phone, queue->front()->getinfo()->birthday);
 		// delete the first entry in the queue:
@@ -68,7 +68,7 @@ queue<Patient*>* IO::write_all(queue<Patient*>* queue)
 	if (0 == check)
 	{
 		cout << "Failed to close the update.csv." << endl;
-		exit(1);
+		//exit(1);
 	}
 	return queue;
 }
@@ -108,7 +108,7 @@ queue<Patient*>* IO::read_all(string path, Queue* queue)
 		Information* info = new Information;
 		info->name = Trim(fields[4]);
 		info->email = Trim(fields[5]);
-		info->phone = atoi(Trim(fields[6]).c_str());
+		info->phone = atol(Trim(fields[6]).c_str());
 		info->birthday = atoi(Trim(fields[7]).c_str());
 		// Create a new patient:
 		queue->new_patient(risk, prof, a, info, ddl);
@@ -120,7 +120,7 @@ queue<Patient*>* IO::read_all(string path, Queue* queue)
 string IO::Trim(string& str)
 {
 	//str.find_first_not_of(" \t\r\n"),���ַ���str�д�����0��ʼ�������״β�ƥ��"-\t\r\n"��λ��
-	str.erase(0, str.find_first_not_of("-\t\r\n"));
-	str.erase(str.find_last_not_of("-\t\r\n") + 1);
+	str.erase(0, str.find_first_not_of("\t\r\n"));
+	str.erase(str.find_last_not_of("\t\r\n") + 1);
 	return str;
 }

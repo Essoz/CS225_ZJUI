@@ -55,6 +55,10 @@ public:
 	queue<Patient*>* getl_queue(){
 		return l_queue;
 	}
+	// Set local queue pointer:
+	void setl_queue(queue<Patient*>* queue){
+		l_queue = queue;
+	}
 
 private:
 	IO* io;							// The IO class for this queue

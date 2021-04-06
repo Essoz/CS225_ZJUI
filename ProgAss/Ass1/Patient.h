@@ -1,5 +1,6 @@
 #ifndef Patient_h
 #define Patient_h
+#include <stdio.h>
 #include <string>
 using namespace std;
 
@@ -32,16 +33,16 @@ enum Age {
 // Structure of info which is not used in the priority issue:
 typedef struct
 {
-    string name;
-    string email;
-    int phone;
+    std::string name;
+    std::string email;
+    long phone;
     int birthday;
 } Information;
 
 // Info about the appointment processing:
 typedef struct
 {
-    string location;
+    std::string location;
     int year;       // The appointment year
     int date;       // The appointment date, from 1-365
 } Appointment;
@@ -97,25 +98,18 @@ public:
         priority = prio;
     }
     void setinfo(Information* info) {
-        information->name = info->name;
-        information->email = info->email;
-        information->phone = info->phone;
-        information->birthday = info->birthday;
-        //for (int i = 0; i < 10; i++)
-        //{
-        //    information->name[i] = info->name[i];
-        //    information->email[i] = info->email[i];
-        //}
+        information = info;
+        //information->name = info->name;
+        //information->email = info->email;
+        //information->phone = info->phone;
+        //information->birthday = info->birthday;
     }
     void setappoint(Appointment* appo)
     {
-        appointment->location = appo->location;
-        appointment->year = appo->year;
-        appointment->date = appo->date;
-        //for (int i = 0; i < 10; i++)
-        //{
-        //   appointment->location[i] = appo->location[i];
-        //}
+        appointment = appo;
+        //appointment->location = appo->location;
+        //appointment->year = appo->year;
+        //appointment->date = appo->date;
     }
 
     /*get functions*/
