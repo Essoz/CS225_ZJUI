@@ -1,6 +1,6 @@
 #ifndef Local_IO_h
 #define Local_IO_h
-#include "Patient.h"
+#include "../Patient.h"
 #include "Local_Queue.h"
 #include <queue>
 #include <vector>

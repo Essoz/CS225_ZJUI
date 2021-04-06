@@ -1,6 +1,6 @@
 #ifndef Local_hash_h
 #define Local_hash_h
-#include "Patient.h"
+#include "../Patient.h"
 #include <iostream>	
 #include <math.h>
 #include <cstdlib>

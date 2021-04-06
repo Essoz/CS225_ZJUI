@@ -71,19 +71,6 @@ public:
     };
     void setrisk(Risk R) {
         risk = R;
-        // The medium risk has one month extension:
-        if (R == medium)
-        {
-            // Add the extension and increase the risk status:
-            risk = low;
-            date = date + 30;
-            // Go to the next year
-            if (date >= 365)
-            {
-                date = date % 365;
-                year = year + 1;
-            }
-        }
     };
     void setpro(Profession professionLevel) {
         profession = professionLevel;
@@ -100,17 +87,6 @@ public:
     void setwithdraw(int W)
     {
         withdraw = W;
-        // If the patient has re-registered again, add an extension of two weeks:
-        if (2 == W)
-        {
-            date = date + 14;
-            // Go to the next year
-            if (date >= 365)
-            {
-                date = date % 365;
-                year = year + 1;
-            }
-        }
     }
     void setddl(int ddl)
     {

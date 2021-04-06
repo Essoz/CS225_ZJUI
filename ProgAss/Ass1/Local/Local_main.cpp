@@ -9,6 +9,8 @@ using std::cin;
 
 int main()
 {
-
+	// Starts with a queue
+	Queue* test = new Queue();
+	IO::read_all(path, test);
 	return 0;
 }

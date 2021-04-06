@@ -3,7 +3,7 @@ CC := g++
 LD := g++
 SOURCES := $(wildcard *.cpp)
 OBJECTIVES := $(patsubst %cpp, %o, $(SOURCES))
-TARGET := ComputingAssignmentOne # PUT YOUR INTENDED NAME HERE
+TARGET := MP1 # PUT YOUR INTENDED NAME HERE
 
 # Link ALL dependency files to carry out ALL target files
 $(TARGET): $(OBJECTIVES)
