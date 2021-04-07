@@ -43,7 +43,7 @@ queue<Patient*>* IO::write_all(queue<Patient*>* queue)
 		exit(1);
 	}
 	// Write the header of the output file first:
-	fprintf(update, "ID,Risk_Status,Profession,Age,Reg_Year,Reg_Date,Withdraw,Letter_DDL,Priority,");
+	fprintf(update, "ID,Risk_Status,Profession,Age,Reg_ID,Reg_Year,Reg_Date,Withdraw,Letter_DDL,Priority,");
 	fprintf(update, "Name,Email,Phone,Birthday\n");
 
 	// Loop all the patients in the local registry queue and write all the 
@@ -52,13 +52,14 @@ queue<Patient*>* IO::write_all(queue<Patient*>* queue)
 	{
 		fprintf(update, "%d,%d,%d,",
 			queue->front()->getid(), queue->front()->getrisk(), queue->front()->getpro());
-		fprintf(update, "%d,%d,%d,",
-			queue->front()->getage(), queue->front()->getyear(), queue->front()->getdate());
+		fprintf(update, "%d,%d,%d,%d",
+			queue->front()->getage(), queue->front()->getreg_id(),
+			queue->front()->getyear(), queue->front()->getdate());
 		fprintf(update, "%d,%d,%d,",
 			queue->front()->getwithdraw(), queue->front()->getddl(),queue->front()->getpriority());
-		fprintf(update, "%s,%s,%ld,%d\n", 
+		fprintf(update, "%s,%s,%s,%s\n", 
 			queue->front()->getinfo()->name.c_str(), queue->front()->getinfo()->email.c_str(), 
-			queue->front()->getinfo()->phone, queue->front()->getinfo()->birthday);
+			queue->front()->getinfo()->phone.c_str(), queue->front()->getinfo()->birthday.c_str());
 		// delete the first entry in the queue:
 		queue->pop();
 	}
@@ -108,8 +109,8 @@ queue<Patient*>* IO::read_all(string path, Queue* queue)
 		Information* info = new Information;
 		info->name = Trim(fields[4]);
 		info->email = Trim(fields[5]);
-		info->phone = atol(Trim(fields[6]).c_str());
-		info->birthday = atoi(Trim(fields[7]).c_str());
+		info->phone = Trim(fields[6]).c_str();
+		info->birthday = Trim(fields[7]).c_str();
 		// Create a new patient:
 		queue->new_patient(risk, prof, a, info, ddl);
 	}
