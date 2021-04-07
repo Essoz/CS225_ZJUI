@@ -56,6 +56,10 @@ public:
 	queue<Patient*>* getl_queue(){
 		return l_queue;
 	}
+	// Get hashtable:
+	Hash_Chaining* getHashtable() {
+		return Hashtable;
+	}
 	// Set local queue pointer:
 	void setl_queue(queue<Patient*>* queue){
 		l_queue = queue;

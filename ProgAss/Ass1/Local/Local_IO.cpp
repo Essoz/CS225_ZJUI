@@ -35,7 +35,7 @@ queue<Patient*>* IO::write_all(queue<Patient*>* queue)
 {
 	// open the file you want to write:
 	FILE* update;
-	update = fopen("update.csv", "w");
+	update = fopen("Submit.csv", "w");
 	// check if fopen successes:
 	if (NULL == update)
 	{
@@ -113,6 +113,54 @@ queue<Patient*>* IO::read_all(string path, Queue* queue)
 		info->birthday = Trim(fields[7]).c_str();
 		// Create a new patient:
 		queue->new_patient(risk, prof, a, info, ddl);
+	}
+	return queue->getl_queue();
+}
+
+// This new added function is used to read the updated info and update the queue:
+queue<Patient*>* IO::read_update(string path, Queue* queue)
+{
+	ifstream fin(path);		// open the stream
+	string line;
+	getline(fin, line);		// Skip the header line
+	while (getline(fin, line))		// ���ж�ȡ�����з���\n�����֣������ļ�β��־eof��ֹ��ȡ
+	{
+		istringstream sin(line);	// �������ַ���line���뵽�ַ�����istringstream��
+		vector<string> fields;		// ����һ���ַ�������
+		string field;
+		while (getline(sin, field, ','))	// ���ַ�����sin�е��ַ����뵽field�ַ����У��Զ���Ϊ�ָ���
+		{
+			fields.push_back(field);		// ���ոն�ȡ���ַ������ӵ�����fields��
+		}
+		// Now we can declare several variables and update information:
+		int id = atoi(Trim(fields[0]).c_str());
+		int type = atoi(Trim(fields[1]).c_str());
+		string up_info = Trim(fields[2]);
+
+		// First check if the given patient is vaild:
+		if (NULL == queue->getHashtable()->retrieval(id)) {
+			cout << "The patient with id " << id << " does not exist!" << endl;
+			exit(1);
+		}
+
+		// Then check the type of info that is wanted to change:
+		if (type >= 0 && type <= 6)
+		{
+			// Convert the updated info from string to int:
+			int info = atoi(up_info.c_str());
+			// Update the info:
+			queue->update(id, type, info);
+		}
+		else if (type >= 7 && type <= 10)
+		{
+			// Update the info:
+			queue->update_info(id, type, up_info);
+		}
+		else
+		{
+			cout << "Invalid type number!" << endl;
+			exit(1);
+		}
 	}
 	return queue->getl_queue();
 }
