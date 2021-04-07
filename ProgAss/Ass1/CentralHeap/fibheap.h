@@ -2,6 +2,7 @@
 #define _FIBHEAP_H
 /* Put your declaration here */
 #include "../Patient.h"
+#include "hashing/central_hash.h"
 #include <string>
 #include <vector>
 
@@ -28,12 +29,38 @@ template<class T> class FibHeap{
         // void Prune(r);
         void Cut(FibNode<T>* handle);
         static FibHeap<T>* Union(FibHeap<T>* heap1, FibHeap<T>* heap2);
-        // static void 
         int GetNum();
+        void PatientCreate(vector<string>* infolist);
+        //
+        /* <=== Helper Functions for DDL management ===> */
+        /* to be done list
+         * DDL check
+         * DDL assign (executed before normal assignments)
+         */
+
+        /* <=== Helper Function for HashTable Management ===> */
+        void hash_table_insert(FibNode<T>* node);
+        FibNode<T>* hash_table_remove(int id);
+        FibNode<T>* hash_table_find(int id);
+        FibNode<T>* hash_table_swap(FibNode<T>* node);   // helper function for updating nodes (only for priority
+        bool hash_intable_check(int id);
+        
+        void withdraw_table_insert(FibNode<T>* node);
+        FibNode<T>* withdraw_table_remove(int id);
+        
+        void ddl_insert(FibNode<T>* node);
+        bool ddl_incheck(FibNode<T>* node);
+        FibNode<T>* ddl_delete(FibNode<T>* node);
     private:
         void _PrintTree(FibNode<T>* node);
         FibNode<T>* min_ptr;
         int numitems;
+        Hash_Chaining withdraw_table;
+        Hash_Chaining processin_table;
+        vector<FibNode<T>*> ddl_queue;
+
+
+        
 };
 
 
@@ -57,15 +84,15 @@ template<class T> class FibNode: public Patient{
         int degree;
 };
 
-template<class T> FibNode<T>::FibNode(int id, Risk risk, Profession professionLevel, Age a, Information* info, int year, int date, int withdraw, int ddl): 
-Patient(id, risk, professionLevel, a, info, year, date, withdraw, ddl){
+template<class T> FibNode<T>::FibNode(vector<string>* infolist){
     parent = NULL;
     child = NULL;
     left = NULL;
     right = NULL;
     degree = 0;
     mark = false;       // default marking == false
-    key = priority;
+    // key = priority;
+    PatientCreate(infolist);
 
 };
 #endif

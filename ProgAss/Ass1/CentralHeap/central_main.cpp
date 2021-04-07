@@ -19,12 +19,7 @@ int main(){
 
     // initialize an IO instance for later use
 
-    // initialize a Queue for ddl registrations 
-        
-    // initialize a HashTable for all elements in the heap, all element with a DDL
-
-    // initialize a 
-
+    
 
     while (/*file not empty*/){
         // time counter ++ 0.5

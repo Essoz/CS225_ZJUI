@@ -1,11 +1,14 @@
-#ifndef Local_hash_h
-#define Local_hash_h
-#include "Patient.h"
+#ifndef CENTRAL_HASH_H
+#define CENTRAL_HASH_H
+// #include "FibNode<int>.h"
 #include <iostream>	
 #include <math.h>
 #include <cstdlib>
 #include <map>
 #include <vector>
+
+// #include "../../FibNode<int>.h"
+#include "../fibheap.h"
 using namespace std;
 
 /*
@@ -25,13 +28,13 @@ class Hash_Chaining
 public:
     Hash_Chaining(int length);
     int calculate_hashvalue(int id, int size);
-    void insertion(Patient* item);
-    void deletion(Patient* item);
-    // Return the pointer of the patient instance in the hash table:
-    Patient* retrieval(int id);
+    void insertion(FibNode<int>* item);
+    void deletion(FibNode<int>* item);
+    // Return the pointer of the FibNode<int> instance in the hash table:
+    FibNode<int>* retrieval(int id);
 
 private:
-    std::vector<Patient*>** hashtable;  // The hashtable
+    std::vector<FibNode<int>*>** hashtable;  // The hashtable
     int hash_numitems;                  // length of hashtable
     int hash_maxsize;                   // defines the size of the hashtable
 };
