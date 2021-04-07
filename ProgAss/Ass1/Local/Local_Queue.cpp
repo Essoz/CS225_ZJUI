@@ -33,7 +33,7 @@ Queue::Queue()
 	time(&rawtime);
 	info = gmtime(&rawtime);
 	cur_year = 1900 + info->tm_year;					// The current year
-	cur_date = info->tm_mon * 30 + info->tm_mday;		// The current date
+	cur_date = info->tm_mday;		// The current date
 	//cur_year = 2021;	// The current year
 	//cur_date = 96;		// The current date
 	counter = 0;		// The counter starts with 0
@@ -136,16 +136,16 @@ void Queue::update_info(int id, int up_type, string info)
 	// Next, determine what type of info you want to change:
 	switch (up_type)
 	{
-	case 0:		// Name
+	case 7:		// Name
 		patient->setname(info);
 		break;
-	case 1:		// Email
+	case 8:		// Email
 		patient->setemail(info);
 		break;
-	case 2:		// Phone
+	case 9:		// Phone
 		patient->setphone(info);
 		break;
-	case 3:		// Birthday
+	case 10:		// Birthday
 		patient->setbirthday(info);
 		break;
 	default:

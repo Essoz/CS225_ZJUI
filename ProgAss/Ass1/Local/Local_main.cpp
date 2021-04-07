@@ -20,10 +20,10 @@ int main()
 	test->update(1, 2, 6);
 	test->update(1, 5, 1);
 	test->update(1, 6, 59);
-	test->update_info(2, 0, "xxx");
-	test->update_info(2, 1, "xxx");
-	test->update_info(2, 2, "xxx");
-	test->update_info(2, 3, "xxx");
+	test->update_info(2, 7, "xxx");
+	test->update_info(2, 8, "xxx");
+	test->update_info(2, 9, "xxx");
+	test->update_info(2, 10, "xxx");
 	// Test for report:
 	test->setl_queue(test->report(test->getl_queue()));
 	return 0;
