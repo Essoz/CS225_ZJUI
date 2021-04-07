@@ -382,4 +382,106 @@ template<class T> void FibNode<T>::PatientCreate(vector<string>* infolist){
     temp_info.phone = String2Int[infolist[11]];
     temp_info.birthday = String2Int[infolist[12]];
     setinfo(temp_info);
+
+    key = getpriority();
+};
+
+/* <=== Functions for Hash tables ===> */
+template<class T> FibNode<T>* FibHeap<T>::hash_table_find(int id){
+    return processin_table.retrieval(id);
+};
+template<class T> bool FibHeap<T>::hash_intable_check(int id){
+    if (processin_table.retrieval(id) == NULL) return false;
+    // else the element is in the hashtable
+    return true;
+};
+
+/* hash_table_remove
+ * INPUT
+ * 1. the id of the element to be deleted
+ * OUTPUT
+ * 1. the address to the removed node (for further removing the node from the central heap)
+ */
+template<class T> FibNode<T>* FibHeap<T>::hash_table_remove(int id){
+    // first record the address of the node to be deleted
+    FibNode<T>* old = processin_table.retrieval(id);
+    // then delete the entry from the central heap
+    processin_table.deletion(old);
+    // return the pointer to the old node
+    return old;    
+};
+
+template<class T> void FibHeap<T>::hash_table_insert(FibNode<T>* node){
+    processin_table.insertion(node);
+};
+
+/* hash_table_swap
+ * INPUT
+ * the updated version of a registration (node)
+ * OUTPUT
+ * the older version of a registration
+ * EFFECT
+ * swap a registration (only in hash table) that is under assignment with its newer version
+ */
+
+template<class T> FibNode<T>* FibHeap<T>::hash_table_swap(FibNode<T>* node){
+    int id = node->getid();
+    FibNode<T>* old = processin_table.retrieval(id);
+    processin_table.deletion(old);
+    hash_table_insert(node);
+    return old;
+};
+
+template<class T> void FibHeap<T>::withdraw_table_insert(FibNode<T>* node){
+    withdraw_table.insertion(node);
+};
+template<class T> FibNode<T>* FibHeap<T>::withdraw_table_remove(int id){
+    FibNode<T>* old = withdraw_table.retrieval(id);
+    withdraw_table.deletion(old);
+    return old;
+};
+
+/* <=== Helper Function for DDL queue management ===> */
+/* ddl_insert
+ * INPUT
+ * 1. the node to be inserted
+ * OUTPUT
+ * 
+ * 
+ * Note: the insert will keep the ddl queue in ascending order 
+ */
+template<class T> void FibHeap<T>::ddl_insert(FibNode<T>* node){
+    //TODO: to improve the performance of this function, implement the insertion here using a BST approach
+    int i;
+    for(i = 0; i < ddl_queue.size(); i++) {
+        if (node->getddl() < ddl_queue[i]->getddl())  break;
+    }
+
+    // TODO the sorting of the queue may generate a BUG
+    ddl_queue.insert(ddl_queue.begin() + i, newnode);
+
+};
+template<class T> bool FibHeap<T>::ddl_incheck(FibNode<T>* node){
+    int i = 0;
+    while (i < ddl_queue.size()) {
+        if (ddl_queue[i]->getid() == node->getid())
+            return true;
+        i++;
+    }
+    return false;
+};
+template<class T> FibNode<T>* FibHeap<T>::ddl_delete(FibNode<T>* node){
+    int i = 0;
+    while (i < ddl_queue.size()) {
+        if (ddl_queue[i]->getid() == node->getid())
+            break;
+        i++;
+    }
+    if (i == ddl_queue.size()) {
+        cout << "ddl_queue DNE Exception, aborting\n";
+        exit(3);
+    }
+    FibNode<T>* old = ddl_queue[i];
+    ddl_queue.erase(ddl_queue.begin() + i); // remove the i-th element
+    return old;   
 };

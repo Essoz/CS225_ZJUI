@@ -52,51 +52,91 @@ template<class T> bool CentralIO<T>::Read2Heap(){
         }
     
     // clear this list for next use
-    FibNode<int>* newnode = new FibNode<int>;
-    newnode->PatientCreate(temp_list);
-    temp_list.clear();    
+    FibNode<int>* newnode = new FibNode<int>(&temp_list);
+    temp_list.clear();
     //check hash set
     if (newnode->withdraw) {
         if (newnode->withdraw == 1){
+            /*
+             * 1. remove the node from hash table
+             * 2. remove the node from the heap
+             * 3. insert the new node into the withdraw_table
+             * 4. remove the node from ddl queue (if the node was in that queue)
+             * 5. release memory occupied by the old node
+             */
+            heap->withdraw_table_insert(newnode);
+            FibNode<int>* old = heap->hash_table_remove(newnode);
+            heap->Delete(old);
+                // if the node was in the DDL queue, remove the node from the queue
+            if (heap->ddl_incheck(old))
+                heap->ddl_delete(old);
+            // insert the new one in case of any update
+            heap->withdraw_table_insert(newnode);
+            delete old;
             // withdraw == 1 (this indicates a withdraw has been prompted, we have to search this node in the hashtable and move the node from the heap to the withdrawn set, set withdraw = 2) 
             // put this node into the withdrawn hashset 
         } else {
-            
-
             // withdraw == 2 (this indicates the node now needs an re-insertion into the heap with a 14-day extension )
-
+            /*
+             * 1. remove the node from withdraw_table
+             * 2. add the node into hash_table
+             * 3. insert the node into the heap
+             * 4. if ddl, add this node into the ordered list of ddl
+             */
             
-            // remove this node from the withdrawn hashset
-            
+            heap->withdraw_table_remove(newnode->getid());
+            heap->hash_table_insert(newnode);
 
+            if (newnode->getddl() != -1) {
+                heap->ddl_insert(newnode);
+            }
+            heap->Insert(newnode);
+            heap->withdraw_table_remove(newnode->getid());
+            heap->hash_table_insert(newnode);
+            // remove this node from the withdrawn hashset.
         }
-    }
-
-    if (inhashset(newnode)){
+    } else if (heap->hash_intable_check(newnode)){
         // the node is in hashtable
-
-
-        // do node swap and delete the original node
-
-
-    }
-
-    //if in hashset
-    
-    //do corresponding insertions
-    
-    /*
-     * Insert this node into the corresponding hash table
-     * 
-     */
-
+        //invoke the swap function
+        /*
+         * 1. swap the two node in the hash table
+         * 2. swap the two node in the fibonacci 
+         */
+        FibNode<int>* old;
+        old = heap->hash_table_swap(newnode); 
+        // delete the older version of the previous registration
 
         
+        heap->Delete(old);
+        heap->Insert(newnode);  // TODO Actually I can invoke a decrease key function here
+
+        // do ddl update (if necessary)
+        if (old->getddl() != -1){
+            heap->ddl_remove(old);
+        }
+        if (newnode->getddl() != -1){
+            heap->ddl_insert(newnode);
+        }
+        
+        delete old;
+        // do node swap and delete the original node
+
+        // but there are several cases to consider:
+        // 1. the element is also in the ddl queue
     }
-    
+        heap->Insert(newnode);
+        heap->hash_table_insert(newnode);
+        if (newnode->getddl() != -1) {
+            heap->ddl_insert(newnode);
+        }    
+    }
     return true;
 }
 
+
+
+
+/* TODO <=== Helper Function for Generating Reports ===> */
 template<class T> bool CentralIO<T>::ReportWeekly(int key){
     /* Generate Weekly Report for 
      * 1. People who have been treated including their profession, age category, risk status, and the waiting time from registration to treatment

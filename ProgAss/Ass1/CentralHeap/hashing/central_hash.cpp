@@ -1,4 +1,4 @@
-#include "Local_hash.h"
+#include "central_hash.h"
 #include <iostream>	
 #include <math.h>
 #include <cstdlib>
@@ -26,7 +26,7 @@ Hash_Chaining::Hash_Chaining(int length)
         hash_maxsize = 20;  // Default size for hashtable
     }
     hash_numitems = 0;   // The current number of pairs in hashtable
-    hashtable = new vector<Patient*>*[hash_maxsize];
+    hashtable = new vector<FibNode<int>*>*[hash_maxsize];
     for (int i = 0; i < hash_maxsize; i++) {
         hashtable[i] = NULL;
     }
@@ -35,17 +35,17 @@ Hash_Chaining::Hash_Chaining(int length)
 // Calculate the hashvalue:
 int Hash_Chaining::calculate_hashvalue(int id, int size)
 {
-    hash<Patient*> hashfunction; // use the predefined hashfunction to get "key" values
+    hash<FibNode<int>*> hashfunction; // use the predefined hashfunction to get "key" values
     return hashfunction(item) % size;
 }
 
 // Insert a value:
-void Hash_Chaining::insertion(Patient* item)
+void Hash_Chaining::insertion(FibNode<int>* item)
 {
     int index = calculate_hashvalue(item->getid(), hash_maxsize); // Calculate the hashvalue
     // If the corresponding entry is not defined, define it:
     if (hashtable[index] == NULL) {
-        vector<Patient*>* entry = new vector<Patient*>;
+        vector<FibNode<int>*>* entry = new vector<FibNode<int>*>;
         hashtable[index] = entry;
         hash_numitems++;
         hashtable[index]->push_back(item);   // Add that item into the entry
@@ -63,7 +63,7 @@ void Hash_Chaining::insertion(Patient* item)
 }
 
 // Delete a value:
-void Hash_Chaining::deletion(Patient* item)
+void Hash_Chaining::deletion(FibNode<int>* item)
 {
     int index = calculate_hashvalue(item->getid(), hash_maxsize); // Calculate the hashvalue
     // If the corresponding entry is not defined, just return:
@@ -92,13 +92,13 @@ void Hash_Chaining::deletion(Patient* item)
     }
 }
 
-// Return the pointer of the patient instance in the hash table:
-Patient* Hash_Chaining::retrieval(int id)
+// Return the pointer of the FibNode<int> instance in the hash table:
+FibNode<int>* Hash_Chaining::retrieval(int id)
 {
     int index = calculate_hashvalue(id, hash_maxsize); // Calculate the hashvalue
     // If the corresponding entry is not defined, just return:
     if (hashtable[index] == NULL) {
-        cout << "The patient of id " << id << " is not in the hashtable." << endl;
+        cout << "The FibNode<int> of id " << id << " is not in the hashtable." << endl;
         return NULL;
     }
     else {
@@ -109,7 +109,7 @@ Patient* Hash_Chaining::retrieval(int id)
                 return hashtable[index]->at(i);
             }
         }
-        cout << "The patient of id " << id << " is not in the hashtable." << endl;
+        cout << "The FibNode<int> of id " << id << " is not in the hashtable." << endl;
         return NULL;
     }
 }

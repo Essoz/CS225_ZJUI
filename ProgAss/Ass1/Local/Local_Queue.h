@@ -44,7 +44,8 @@ public:
 	// Create a new patient member:
 	void new_patient(Risk risk, Profession prof, Age a, Information* info, int ddl);
 	// Update the information of a patient with unique id number, up_type determines what info will be changed:
-	void update(int id, int up_type, auto info);
+	void update(int id, int up_type, int info);
+	void update_info(int id, int up_type, string info);		// Only for information
 	// Report data to centralised treatment queue:
 	queue<Patient*>* report(queue<Patient*>* l_queue);
 	// Get io pointer:
@@ -54,6 +55,10 @@ public:
 	// Get local queue pointer:
 	queue<Patient*>* getl_queue(){
 		return l_queue;
+	}
+	// Get hashtable:
+	Hash_Chaining* getHashtable() {
+		return Hashtable;
 	}
 	// Set local queue pointer:
 	void setl_queue(queue<Patient*>* queue){
@@ -67,6 +72,8 @@ private:
 	// This file scope variable track the id number so that no two patients have the same id number.
 	//static int id_num;
 	int id_num;
+	// This static variable represents the local registry id:
+	int regis_id;
 	// These two static variables are used to represent current date and year.
 	//static int cur_year;
 	//static int cur_date;

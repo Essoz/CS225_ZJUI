@@ -35,8 +35,8 @@ typedef struct
 {
     std::string name;
     std::string email;
-    long phone;
-    int birthday;
+    std::string phone;
+    std::string birthday;
 } Information;
 
 // Info about the appointment processing:
@@ -55,16 +55,17 @@ private:
     Profession profession;
     Age age;
     Information* information;
-    int year;       // The registeration year
+    int registry_id;    // The id of the local registry
+    int year;           // The registeration year
     int date;        // The date for registeration, the range is 1-365
-    int withdraw;   // If the patient has withdrew before
+    int withdraw;    // If the patient has withdrew before
     // 0 for never withdraw, 1 for withdraw, 2 for withdraw and re-regiseter
     int letter_ddl; // The deadline of the priority letter, should be -1 if no letter is handed in
     int priority;   // The priority of treatment
     Appointment* appointment;
 
 public:
-    Patient(int id, Risk risk, Profession professionLevel, Age a, Information* info, int year, int date, int withdraw, int ddl);      // Constructor for new patient
+    Patient(int id, Risk risk, Profession professionLevel, Age a, Information* info, int regis_id, int year, int date, int withdraw, int ddl);      // Constructor for new patient
 
     /*set functions*/
     void setid(int id) {
@@ -78,6 +79,9 @@ public:
     };
     void setage(Age a) {
         age = a;
+    }
+    void setreg_id(int id) {
+        registry_id = id;
     }
     void setyear(int Y) {
         year = Y;
@@ -99,17 +103,22 @@ public:
     }
     void setinfo(Information* info) {
         information = info;
-        //information->name = info->name;
-        //information->email = info->email;
-        //information->phone = info->phone;
-        //information->birthday = info->birthday;
+    }
+    void setname(string name) {
+        information->name = name;
+    }
+    void setemail(string email) {
+        information->email = email;
+    }
+    void setphone(string phone) {
+        information->phone =phone;
+    }
+    void setbirthday(string bir) {
+        information->birthday = bir;
     }
     void setappoint(Appointment* appo)
     {
         appointment = appo;
-        //appointment->location = appo->location;
-        //appointment->year = appo->year;
-        //appointment->date = appo->date;
     }
 
     /*get functions*/
@@ -124,6 +133,9 @@ public:
     };
     Age getage() {
         return age;
+    }
+    int getreg_id() {
+        return registry_id;
     }
     int getyear() {
         return year;
@@ -157,13 +169,14 @@ public:
     int calculate_prio();     // Calculate the priority
 };
 
-Patient::Patient(int id, Risk risk, Profession professionLevel, Age a, Information* info, int year, int date, int withdraw, int ddl)
+Patient::Patient(int id, Risk risk, Profession professionLevel, Age a, Information* info, int regis_id, int year, int date, int withdraw, int ddl)
 {
     setid(id);
     setrisk(risk);
     setpro(professionLevel);
     setage(a);
     setinfo(info);
+    setreg_id(regis_id);
     setyear(year);
     setdate(date);
     setwithdraw(withdraw);
