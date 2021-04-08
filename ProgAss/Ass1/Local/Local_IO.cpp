@@ -140,7 +140,7 @@ queue<Patient*>* IO::read_update(string path, Queue* queue)
 		// First check if the given patient is vaild:
 		if (NULL == queue->getHashtable()->retrieval(id)) {
 			cout << "The patient with id " << id << " does not exist!" << endl;
-			exit(1);
+			continue;
 		}
 
 		// Then check the type of info that is wanted to change:
