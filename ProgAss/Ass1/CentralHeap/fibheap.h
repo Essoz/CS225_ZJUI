@@ -8,9 +8,10 @@
 
 template<class T> class FibNode;
 
-template<class T> class FibHeap{
+template<class T> class FibHeap
+{
     public:
-        friend class CentralIO;
+        friend class CentralIO<T>;
         FibHeap();  // this operation builds the heap
         /* You should add other functions to make the structure as Fibonacci heap  */
         /* It is part of computing assignment, so we would not provide the basic implementation for you */
@@ -30,7 +31,7 @@ template<class T> class FibHeap{
         void Cut(FibNode<T>* handle);
         static FibHeap<T>* Union(FibHeap<T>* heap1, FibHeap<T>* heap2);
         int GetNum();
-        void PatientCreate(vector<string>* infolist);
+        void PatientCreate(vector<string>&infolist);
         //
         /* <=== Helper Functions for DDL management ===> */
         /* to be done list
@@ -73,9 +74,6 @@ template<class T> class FibHeap{
         Hash_Chaining highrisk_table;
         Hash_Chaining assigned_table;
         vector<FibNode<T>*> ddl_queue;
-
-
-        
 };
 
 
@@ -88,8 +86,8 @@ template<class T> FibHeap<T>::FibHeap(){
 template<class T> class FibNode: public Patient{
     public:
         friend class FibHeap<T>;
-        FibNode(int id, Risk risk, Profession professionLevel, Age a, Information* info, int year, int date, int withdraw, int ddl);
-        void PatientCreate(vector<string>* infolist);
+        FibNode(vector<string>&infolist);
+        void PatientCreate(vector<string>&infolist);
         FibNode<T>* parent;
         FibNode<T>* child;
         FibNode<T>* left;
@@ -99,7 +97,7 @@ template<class T> class FibNode: public Patient{
         int degree;
 };
 
-template<class T> FibNode<T>::FibNode(vector<string>* infolist){
+template<class T> FibNode<T>::FibNode(vector<string>&infolist){
     parent = NULL;
     child = NULL;
     left = NULL;

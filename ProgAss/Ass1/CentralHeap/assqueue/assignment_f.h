@@ -2,7 +2,7 @@
 #define ASSIGNMENT_F_H
 #include "assignment.h"
 
-template<class T> bool Assignment::Assign(FibNode<int>* reg, int date) {
+bool Assignment::Assign(FibNode<int>* reg, int date) {
 
     
     // if no ddl or extension
@@ -12,15 +12,15 @@ template<class T> bool Assignment::Assign(FibNode<int>* reg, int date) {
     // this leaves the case where the node can be assigned
 
     // medium risk overwrites withdrawn
-    if (reg->getrisk() = 2) date += 30;
+    if (reg->getrisk() == 2) date += 30;
     else if (reg->getwithdraw() == 2) date += 14;
 
-    if (ddl_incheck(reg)){
+    if (heap->ddl_incheck(reg)){
         // if ddl has not passed, 
         if (date < reg->getddl()){
             // remove the original appointment
-            Location* old_loc = all_locations->location_list[reg->getappointment()->loc->id].
-            old_loc->removeAppointment(reg->getappointment());
+            Location* old_loc = all_locations->location_list[reg->getappoint()->loc->id].
+            old_loc->removeAppointment(reg->getappoint());
             _assign(reg,date);
         }  
         // else do nothing because there is no need for re-assigning
@@ -41,7 +41,7 @@ template<class T> bool Assignment::Assign(FibNode<int>* reg, int date) {
 }
 /* insert in assigned_hash_table
  */
-template<class T> void Assignment::_assign(FibNode<int>* reg, int date) {
+void Assignment::_assign(FibNode<int>* reg, int date) {
     Registry* registry = reg->getreg();
     for (int i = 0; i < Registry->location_dist->size(); i++) {
         
@@ -51,7 +51,7 @@ template<class T> void Assignment::_assign(FibNode<int>* reg, int date) {
             all_locations->location_list[*(Registry->location_dist)[i]][date]
             Appointment* reg_app = new Appointment(
             , date, temp_time_assigned);
-            reg->setappointment(reg_app);
+            reg->setappoint(reg_app);
             assigned_table_insert(reg);
         }
     }

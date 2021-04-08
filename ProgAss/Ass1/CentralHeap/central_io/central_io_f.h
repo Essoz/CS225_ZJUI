@@ -1,9 +1,9 @@
-#include "central_io.h"
 #include <fstream>
 #include <string>
 #include <sstream>
 #include <queue>
 #include <vector>
+#include "central_io.h"
 using namespace std;
 
 
@@ -26,6 +26,13 @@ using namespace std;
 template<class T> bool CentralIO<T>::Read2Heap(){
     ifstream infile;
     infile.open(path, ifstream::in);
+
+    // wait for information from local registries
+    if (infile.eof()){
+        infile.close();
+        return false;
+    }
+
     if (infile.fail()) { 
         cout << "File not found" <<endl; 
         return false;
@@ -40,7 +47,7 @@ template<class T> bool CentralIO<T>::Read2Heap(){
         if (line.size() == 0) break; 
         
         // reading registrations from files generated from local registries
-        for (int i = 0, i < line.size(); i++) {
+        for (int i = 0; i < line.size(); i++) {
             if (line[i] = ",") {
                 // put this string into the vector
                 temp_list.push_back(temp);
@@ -52,7 +59,7 @@ template<class T> bool CentralIO<T>::Read2Heap(){
         }
     
     // clear this list for next use
-    FibNode<int>* newnode = new FibNode<int>(&temp_list);
+    FibNode<int>* newnode = new FibNode<int>(temp_list);
     temp_list.clear();
     //check hash set
     if (newnode->withdraw) {
