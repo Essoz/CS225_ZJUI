@@ -2,7 +2,7 @@
 #define ASSIGNMENT_F_H
 #include "assignment.h"
 
-bool Assignment::Assign(FibNode<int>* reg, int date) {
+bool Assignment::Assign(FibNode* reg, int date) {
 
     
     // if no ddl or extension
@@ -41,7 +41,7 @@ bool Assignment::Assign(FibNode<int>* reg, int date) {
 }
 /* insert in assigned_hash_table
  */
-void Assignment::_assign(FibNode<int>* reg, int date) {
+void Assignment::_assign(FibNode* reg, int date) {
     Registry* registry = reg->getreg();
     for (int i = 0; i < Registry->location_dist->size(); i++) {
         
@@ -72,7 +72,7 @@ int AllLocations::calcCapacity(int date){
 
 void AllLocations::maintainCuredList(int week){
     if (week >= cured_list.size()){
-        // vector<FibNode<int>*> temp;
+        // vector<FibNode*> temp;
         for (int i = 0; i < location_list.size(); i++) {
             for (int j = 0; j < location_list[i]->cured_queue[week].size(); j++) {
                 cured_list[week].push_back(location_list[i]->cured_queue[week][j]);
@@ -87,7 +87,7 @@ void AllLocations::maintainCuredList(int week){
  * OUTPUT
  * 1. the time_slot assigned
  */
-int Location::assignedInsert(int date, FibNode<int>* new_node) {
+int Location::assignedInsert(int date, FibNode* new_node) {
     if (checkAvailability(date)) {
         assigned_queue[date].push_back(new_node);
         return true;
@@ -121,7 +121,7 @@ int Location::checkAvailability(int date) {
     return (daily_capacity - assigned_queue[date].size());
 }
 
-FibNode<int>* Location::findAppointment(Appointment* app){
+FibNode* Location::findAppointment(Appointment* app){
     return assigned_queue[app->getDate()][app->getTime()];
 }
 

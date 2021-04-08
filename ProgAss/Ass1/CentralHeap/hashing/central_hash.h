@@ -20,19 +20,20 @@ using namespace std;
  *  in the Local_Queue.h. It is modified from the HW5, ex2.
  *  We apply hashing with chaining here.
  */
+// class FibNode;
 
 class Hash_Chaining
 {
 public:
     Hash_Chaining(int length = 20);
     int calculate_hashvalue(int id, int size);
-    void insertion(FibNode<int>* node);
+    void insertion(FibNode* node);
     void deletion(int id);
     // Return the pointer of the patient instance in the hash table:
-    FibNode<int>* retrieval(int id);
+    FibNode* retrieval(int id);
     int get_numitems();
 private:
-    std::vector<vector<FibNode<int>*>*>* hashtable;      // The hashtable
+    std::vector<vector<FibNode*>*>* hashtable;      // The hashtable
     int hash_numitems;                  // length of hashtable
     int hash_maxsize;                   // defines the size of the hashtable
 };

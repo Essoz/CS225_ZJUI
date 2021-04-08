@@ -6,30 +6,30 @@
 #include <string>
 #include <vector>
 
-template<class T> class FibNode;
+class FibNode;
 
-template<class T> class FibHeap
+class FibHeap
 {
     public:
-        friend class CentralIO<T>;
+        friend class CentralIO;
         FibHeap();  // this operation builds the heap
         /* You should add other functions to make the structure as Fibonacci heap  */
         /* It is part of computing assignment, so we would not provide the basic implementation for you */
-        void Insert(FibNode<T>* fib_node);
-        FibNode<T>* Minimum();
-        FibNode<T>* ExtractMin();
-        void DecreaseKey(FibNode<T>* handle, T new_key);
-        void Delete(FibNode<T>* handle);
+        void Insert(FibNode* fib_node);
+        FibNode* Minimum();
+        FibNode* ExtractMin();
+        void DecreaseKey(FibNode* handle, int new_key);
+        void Delete(FibNode* handle);
         void Consolidate();
         void FindMin();
         void PrintTree();
-        FibNode<T>* HeapLink(FibNode<T>* heap1, FibNode<T>* heap2);
+        FibNode* HeapLink(FibNode* heap1, FibNode* heap2);
         /* The following is required for this assignment */
         /* It is not complete, you should design the API by yourself */
         // void Change_Key(x, k);
         // void Prune(r);
-        void Cut(FibNode<T>* handle);
-        static FibHeap<T>* Union(FibHeap<T>* heap1, FibHeap<T>* heap2);
+        void Cut(FibNode* handle);
+        static FibHeap* Union(FibHeap* heap1, FibHeap* heap2);
         int GetNum();
         void PatientCreate(vector<string>&infolist);
         //
@@ -40,63 +40,63 @@ template<class T> class FibHeap
          */
 
         /* <=== Helper Function for HashTable Management ===> */
-        void hash_table_insert(FibNode<T>* node);
-        FibNode<T>* hash_table_remove(int id);
-        FibNode<T>* hash_table_find(int id);
-        FibNode<T>* hash_table_swap(FibNode<T>* node);   // helper function for updating nodes (only for priority
+        void hash_table_insert(FibNode* node);
+        FibNode* hash_table_remove(int id);
+        FibNode* hash_table_find(int id);
+        FibNode* hash_table_swap(FibNode* node);   // helper function for updating nodes (only for priority
         bool hash_intable_check(int id);
         
-        void withdraw_table_insert(FibNode<T>* node);
-        FibNode<T>* withdraw_table_remove(int id);
+        void withdraw_table_insert(FibNode* node);
+        FibNode* withdraw_table_remove(int id);
         
-        void highrisk_table_insert(FibNode<T>* node);
-        FibNode<T>* highrisk_table_remove(int id);
-        FibNode<T>* highrisk_table_find(int id);
+        void highrisk_table_insert(FibNode* node);
+        FibNode* highrisk_table_remove(int id);
+        FibNode* highrisk_table_find(int id);
         bool highrisk_intable_check(int id);
-        FibHeap<T> highrisk_queue;
+        FibHeap highrisk_queue;
 
-        void assigned_table_insert(FibNode<T>* node);
-        FibNode<T>* assigned_table_remove(int id);
-        FibNode<T>* assigned_table_find(int id);
+        void assigned_table_insert(FibNode* node);
+        FibNode* assigned_table_remove(int id);
+        FibNode* assigned_table_find(int id);
         bool assigned_intable_check(int id);
 
-        void ddl_insert(FibNode<T>* node);
-        bool ddl_incheck(FibNode<T>* node);
-        FibNode<T>* ddl_delete(FibNode<T>* node);
+        void ddl_insert(FibNode* node);
+        bool ddl_incheck(FibNode* node);
+        FibNode* ddl_delete(FibNode* node);
         
     private:
-        void _PrintTree(FibNode<T>* node);
-        FibNode<T>* min_ptr;
+        void _PrintTree(FibNode* node);
+        FibNode* min_ptr;
         int numitems;
         Hash_Chaining withdraw_table;
         Hash_Chaining processin_table;
         Hash_Chaining highrisk_table;
         Hash_Chaining assigned_table;
-        vector<FibNode<T>*> ddl_queue;
+        vector<FibNode*> ddl_queue;
 };
 
 
 // build an empty heap
-template<class T> FibHeap<T>::FibHeap(){
+FibHeap::FibHeap(){
     min_ptr = NULL;
     numitems = 0;
 };
 
-template<class T> class FibNode: public Patient{
+class FibNode: public Patient{
     public:
-        friend class FibHeap<T>;
+        friend class FibHeap;
         FibNode(vector<string>&infolist);
         void PatientCreate(vector<string>&infolist);
-        FibNode<T>* parent;
-        FibNode<T>* child;
-        FibNode<T>* left;
-        FibNode<T>* right;
+        FibNode* parent;
+        FibNode* child;
+        FibNode* left;
+        FibNode* right;
         bool mark;
-        T key;
+        int key;
         int degree;
 };
 
-template<class T> FibNode<T>::FibNode(vector<string>&infolist){
+FibNode::FibNode(vector<string>&infolist){
     parent = NULL;
     child = NULL;
     left = NULL;

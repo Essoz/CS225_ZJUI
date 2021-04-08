@@ -6,17 +6,22 @@
 #include "central_io/central_io_f.h"
 #include "appointment/appointment_f.h"
 #include <bits/stdc++.h>
-
+// #include <string>
+// #include <vector>
+using namespace std;
+// using std::string;
+// using std::vector;
+// using std::string;
 int timer = 0;
 const int interval = 1; // unit in day
 string path = "../Submit.csv";
 int date;
 int main(){
-    int order;
+    char order;
     cout << "Please Choose how do you want to order the report" << endl;
         cout << "0: Name\n1: Profession Category\n2: Age Group (Ascending Order)\n";
         cin >> order;
-        if ((type != 0) && (type != 1) && (type != 2))
+        if ((order != '0') && (order != '1') && (order != '2'))
             cout << "You must choose 0, 1 or 2\n\n";
     
     /* <======= TEST CASES ======> */
@@ -62,9 +67,9 @@ int main(){
 
     AllLocations all_locations(location_list);
     Assignment AssignRegistration(&all_locations);
-    FibHeap<int> CentralQueue;
+    FibHeap CentralQueue;
     // initialize an IO instance for later use
-    CentralIO<int> central_IO = CentralIO<int>(&CentralQueue, path);
+    CentralIO central_IO = CentralIO(&CentralQueue, path);
     
     while (true) {
         date = timer / 2; 

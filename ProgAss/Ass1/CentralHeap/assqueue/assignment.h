@@ -9,19 +9,19 @@ class Location;
 
 class Assignment{
     public: 
-        Assignment(AllLocations* all_locations, FibHeap<int>* heap);
-        bool Assign(FibNode<int>* reg, int date); // on false goes to the next day
+        Assignment(AllLocations* all_locations, FibHeap* heap);
+        bool Assign(FibNode* reg, int date); // on false goes to the next day
         bool checkAvailability(int date);
     private:
-        void _assign(FibNode<int>* reg, int date);
+        void _assign(FibNode* reg, int date);
         AllLocations* all_locations;
-        FibHeap<int>* heap;
+        FibHeap* heap;
         // maxnum; // number of locations 
         // currentnum; // current number of available locations //TODO I don't have to 
         // Assignment(int )
 
 };
-Assignment::Assignment(AllLocations* all_locations, FibHeap<int>* heap) {
+Assignment::Assignment(AllLocations* all_locations, FibHeap* heap) {
     Assignment::all_locations = all_locations;  
     Assignment::heap = heap;
 }
@@ -41,7 +41,7 @@ class AllLocations{
         int current_capacity;
         int num_locations;
         vector<Location*> location_list;
-        vector<vector<FibNode<int>*>> cured_list;
+        vector<vector<FibNode*>> cured_list;
 
 };
 
@@ -56,14 +56,14 @@ class Location{
         int id;
         int daily_capacity;
         int checkAvailability(int date);
-        int assignedInsert(int date, FibNode<int>* new_node);
+        int assignedInsert(int date, FibNode* new_node);
         void assignedClear(int date); // TODO
-        FibNode<int>* findAppointment(Appointment* app);
+        FibNode* findAppointment(Appointment* app);
         void removeAppointment(Appointment* app);
         vector<string> time_slot;
     private:
-        vector<vector<FibNode<int>*>> assigned_queue;  // the first dimension is day
-        vector<vector<FibNode<int>*>> cured_queue;  // the first dimension is week
+        vector<vector<FibNode*>> assigned_queue;  // the first dimension is day
+        vector<vector<FibNode*>> cured_queue;  // the first dimension is week
 };
 
 
@@ -79,13 +79,13 @@ Location::Location(int id, vector<string>&time_slot) {
 /* Local registries */
 class Registry{
     public:
-        Registry(int id, vector<int>* location_dist);
+        Registry(int id, vector* location_dist);
         int id;
-        vector<int>* location_dist;
+        vector* location_dist;
     private:
 };
 
-Registry::Registry(int id, vector<int>* location_dist) {
+Registry::Registry(int id, vector* location_dist) {
     Registry::id = id;
     Registry::location_dist = location_dist;
 };

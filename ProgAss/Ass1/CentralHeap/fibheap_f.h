@@ -23,8 +23,9 @@ using std::endl;
 
  */
 
+
 /* <===> Test Passed <===> */
-template<class T> void FibHeap<T>::Insert(FibNode<T>* fib_node){
+void FibHeap::Insert(FibNode* fib_node){
     if(min_ptr){
         //if the Heap structure is not empty
         min_ptr->left->right = fib_node;
@@ -52,7 +53,7 @@ template<class T> void FibHeap<T>::Insert(FibNode<T>* fib_node){
 
 //  4. execute consolidate
  */
-template<class T> void FibHeap<T>::DecreaseKey(FibNode<T>* handle, T new_key){
+void FibHeap::DecreaseKey(FibNode* handle, int new_key){
     int num = GetNum();
     handle->key = new_key;
     if(handle->parent && new_key < handle->parent->key){
@@ -73,8 +74,8 @@ template<class T> void FibHeap<T>::DecreaseKey(FibNode<T>* handle, T new_key){
  */
 
 
-template<class T> void FibHeap<T>::Cut(FibNode<T>* handle){
-    FibNode<T>* par_ptr = handle->parent;
+void FibHeap::Cut(FibNode* handle){
+    FibNode* par_ptr = handle->parent;
     if (handle->left == handle){
         // if handle is the only child, just set child_ptr to NULL
         par_ptr->child = NULL;
@@ -106,17 +107,17 @@ template<class T> void FibHeap<T>::Cut(FibNode<T>* handle){
  * Output: None
  * Effect
  */
-template<class T> void FibHeap<T>::Consolidate(){
+void FibHeap::Consolidate(){
     int D_n = log(GetNum())/log(2);
     D_n++;
     int num = GetNum();
     // initiate the auxillary array
-    FibNode<T>** arr = new FibNode<T>* [D_n];
+    FibNode** arr = new FibNode* [D_n];
     for(int i = 0; i < D_n; i++){
         arr[i] = NULL;
     }
-    FibNode<T>* node_x = min_ptr;
-    FibNode<T>* node_y; 
+    FibNode* node_x = min_ptr;
+    FibNode* node_y; 
     int x_degree = 0;
     // debug note : the for loop should be replaced by a while loop, and the above line should be 
     for (int i = 0; i <= num; i++){
@@ -126,7 +127,7 @@ template<class T> void FibHeap<T>::Consolidate(){
             if (node_x == node_y) break;
             if (node_x->key > node_y->key){
                 // exchanging two pointers if necessary, making sure that node x has a smaller key.
-                FibNode<T>* temp_ptr = node_x;
+                FibNode* temp_ptr = node_x;
                 node_x = node_y;
                 node_y = temp_ptr;
 
@@ -155,8 +156,8 @@ template<class T> void FibHeap<T>::Consolidate(){
  1. Unmark heap2
  2. heap2 will be linked to heap1 as a child of heap1
  */
-template<class T> FibNode<T>* FibHeap<T>::HeapLink(FibNode<T>* heap1, FibNode<T>* heap2){
-    FibNode<T>* temp = heap1->child;
+FibNode* FibHeap::HeapLink(FibNode* heap1, FibNode* heap2){
+    FibNode* temp = heap1->child;
     heap2->left->right = heap2->right;
     heap2->right->left = heap2->left;
     
@@ -178,7 +179,7 @@ template<class T> FibNode<T>* FibHeap<T>::HeapLink(FibNode<T>* heap1, FibNode<T>
 }
 
 /* FibHeap - Minimum */
-template<class T> FibNode<T>* FibHeap<T>::Minimum(){
+FibNode* FibHeap::Minimum(){
     return min_ptr;
 }
 /* FibHeap - ExtractMin
@@ -190,10 +191,10 @@ template<class T> FibNode<T>* FibHeap<T>::Minimum(){
  2. If the structure is not empty, then add all children of min_ptr to the root list
  3. Return the given node
  */
-template<class T> FibNode<T>* FibHeap<T>::ExtractMin(){
+FibNode* FibHeap::ExtractMin(){
     if (min_ptr){
-        FibNode<T>* current_node = min_ptr->child;
-        FibNode<T>* next_node = NULL;
+        FibNode* current_node = min_ptr->child;
+        FibNode* next_node = NULL;
         
         for (int i = 0; i < min_ptr->degree; i++){
             next_node = current_node->left;
@@ -234,10 +235,10 @@ template<class T> FibNode<T>* FibHeap<T>::ExtractMin(){
  * Algorithm Description
  1. Traverse through all roots in the list
  */
-template<class T> void FibHeap<T>::FindMin(){
+void FibHeap::FindMin(){
     if (min_ptr) {
-        FibNode<T>* current_node = min_ptr->left;
-        FibNode<T>* current_min = min_ptr;
+        FibNode* current_node = min_ptr->left;
+        FibNode* current_min = min_ptr;
         while (current_node != min_ptr){
             if (current_node->key < current_min->key){
                 // locate the new minimum 
@@ -262,13 +263,13 @@ template<class T> void FibHeap<T>::FindMin(){
  1. First set the node to be deleted to the infimum of all keys
  2. Then execute extract_minimum
  */
-template<class T> void FibHeap<T>::Delete(FibNode<T>* handle){
+void FibHeap::Delete(FibNode* handle){
     DecreaseKey(handle, INFIMUM);
     ExtractMin();
 }
 
-template<class T> FibHeap<T>* FibHeap<T>::Union(FibHeap<T>* heap1, FibHeap<T>* heap2){
-    FibHeap<T>* new_heap = new FibHeap<T>;
+FibHeap* FibHeap::Union(FibHeap* heap1, FibHeap* heap2){
+    FibHeap* new_heap = new FibHeap;
     new_heap->numitems = heap1->numitems + heap2->numitems;
 
     // determine new min from the two heap structures
@@ -295,7 +296,7 @@ template<class T> FibHeap<T>* FibHeap<T>::Union(FibHeap<T>* heap1, FibHeap<T>* h
     return new_heap;
 }
 
-template<class T> int FibHeap<T>::GetNum(){
+int FibHeap::GetNum(){
     return numitems;
 }
 
@@ -304,7 +305,7 @@ template<class T> int FibHeap<T>::GetNum(){
 
 
 /* This Function is for Testing */
-template<class T> void FibHeap<T>::PrintTree(){
+void FibHeap::PrintTree(){
     cout << "\n=========================\n"; 
 	
     if (min_ptr == NULL){
@@ -312,7 +313,7 @@ template<class T> void FibHeap<T>::PrintTree(){
         return;
     }
     
-    FibNode<T>* root_pt = min_ptr;
+    FibNode* root_pt = min_ptr;
     int i = 0;
     do{
         cout << "Heap " << i++ << " :: " <<root_pt->key;
@@ -325,9 +326,9 @@ template<class T> void FibHeap<T>::PrintTree(){
 }
 
 /* Recursive Printing*/
-template<class T> void FibHeap<T>::_PrintTree(FibNode<T>* node){
+void FibHeap::_PrintTree(FibNode* node){
     if (node == NULL){return;}
-    FibNode<T>* node_pt = node;
+    FibNode* node_pt = node;
     cout << "[";
     do{
         cout<< node_pt->key <<", ";
@@ -363,7 +364,7 @@ int String2Int(string key){
  * Effect
  * Nodes will be added into the central heap (or withdrawn, or update), respectively
  */
-template<class T> void FibNode<T>::PatientCreate(vector<string>&infolist){
+void FibNode::PatientCreate(vector<string>&infolist){
     setid(String2Int(infolist[0]));
     setrisk(Risk (String2Int(infolist[1])) );
     setpro(Profession (String2Int(infolist[2])) );
@@ -386,10 +387,10 @@ template<class T> void FibNode<T>::PatientCreate(vector<string>&infolist){
 };
 
 /* <=== Functions for Hash tables ===> */
-template<class T> FibNode<T>* FibHeap<T>::hash_table_find(int id){
+FibNode* FibHeap::hash_table_find(int id){
     return processin_table.retrieval(id);
 };
-template<class T> bool FibHeap<T>::hash_intable_check(int id){
+bool FibHeap::hash_intable_check(int id){
     if (processin_table.retrieval(id) == NULL) return false;
     // else the element is in the hashtable
     return true;
@@ -401,16 +402,16 @@ template<class T> bool FibHeap<T>::hash_intable_check(int id){
  * OUTPUT
  * 1. the address to the removed node (for further removing the node from the central heap)
  */
-template<class T> FibNode<T>* FibHeap<T>::hash_table_remove(int id){
+FibNode* FibHeap::hash_table_remove(int id){
     // first record the address of the node to be deleted
-    FibNode<T>* old = processin_table.retrieval(id);
+    FibNode* old = processin_table.retrieval(id);
     // then delete the entry from the central heap
     processin_table.deletion(id);
     // return the pointer to the old node
     return old;    
 };
 
-template<class T> void FibHeap<T>::hash_table_insert(FibNode<T>* node){
+void FibHeap::hash_table_insert(FibNode* node){
     processin_table.insertion(node);
 };
 
@@ -423,19 +424,19 @@ template<class T> void FibHeap<T>::hash_table_insert(FibNode<T>* node){
  * swap a registration (only in hash table) that is under assignment with its newer version
  */
 
-template<class T> FibNode<T>* FibHeap<T>::hash_table_swap(FibNode<T>* node){
+FibNode* FibHeap::hash_table_swap(FibNode* node){
     int id = node->getid();
-    FibNode<T>* old = processin_table.retrieval(id);
+    FibNode* old = processin_table.retrieval(id);
     processin_table.deletion(id);
     hash_table_insert(node);
     return old;
 };
 
-template<class T> void FibHeap<T>::withdraw_table_insert(FibNode<T>* node){
+void FibHeap::withdraw_table_insert(FibNode* node){
     withdraw_table.insertion(node);
 };
-template<class T> FibNode<T>* FibHeap<T>::withdraw_table_remove(int id){
-    FibNode<T>* old = withdraw_table.retrieval(id);
+FibNode* FibHeap::withdraw_table_remove(int id){
+    FibNode* old = withdraw_table.retrieval(id);
     withdraw_table.deletion(id);
     return old;
 };
@@ -449,7 +450,7 @@ template<class T> FibNode<T>* FibHeap<T>::withdraw_table_remove(int id){
  * 
  * Note: the insert will keep the ddl queue in ascending order 
  */
-template<class T> void FibHeap<T>::ddl_insert(FibNode<T>* node){
+void FibHeap::ddl_insert(FibNode* node){
     //TODO: to improve the performance of this function, implement the insertion here using a BST approach
     int i;
     for(i = 0; i < ddl_queue.size(); i++) {
@@ -460,7 +461,7 @@ template<class T> void FibHeap<T>::ddl_insert(FibNode<T>* node){
     ddl_queue.insert(ddl_queue.begin() + i, node);
 
 };
-template<class T> bool FibHeap<T>::ddl_incheck(FibNode<T>* node){
+bool FibHeap::ddl_incheck(FibNode* node){
     int i = 0;
     while (i < ddl_queue.size()) {
         if (ddl_queue[i]->getid() == node->getid())
@@ -469,7 +470,7 @@ template<class T> bool FibHeap<T>::ddl_incheck(FibNode<T>* node){
     }
     return false;
 };
-template<class T> FibNode<T>* FibHeap<T>::ddl_delete(FibNode<T>* node){
+FibNode* FibHeap::ddl_delete(FibNode* node){
     int i = 0;
     while (i < ddl_queue.size()) {
         if (ddl_queue[i]->getid() == node->getid())
@@ -480,47 +481,47 @@ template<class T> FibNode<T>* FibHeap<T>::ddl_delete(FibNode<T>* node){
         cout << "ddl_queue DNE Exception, aborting\n";
         exit(3);
     }
-    FibNode<T>* old = ddl_queue[i];
+    FibNode* old = ddl_queue[i];
     ddl_queue.erase(ddl_queue.begin() + i); // remove the i-th element
     return old;   
 };
 
-template<class T> void FibHeap<T>::highrisk_table_insert(FibNode<T>* node) {
+void FibHeap::highrisk_table_insert(FibNode* node) {
     highrisk_table.insertion(node);
 }
-template<class T> FibNode<T>* FibHeap<T>::highrisk_table_remove(int id) {
-    FibNode<T>* old = highrisk_table.retrieval(id);
+FibNode* FibHeap::highrisk_table_remove(int id) {
+    FibNode* old = highrisk_table.retrieval(id);
 
     highrisk_table.deletion(id);
 
     return old;
 }
-template<class T> FibNode<T>* FibHeap<T>::highrisk_table_find(int id) {
+FibNode* FibHeap::highrisk_table_find(int id) {
     return highrisk_table.retrieval(id);
 }
-template<class T> bool FibHeap<T>::highrisk_intable_check(int id) {
+bool FibHeap::highrisk_intable_check(int id) {
     if (highrisk_table.retrieval(id) == NULL) return false;
     return true;
 }
 
-template<class T> FibNode<T>* FibHeap<T>::assigned_table_find(int id){
+FibNode* FibHeap::assigned_table_find(int id){
     return assigned_table.retrieval(id);
 };
-template<class T> bool FibHeap<T>::assigned_intable_check(int id){
+bool FibHeap::assigned_intable_check(int id){
     if (assigned_table.retrieval(id) == NULL) return false;
     // else the element is in the hashtable
     return true;
 };
 
-template<class T> FibNode<T>* FibHeap<T>::assigned_table_remove(int id){
+FibNode* FibHeap::assigned_table_remove(int id){
     // first record the address of the node to be deleted
-    FibNode<T>* old = assigned_table.retrieval(id);
+    FibNode* old = assigned_table.retrieval(id);
     // then delete the entry from the central heap
     assigned_table.deletion(id);
     // return the pointer to the old node
     return old;    
 };
 
-template<class T> void FibHeap<T>::assigned_table_insert(FibNode<T>* node){
+void FibHeap::assigned_table_insert(FibNode* node){
     assigned_table.insertion(node);
 };

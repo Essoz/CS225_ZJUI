@@ -23,7 +23,7 @@ using namespace std;
 
 
  */
-template<class T> bool CentralIO<T>::Read2Heap(){
+bool CentralIO::Read2Heap(){
     ifstream infile;
     infile.open(path, ifstream::in);
 
@@ -59,7 +59,7 @@ template<class T> bool CentralIO<T>::Read2Heap(){
         }
     
     // clear this list for next use
-    FibNode<int>* newnode = new FibNode<int>(temp_list);
+    FibNode* newnode = new FibNode(temp_list);
     temp_list.clear();
     //check hash set
     if (newnode->withdraw) {
@@ -71,7 +71,7 @@ template<class T> bool CentralIO<T>::Read2Heap(){
              * 4. remove the node from ddl queue (if the node was in that queue)
              * 5. release memory occupied by the old node
              */
-            FibNode<int>* old;
+            FibNode* old;
             heap->withdraw_table_insert(newnode);
 
             if (hash_intable_check(newnode->getid())){
@@ -123,7 +123,7 @@ template<class T> bool CentralIO<T>::Read2Heap(){
          * 1. swap the two node in the hash table
          * 2. swap the two node in the fibonacci 
          */
-        FibNode<int>* old;
+        FibNode* old;
         old = heap->hash_table_swap(newnode); 
         // delete the older version of the previous registration
 
@@ -162,7 +162,7 @@ template<class T> bool CentralIO<T>::Read2Heap(){
 
 
 /* TODO <=== Helper Function for Generating Reports ===> */
-template<class T> bool CentralIO<T>::ReportWeekly(int week, int key){
+bool CentralIO::ReportWeekly(int week, int key){
     /* Generate Weekly Report for 
      * 1. People who have been treated including their profession, age category, risk status, and the waiting time from registration to treatment
      * 2. the registered people with a set appointment including their profession category, age category, risk status and their waiting time until now
@@ -172,20 +172,20 @@ template<class T> bool CentralIO<T>::ReportWeekly(int week, int key){
     _WeeklyAssigned(week, key);
     _WeeklyQueueing(week, key);
 }
-template<class T> bool CentralIO<T>::ReportMonthly(int month, int key){
+bool CentralIO::ReportMonthly(int month, int key){
     _Monthly(month, key);
 }
 
-template<class T> bool CentralIO<T>::_WeeklyCured(int week, int key){
+bool CentralIO::_WeeklyCured(int week, int key){
     cout << "\nWeekly Cured, " << key;
 }
-template<class T> bool CentralIO<T>::_WeeklyAssigned(int week, int key){
+bool CentralIO::_WeeklyAssigned(int week, int key){
     cout << "\nWeekly Assigned, " << key;
 }
-template<class T> bool CentralIO<T>::_WeeklyQueueing(int week, int key){
+bool CentralIO::_WeeklyQueueing(int week, int key){
     cout << "\nWeeklyQueueing, " << key;
 }
-template<class T> bool CentralIO<T>::_Monthly(int month, int key){
+bool CentralIO::_Monthly(int month, int key){
     cout << "\n Monthly, " << key;
     return true;
 }
@@ -195,7 +195,7 @@ template<class T> bool CentralIO<T>::_Monthly(int month, int key){
  * 1. 0 (a >= b)
  * 2. 1 (a < b)
  */
-template<class T> bool CentralIO<T>::compare(FibNode<T>* a, FibNode<T>* b, int key){
+bool CentralIO::compare(FibNode* a, FibNode* b, int key){
     if (key == 0) {
         return (a->getname() < b->getname());
     } 
