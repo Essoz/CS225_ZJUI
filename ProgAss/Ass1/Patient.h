@@ -65,6 +65,7 @@ private:
     Appointment* appointment;
 
 public:
+    Patient();
     Patient(int id, Risk risk, Profession professionLevel, Age a, Information* info, int regis_id, int year, int date, int withdraw, int ddl);      // Constructor for new patient
 
     /*set functions*/
