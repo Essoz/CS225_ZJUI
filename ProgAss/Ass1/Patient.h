@@ -21,13 +21,13 @@ using namespace std;
  */
 
 enum Risk {
-    high, medium, low, no
+    no,low,medium,high
 };
 enum Profession {
-    I, II, III, IV, V, VI, VII, VIII
+    vIII,VII,VI,V,IV,III,II,I
 };
 enum Age {
-    children, adolescent, youngadult, adult, senior, elderly, old
+    old, elderly, senior, adult, youngadult, adolescent, children,  
 };
 
 // Structure of info which is not used in the priority issue:
@@ -158,6 +158,9 @@ public:
     Information* getinfo() {
         return information;
     }
+    string getname() {
+        return information->name;
+    }
     Appointment* getappoint()
     {
         return appointment;
@@ -192,7 +195,7 @@ int Patient::calculate_prio()
 {
     int prio = 0;
     // Start from the registration time, they occupy the last 5 digits:
-    prio = prio + (1000 - date) + 1000 * (100 - (year - 2000));
+    prio = prio + date + 1000 * (year - 2000);
     // Then for age group, it stands for the least 6 digit:
     prio = prio + 100000 * age;
     // Finally for profession, 7th digit:
