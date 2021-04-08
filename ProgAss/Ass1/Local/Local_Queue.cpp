@@ -168,6 +168,7 @@ queue<Patient*>* Queue::report(queue<Patient*>* l_queue)
 	if (0 == counter % 2)
 	{
 		cur_date++;
+		std::cout << cur_date << std::endl;
 		// Increase year when date reaches 365:
 		if (cur_date >= 365)
 		{
