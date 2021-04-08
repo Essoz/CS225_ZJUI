@@ -35,7 +35,7 @@ queue<Patient*>* IO::write_all(queue<Patient*>* queue)
 {
 	// open the file you want to write:
 	FILE* update;
-	update = fopen("update.csv", "w");
+	update = fopen("Submit.csv", "w");
 	// check if fopen successes:
 	if (NULL == update)
 	{
@@ -43,7 +43,7 @@ queue<Patient*>* IO::write_all(queue<Patient*>* queue)
 		exit(1);
 	}
 	// Write the header of the output file first:
-	fprintf(update, "ID,Risk_Status,Profession,Age,Reg_Year,Reg_Date,Withdraw,Letter_DDL,Priority,");
+	fprintf(update, "ID,Risk_Status,Profession,Age,Reg_ID,Reg_Year,Reg_Date,Withdraw,Letter_DDL,Priority,");
 	fprintf(update, "Name,Email,Phone,Birthday\n");
 
 	// Loop all the patients in the local registry queue and write all the 
@@ -52,13 +52,14 @@ queue<Patient*>* IO::write_all(queue<Patient*>* queue)
 	{
 		fprintf(update, "%d,%d,%d,",
 			queue->front()->getid(), queue->front()->getrisk(), queue->front()->getpro());
-		fprintf(update, "%d,%d,%d,",
-			queue->front()->getage(), queue->front()->getyear(), queue->front()->getdate());
+		fprintf(update, "%d,%d,%d,%d",
+			queue->front()->getage(), queue->front()->getreg_id(),
+			queue->front()->getyear(), queue->front()->getdate());
 		fprintf(update, "%d,%d,%d,",
 			queue->front()->getwithdraw(), queue->front()->getddl(),queue->front()->getpriority());
-		fprintf(update, "%s,%s,%ld,%d\n", 
+		fprintf(update, "%s,%s,%s,%s\n", 
 			queue->front()->getinfo()->name.c_str(), queue->front()->getinfo()->email.c_str(), 
-			queue->front()->getinfo()->phone, queue->front()->getinfo()->birthday);
+			queue->front()->getinfo()->phone.c_str(), queue->front()->getinfo()->birthday.c_str());
 		// delete the first entry in the queue:
 		queue->pop();
 	}
@@ -108,10 +109,58 @@ queue<Patient*>* IO::read_all(string path, Queue* queue)
 		Information* info = new Information;
 		info->name = Trim(fields[4]);
 		info->email = Trim(fields[5]);
-		info->phone = atol(Trim(fields[6]).c_str());
-		info->birthday = atoi(Trim(fields[7]).c_str());
+		info->phone = Trim(fields[6]).c_str();
+		info->birthday = Trim(fields[7]).c_str();
 		// Create a new patient:
 		queue->new_patient(risk, prof, a, info, ddl);
+	}
+	return queue->getl_queue();
+}
+
+// This new added function is used to read the updated info and update the queue:
+queue<Patient*>* IO::read_update(string path, Queue* queue)
+{
+	ifstream fin(path);		// open the stream
+	string line;
+	getline(fin, line);		// Skip the header line
+	while (getline(fin, line))		// ���ж�ȡ�����з���\n�����֣������ļ�β��־eof��ֹ��ȡ
+	{
+		istringstream sin(line);	// �������ַ���line���뵽�ַ�����istringstream��
+		vector<string> fields;		// ����һ���ַ�������
+		string field;
+		while (getline(sin, field, ','))	// ���ַ�����sin�е��ַ����뵽field�ַ����У��Զ���Ϊ�ָ���
+		{
+			fields.push_back(field);		// ���ոն�ȡ���ַ������ӵ�����fields��
+		}
+		// Now we can declare several variables and update information:
+		int id = atoi(Trim(fields[0]).c_str());
+		int type = atoi(Trim(fields[1]).c_str());
+		string up_info = Trim(fields[2]);
+
+		// First check if the given patient is vaild:
+		if (NULL == queue->getHashtable()->retrieval(id)) {
+			cout << "The patient with id " << id << " does not exist!" << endl;
+			exit(1);
+		}
+
+		// Then check the type of info that is wanted to change:
+		if (type >= 0 && type <= 6)
+		{
+			// Convert the updated info from string to int:
+			int info = atoi(up_info.c_str());
+			// Update the info:
+			queue->update(id, type, info);
+		}
+		else if (type >= 7 && type <= 10)
+		{
+			// Update the info:
+			queue->update_info(id, type, up_info);
+		}
+		else
+		{
+			cout << "Invalid type number!" << endl;
+			exit(1);
+		}
 	}
 	return queue->getl_queue();
 }
