@@ -33,7 +33,7 @@ Queue::Queue()
 	time(&rawtime);
 	info = gmtime(&rawtime);
 	cur_year = 1900 + info->tm_year;					// The current year
-	cur_date = info->tm_mday;		// The current date
+	cur_date = info->tm_mon * 30 + info->tm_mday;		// The current date
 	//cur_year = 2021;	// The current year
 	//cur_date = 96;		// The current date
 	counter = 0;		// The counter starts with 0
@@ -168,6 +168,7 @@ queue<Patient*>* Queue::report(queue<Patient*>* l_queue)
 	if (0 == counter % 2)
 	{
 		cur_date++;
+		std::cout << cur_date << std::endl;
 		// Increase year when date reaches 365:
 		if (cur_date >= 365)
 		{

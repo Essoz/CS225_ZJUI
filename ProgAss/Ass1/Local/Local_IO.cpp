@@ -68,7 +68,7 @@ queue<Patient*>* IO::write_all(queue<Patient*>* queue)
 	// Check if the file is successfully closed:
 	if (0 == check)
 	{
-		cout << "Failed to close the update.csv." << endl;
+		//cout << "Failed to close the update.csv." << endl;
 		//exit(1);
 	}
 	return queue;
@@ -139,8 +139,8 @@ queue<Patient*>* IO::read_update(string path, Queue* queue)
 
 		// First check if the given patient is vaild:
 		if (NULL == queue->getHashtable()->retrieval(id)) {
-			cout << "The patient with id " << id << " does not exist!" << endl;
-			exit(1);
+			//cout << "The patient with id " << id << " does not exist!" << endl;
+			continue;
 		}
 
 		// Then check the type of info that is wanted to change:
