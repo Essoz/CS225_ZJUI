@@ -89,9 +89,9 @@ class FibHeap
         FibNode* ddl_delete(FibNode* node);
         
     private:
-        void _PrintTree(FibNode<T>* node);
-        FibNode<T>* min_ptr;
-        vector<FibNode<T>*> fiblist;
+        void _PrintTree(FibNode* node);
+        FibNode* min_ptr;
+        vector<FibNode*> fiblist;
         int numitems;
         Hash_Chaining withdraw_table;
         Hash_Chaining processin_table;

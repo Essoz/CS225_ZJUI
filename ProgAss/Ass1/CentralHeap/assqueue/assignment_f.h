@@ -41,14 +41,13 @@ bool Assignment::Assign(FibNode* reg, int date) {
  */
 void Assignment::_assign(FibNode* reg, int date) {
     Registry* registry = reg->getreg();
-    for (int i = 0; i < Registry->location_dist->size(); i++) {
+    for (int i = 0; i < int(Registry->location_dist->size()); i++) {
         
         
         if (all_locations->location_list[*(Registry->location_dist)[i]].checkAvailability(date)) {
             int temp_time_assigned = assignedInsert(date, reg);
-            all_locations->location_list[*(Registry->location_dist)[i]][date]
             Appointment* reg_app = new Appointment(
-            , date, temp_time_assigned);
+            all_locations->location_list[*(Registry->location_dist)[i]][date], date, temp_time_assigned);
             reg->setappoint(reg_app);
             assigned_table_insert(reg);
         }
@@ -61,8 +60,8 @@ int AllLocations::getNumLocs(){
 
 int AllLocations::calcCapacity(int date){
     current_occupied = 0;
-    for (int i = 0; i < location_list.size(); i++) {
-        current_occupied += location_list[i]->assigned_queue[date].size();
+    for (int i = 0; i < int(location_list.size()); i++) {
+        current_occupied += location_list[i]->assigned_queue.at(date).size();
     }
     current_capacity = max_capacity - current_occupied;
     return current_capacity;
@@ -71,15 +70,14 @@ int AllLocations::calcCapacity(int date){
 void AllLocations::maintainCuredList(int week){
     if (week >= cured_list.size()){
         // vector<FibNode*> temp;
-        for (int i = 0; i < location_list.size(); i++) {
-            for (int j = 0; j < location_list[i]->cured_queue[week].size(); j++) {
-                cured_list[week].push_back(location_list[i]->cured_queue[week][j]);
+        for (int i = 0; i < int(location_list.size()); i++) {
+            for (int j = 0; j < int(location_list[i]->cured_queue.at(week).size()); j++) {
+                cured_list.at(week).push_back(location_list[i]->cured_queue.at(week)[j]);
             }
         }
     } else {
         cout << "\nYOU ARE FUCKED UP at AllLocations::maintainCuredList\n";
     }
-
 }
 /*
  * OUTPUT
@@ -87,10 +85,10 @@ void AllLocations::maintainCuredList(int week){
  */
 int Location::assignedInsert(int date, FibNode* new_node) {
     if (checkAvailability(date)) {
-        assigned_queue[date].push_back(new_node);
+        assigned_queue.at(date).push_back(new_node);
         return true;
     } else {exit(3);} 
-    return (assigned_queue[date].end() - assigned_queue[date].begin());
+    return (assigned_queue.at(date).end() - assigned_queue.at(date).begin());
 }
 /* Location::assignedRemove
  * INPUT
@@ -102,11 +100,11 @@ int Location::assignedInsert(int date, FibNode* new_node) {
  */ 
 void Location::assignedClear(int date) {
     int week = date / 7;    // week is equal to the actual week - 1
-    for (int i = 0; i < assigned_queue[date].size(); i++) {
-        cured_queue[week].push_back(assigned_queue[date][i]);
+    for (int i = 0; i < int(assigned_queue.at(date).size()); i++) {
+        cured_queue.at(week).push_back(assigned_queue.at(date)[i]);
     }
     // clear the assignment queue for that specific date
-    assigned_queue[date].clear();
+    assigned_queue.at(date).clear();
 }
 
 /* Location::checkAvailability
@@ -116,7 +114,7 @@ void Location::assignedClear(int date) {
  * 1. number of remained capacity (how many appointments left can be made) 
  */
 int Location::checkAvailability(int date) {
-    return (daily_capacity - assigned_queue[date].size());
+    return (daily_capacity - assigned_queue.at(date).size());
 }
 
 FibNode* Location::findAppointment(Appointment* app){

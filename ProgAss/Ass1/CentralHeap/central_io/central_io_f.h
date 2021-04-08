@@ -46,7 +46,7 @@ bool CentralIO::Read2Heap(){
         
         // reading registrations from files generated from local registries
         for (int i = 0; i < int(line.size()); i++) {
-            if (line[i] == ",") {
+            if (line[i].c_str() == ",") {
                 // put this string into the vector
                 temp_list.push_back(temp);
                 // clear the temp string for the next argument
@@ -198,7 +198,8 @@ bool CentralIO::_Monthly(int month, int key){
  * 1. 0 (a >= b)
  * 2. 1 (a < b)
  */
-bool CentralIO::compare(FibNode* a, FibNode* b, int key){
+bool CentralIO::compare(FibNode* a, FibNode* b, int key)
+{
     if (key == 0) {
         return (a->getname() < b->getname());
     } 
@@ -208,7 +209,9 @@ bool CentralIO::compare(FibNode* a, FibNode* b, int key){
     if (key == 2) {
         return (a->getage() < b->getage());
     }
+    return false;
 }
+
 void CentralIO::sortbykey(vector<FibNode*> fiblist,int key)
 {
     FibNode* temp;
