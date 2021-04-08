@@ -18,7 +18,7 @@ using std::hash;
  */
 
 // Constructor:
-Hash_Chaining::Hash_Chaining(int length = 20)
+Hash_Chaining::Hash_Chaining(int length)
 {
     // Initialize the attributes of the hashtable
     hash_maxsize = length;
@@ -26,7 +26,7 @@ Hash_Chaining::Hash_Chaining(int length = 20)
         hash_maxsize = 20;  // Default size for hashtable
     }
     hash_numitems = 0;   // The current number of pairs in hashtable
-    hashtable = new vector<vector<FibNode<int>*>*>(hash_maxsize);
+    hashtable = new vector<vector<FibNode*>*>(hash_maxsize);
     for (int i = 0; i < hash_maxsize; i++) {
         hashtable->at(i) = NULL;
     }
@@ -43,12 +43,12 @@ int Hash_Chaining::calculate_hashvalue(int id, int size)
 }
 
 // Insert a value:
-void Hash_Chaining::insertion(FibNode<int>* node)
+void Hash_Chaining::insertion(FibNode* node)
 {
     int index = calculate_hashvalue(node->getid(), hash_maxsize); // Calculate the hashvalue
     // If the corresponding entry is not defined, define it:
     if (hashtable->at(index) == NULL) {
-        vector<FibNode<int>*>* entry = new vector<FibNode<int>*>;
+        vector<FibNode*>* entry = new vector<FibNode*>;
         hashtable->at(index) = entry;
         hash_numitems++;
         hashtable->at(index)->push_back(node);   // Add that item into the entry
@@ -69,7 +69,7 @@ void Hash_Chaining::insertion(FibNode<int>* node)
 void Hash_Chaining::deletion(int id)
 {
     // Get the correspoding node pointer:
-    FibNode<int>* node = retrieval(id);
+    FibNode* node = retrieval(id);
     // If no node in the table, do nothing:
     if (NULL == node){
         return;
@@ -94,7 +94,7 @@ void Hash_Chaining::deletion(int id)
 }
 
 // Return the pointer of the patient instance in the hash table:
-FibNode<int>* Hash_Chaining::retrieval(int id)
+FibNode* Hash_Chaining::retrieval(int id)
 {
     int index = calculate_hashvalue(id, hash_maxsize); // Calculate the hashvalue
     // If the corresponding entry is not defined, just return:

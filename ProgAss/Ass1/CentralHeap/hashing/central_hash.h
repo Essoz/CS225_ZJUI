@@ -1,13 +1,12 @@
 #ifndef CENTRAL_HASH_H
 #define CENTRAL_HASH_H
-// #include "central_hash.cpp"
-#include "../fibheap.h"
 #include "../fibheap_f.h"
 #include <iostream>	
 #include <math.h>
 #include <cstdlib>
 #include <map>
 #include <vector>
+#include <string>
 using namespace std;
 
 /*
@@ -20,7 +19,7 @@ using namespace std;
  *  in the Local_Queue.h. It is modified from the HW5, ex2.
  *  We apply hashing with chaining here.
  */
-// class FibNode;
+//class FibNode;
 
 class Hash_Chaining
 {
@@ -33,7 +32,7 @@ public:
     FibNode* retrieval(int id);
     int get_numitems();
 private:
-    std::vector<vector<FibNode*>*>* hashtable;      // The hashtable
+    std::vector<std::vector<FibNode*>*>* hashtable;      // The hashtable
     int hash_numitems;                  // length of hashtable
     int hash_maxsize;                   // defines the size of the hashtable
 };

@@ -1,17 +1,15 @@
-// #include "fibheap.h"
 #include "fibheap_f.h"
-#include "alist.h"
-#include "hashing/central_hash.cpp"
+#include "alist.cpp"
+#include "hashing/central_hash.h"
 #include "assqueue/assignment_f.h"
 #include "central_io/central_io_f.h"
 #include "appointment/appointment_f.h"
-#include <bits/stdc++.h>
-// #include <string>
-// #include <vector>
+//#include <bits/stdc++.h>
+#include <string>
+#include <vector>
+#include <unistd.h>
 using namespace std;
-// using std::string;
-// using std::vector;
-// using std::string;
+
 int timer = 0;
 const int interval = 1; // unit in day
 string path = "../Submit.csv";
@@ -38,7 +36,7 @@ int main(){
     Location* Location_3 = new Location(3, time_slot_3);
     Location* Location_4 = new Location(4, time_slot_4);
 
-    vector<(Location*)> location_list;
+    vector<Location*> location_list(5);
     location_list.push_back(Location_0);
     location_list.push_back(Location_1);
     location_list.push_back(Location_2);
@@ -53,20 +51,14 @@ int main(){
     vector<int> location_dist_4 = {4,0,1,2,3};
     vector<int> location_dist_5 = {4,3,2,1,0};
 
-    Registry Registry_0(0, &location_dist_0);
-    Registry Registry_1(1, &location_dist_1);
-    Registry Registry_2(2, &location_dist_2);
-    Registry Registry_3(3, &location_dist_3);
-    Registry Registry_4(4, &location_dist_4);
-    Registry Registry_5(5, &location_dist_5);
-
-
-
-
-
-
-    AllLocations all_locations(location_list);
-    Assignment AssignRegistration(&all_locations);
+    //Registry Registry_0(0, &location_dist_0);
+    //Registry Registry_1(1, &location_dist_1);
+    //Registry Registry_2(2, &location_dist_2);
+    //Registry Registry_3(3, &location_dist_3);
+    //Registry Registry_4(4, &location_dist_4);
+    //Registry Registry_5(5, &location_dist_5);
+    AllLocations* loc = new AllLocations(location_list);
+    Assignment AssignRegistration(loc);
     FibHeap CentralQueue;
     // initialize an IO instance for later use
     CentralIO central_IO = CentralIO(&CentralQueue, path);
@@ -92,14 +84,14 @@ int main(){
         // start processing
 
         // first assign nodes in the heap
-        if (AssignRegistration.checkAvailability()) {
+        if (AssignRegistration.checkAvailability(date)) {
             while (AssignRegistration.Assign((CentralQueue.Minimum())) && CentralQueue.GetNum()) {
                 // keep assign until no further registrations can be assigned
                 CentralQueue.ExtractMin();
                 // TODO table management
             }
         }
-        if (AssignRegistration.checkAvailability()) {
+        if (AssignRegistration.checkAvailability(date)) {
             while (AssignRegistration.Assign((CentralQueue.highrisk_queue.Minimum())) && CentralQueue.highrisk_queue.GetNum()) {
                 // keep assign until no further registrations can be assigned
                 CentralQueue.highrisk_queue.ExtractMin();
@@ -110,14 +102,15 @@ int main(){
 
         // if counter % 7 == 0, generate reports
         if (timer % 14 == 0){
-            CentralIO.ReportWeekly(timer / 14, order);
+            central_IO.ReportWeekly(timer / 14, order);
         }
         if (timer % 60 == 0){
-            CentralIO.ReportMonthly(timer / 60, order);
+            central_IO.ReportMonthly(timer / 60, order);
         }
 
         // if counter % 30 == 0, generate weekly reports
 
 
     }
+    return 0;
 }

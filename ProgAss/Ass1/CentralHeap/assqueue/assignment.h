@@ -1,8 +1,6 @@
 #ifndef ASSIGNMENT_H
 #define ASSIGNMENT_H
-
 #include "../fibheap_f.h"
-#include "assignment_f.h"
 
 class AllLocations;
 class Location;

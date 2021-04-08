@@ -1,17 +1,41 @@
-#ifndef _FIBHEAP_H
-#define _FIBHEAP_H
-/* Put your declaration here */
+#ifndef fibheap_h
+#define fibheap_h
 #include "../Patient.h"
 #include "hashing/central_hash.h"
 #include <string>
 #include <vector>
 
-class FibNode;
+class FibHeap;
+
+class FibNode: public Patient{
+    friend class FibHeap;
+    public:
+        FibNode(vector<string>&infolist);
+        void PatientCreate(vector<string>&infolist);
+        FibNode* parent;
+        FibNode* child;
+        FibNode* left;
+        FibNode* right;
+        bool mark;
+        int key;
+        int degree;
+};
+
+FibNode::FibNode(vector<string>&infolist){
+    parent = NULL;
+    child = NULL;
+    left = NULL;
+    right = NULL;
+    degree = 0;
+    mark = false;       // default marking == false
+    // key = priority;
+    PatientCreate(infolist);
+};
 
 class FibHeap
 {
+    friend class CentralIO;
     public:
-        friend class CentralIO;
         FibHeap();  // this operation builds the heap
         /* You should add other functions to make the structure as Fibonacci heap  */
         /* It is part of computing assignment, so we would not provide the basic implementation for you */
@@ -65,14 +89,9 @@ class FibHeap
         FibNode* ddl_delete(FibNode* node);
         
     private:
-<<<<<<< HEAD
-        void _PrintTree(FibNode* node);
-        FibNode* min_ptr;
-=======
         void _PrintTree(FibNode<T>* node);
         FibNode<T>* min_ptr;
         vector<FibNode<T>*> fiblist;
->>>>>>> a7397de2185cb5dc6672ca7f0ecbea58a85b8968
         int numitems;
         Hash_Chaining withdraw_table;
         Hash_Chaining processin_table;
@@ -81,36 +100,10 @@ class FibHeap
         vector<FibNode*> ddl_queue;
 };
 
-
 // build an empty heap
 FibHeap::FibHeap(){
     min_ptr = NULL;
     numitems = 0;
 };
 
-class FibNode: public Patient{
-    public:
-        friend class FibHeap;
-        FibNode(vector<string>&infolist);
-        void PatientCreate(vector<string>&infolist);
-        FibNode* parent;
-        FibNode* child;
-        FibNode* left;
-        FibNode* right;
-        bool mark;
-        int key;
-        int degree;
-};
-
-FibNode::FibNode(vector<string>&infolist){
-    parent = NULL;
-    child = NULL;
-    left = NULL;
-    right = NULL;
-    degree = 0;
-    mark = false;       // default marking == false
-    // key = priority;
-    PatientCreate(infolist);
-
-};
-#endif
+#endif /* fibheap_h */

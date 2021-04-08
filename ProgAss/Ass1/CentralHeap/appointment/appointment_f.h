@@ -1,6 +1,3 @@
-#ifndef APPOINTMENT_F_H
-#define APPOINTMENT_F_H
-
 #include "appointment.h"
 #include <string>
 
@@ -36,4 +33,3 @@ int Appointment::getDate(){
 int Appointment::getTime(){
     return time_slot_assigned;
 }
-#endif

@@ -1,8 +1,6 @@
 #ifndef APPOINTMENT_H
 #define APPOINTMENT_H
-
 #include <string>
-#include "../assqueue/assignment_f.h"
 using namespace std;
 class Appointment{
     public:

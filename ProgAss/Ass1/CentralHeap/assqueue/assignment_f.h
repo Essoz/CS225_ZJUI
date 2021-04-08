@@ -1,5 +1,3 @@
-#ifndef ASSIGNMENT_F_H
-#define ASSIGNMENT_F_H
 #include "assignment.h"
 
 bool Assignment::Assign(FibNode* reg, int date) {
@@ -129,4 +127,3 @@ void Location::removeAppointment(Appointment* app){
     assigned_queue[app->getDate()].erase(assigned_queue[app->getDate].begin() + app->getTime());
 
 }
-#endif

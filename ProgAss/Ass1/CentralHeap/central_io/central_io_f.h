@@ -6,8 +6,6 @@
 #include "central_io.h"
 using namespace std;
 
-
-
 /* READ2HEAP
  * INPUT == NULL
  * OUTPUT == NULL
@@ -171,19 +169,24 @@ bool CentralIO::ReportWeekly(int week, int key){
     _WeeklyCured(week, key);
     _WeeklyAssigned(week, key);
     _WeeklyQueueing(week, key);
+    return true;
 }
 bool CentralIO::ReportMonthly(int month, int key){
     _Monthly(month, key);
+    return true;
 }
 
 bool CentralIO::_WeeklyCured(int week, int key){
     cout << "\nWeekly Cured, " << key;
+    return true;
 }
 bool CentralIO::_WeeklyAssigned(int week, int key){
     cout << "\nWeekly Assigned, " << key;
+    return true;
 }
 bool CentralIO::_WeeklyQueueing(int week, int key){
     cout << "\nWeeklyQueueing, " << key;
+    return true;
 }
 bool CentralIO::_Monthly(int month, int key){
     cout << "\n Monthly, " << key;
@@ -195,11 +198,7 @@ bool CentralIO::_Monthly(int month, int key){
  * 1. 0 (a >= b)
  * 2. 1 (a < b)
  */
-<<<<<<< HEAD
-bool CentralIO::compare(FibNode* a, FibNode* b, int key){
-=======
 template<class T> bool CentralIO<T>::compare(FibNode<int>* a, FibNode<int>* b, int key){
->>>>>>> a7397de2185cb5dc6672ca7f0ecbea58a85b8968
     if (key == 0) {
         return (a->getname() < b->getname());
     } 

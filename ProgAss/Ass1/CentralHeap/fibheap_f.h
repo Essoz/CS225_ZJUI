@@ -1,11 +1,13 @@
+#ifdef fibheap_f_h
+#define fibheap_f_h
+#include "fibheap.h"
 #include <stdio.h>
 #include <iostream>
 #include <cstdlib>
 #include <cmath>
-#include "fibheap.h"
-// #include <string>
-// #include <vector>
-
+#include <string>
+#include <vector>
+using namespace std;
 using std::cin;
 using std::cout;
 using std::endl;
@@ -19,10 +21,7 @@ using std::endl;
  * Effect: 
  1. numitems ++
  2. the node is inserted to the left of the min node
- 
-
  */
-
 
 /* <===> Test Passed <===> */
 void FibHeap::Insert(FibNode* fib_node){
@@ -305,9 +304,6 @@ int FibHeap::GetNum(){
 
 
 /* This Function is for Testing */
-<<<<<<< HEAD
-void FibHeap::PrintTree(){
-=======
 template<class T> void FibHeap<T>::PrintTree(){
     fiblist.clear();
     if (!fiblist.empty())
@@ -316,7 +312,6 @@ template<class T> void FibHeap<T>::PrintTree(){
         return;
     }
     
->>>>>>> a7397de2185cb5dc6672ca7f0ecbea58a85b8968
     cout << "\n=========================\n"; 
 	
     if (min_ptr == NULL){
@@ -538,3 +533,5 @@ FibNode* FibHeap::assigned_table_remove(int id){
 void FibHeap::assigned_table_insert(FibNode* node){
     assigned_table.insertion(node);
 };
+
+#endif /* fibheap_f_h */
