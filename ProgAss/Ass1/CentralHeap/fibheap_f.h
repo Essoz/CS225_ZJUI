@@ -356,7 +356,7 @@ void FibHeap::_PrintTree(FibNode* node){
 int String2Int(string key){
     int key_int = 0;
     
-    for (int i = key.size() - 1; i >= 0; i--){
+    for (int i = int(key.size()) - 1; i >= 0; i--){
         key_int += key[i] * pow(10, key.size() - i) ; // an explicit type cast may be needed here
     }
 
@@ -461,7 +461,7 @@ FibNode* FibHeap::withdraw_table_remove(int id){
 void FibHeap::ddl_insert(FibNode* node){
     //TODO: to improve the performance of this function, implement the insertion here using a BST approach
     int i;
-    for(i = 0; i < ddl_queue.size(); i++) {
+    for(i = 0; i < int(ddl_queue.size()); i++) {
         if (node->getddl() < ddl_queue[i]->getddl())  break;
     }
 
@@ -471,7 +471,7 @@ void FibHeap::ddl_insert(FibNode* node){
 };
 bool FibHeap::ddl_incheck(FibNode* node){
     int i = 0;
-    while (i < ddl_queue.size()) {
+    while (i < int(ddl_queue.size())) {
         if (ddl_queue[i]->getid() == node->getid())
             return true;
         i++;
@@ -480,12 +480,12 @@ bool FibHeap::ddl_incheck(FibNode* node){
 };
 FibNode* FibHeap::ddl_delete(FibNode* node){
     int i = 0;
-    while (i < ddl_queue.size()) {
+    while (i < int(ddl_queue.size())) {
         if (ddl_queue[i]->getid() == node->getid())
             break;
         i++;
     }
-    if (i == ddl_queue.size()) {
+    if (i == int(ddl_queue.size())) {
         cout << "ddl_queue DNE Exception, aborting\n";
         exit(3);
     }

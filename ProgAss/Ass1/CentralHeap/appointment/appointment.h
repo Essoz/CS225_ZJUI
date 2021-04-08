@@ -2,10 +2,10 @@
 #define APPOINTMENT_H
 #include <string>
 using namespace std;
-class Appointment{
+class Appoint{
     public:
         friend class AllLocation;
-        Appointment(Location* loc, int date_assigned, int time_slot_assigned);
+        Appoint(Location* loc, int date_assigned, int time_slot_assigned);
         
         Location* loc;
         string assigned_date;
@@ -21,10 +21,10 @@ class Appointment{
         int time_slot_assigned;
 };
 
-Appointment::Appointment(Location* loc, int date_assigned, int time_slot_assigned){
-    Appointment::loc = loc;
-    Appointment::date_assigned = date_assigned;
-    Appointment::time_slot_assigned = time_slot_assigned;
+Appoint::Appoint(Location* loc, int date_assigned, int time_slot_assigned){
+    Appoint::loc = loc;
+    Appoint::date_assigned = date_assigned;
+    Appoint::time_slot_assigned = time_slot_assigned;
     setCured();
 };
 

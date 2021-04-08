@@ -68,7 +68,7 @@ class Location{
 Location::Location(int id, vector<string>&time_slot) {
     Location::id = id;
     Location::time_slot = time_slot;
-    daily_capacity = time_slot.size();
+    daily_capacity = int(time_slot.size());
 };
 
 

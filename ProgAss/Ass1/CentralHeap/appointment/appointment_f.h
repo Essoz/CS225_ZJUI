@@ -12,12 +12,12 @@ using namespace std;
  * 2. date_cured is converted into a string and stored in cured_date
  */
 
-void Appointment::setCured(){
+void Appoint::setCured(){
     date_cured = date_assigned + 1;
     cured_date = calcDate(time_slot_assigned, date_cured);
 };
 
-string Appointment::calcDate(int time_slot_assigned, int date){
+string Appoint::calcDate(int time_slot_assigned, int date){
     // to be implemented  (convert a date (int) to string)
     string month = to_string(date/30);
     string day = to_string(date%30);
@@ -27,9 +27,9 @@ string Appointment::calcDate(int time_slot_assigned, int date){
     return output;
 };
 
-int Appointment::getDate(){
+int Appoint::getDate(){
     return date_assigned;
 }
-int Appointment::getTime(){
+int Appoint::getTime(){
     return time_slot_assigned;
 }

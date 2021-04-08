@@ -42,11 +42,11 @@ bool CentralIO::Read2Heap(){
         ifstream::getline(infile, line);
         
         // terminate the reading process on encountering an empty line
-        if (line.size() == 0) break; 
+        if (int(line.size()) == 0) break; 
         
         // reading registrations from files generated from local registries
-        for (int i = 0; i < line.size(); i++) {
-            if (line[i] = ",") {
+        for (int i = 0; i < int(line.size()); i++) {
+            if (line[i] == ",") {
                 // put this string into the vector
                 temp_list.push_back(temp);
                 // clear the temp string for the next argument
@@ -60,8 +60,8 @@ bool CentralIO::Read2Heap(){
     FibNode* newnode = new FibNode(temp_list);
     temp_list.clear();
     //check hash set
-    if (newnode->withdraw) {
-        if (newnode->withdraw == 1){
+    if (newnode->getwithdraw()) {
+        if (newnode->getwithdraw() == 1){
             /*
              * 1. remove the node from hash table
              * 2. remove the node from the heap
@@ -72,16 +72,16 @@ bool CentralIO::Read2Heap(){
             FibNode* old;
             heap->withdraw_table_insert(newnode);
 
-            if (hash_intable_check(newnode->getid())){
+            if (heap->hash_intable_check(newnode->getid())){
                 old = heap->hash_table_remove(newnode->getid());
                 heap->Delete(old);
 
-            } else if (highrisk_intable_check(newnode->getid())){
+            } else if (heap->highrisk_intable_check(newnode->getid())){
                 old = heap->highrisk_table_remove(newnode->getid());
                 heap->highrisk_queue.Delete(old);
-            } else if (assigned_intable_check(newnode->getid())) {
+            } else if (heap->assigned_intable_check(newnode->getid())) {
                 // all above branches leave the case where the node is already assigned and not in any heaps
-                old = assigned_table_find(newnode->getid());
+                old = heap->assigned_table_find(newnode->getid());
                 Appointment* app = old->getappoint();
                 app->loc->removeAppointment(app);
                 delete app;
@@ -114,7 +114,7 @@ bool CentralIO::Read2Heap(){
             heap->hash_table_insert(newnode);
             // remove this node from the withdrawn hashset.
         }
-    } else if (heap->hash_intable_check(newnode)){
+    } else if (heap->hash_intable_check(newnode->getid())){
         // the node is in hashtable
         //invoke the swap function
         /*
@@ -131,7 +131,7 @@ bool CentralIO::Read2Heap(){
 
         // do ddl update (if necessary)
         if (old->getddl() != -1){
-            heap->ddl_remove(old);
+            heap->ddl_delete(old);
         }
         if (newnode->getddl() != -1){
             heap->ddl_insert(newnode);
@@ -198,7 +198,7 @@ bool CentralIO::_Monthly(int month, int key){
  * 1. 0 (a >= b)
  * 2. 1 (a < b)
  */
-template<class T> bool CentralIO<T>::compare(FibNode<int>* a, FibNode<int>* b, int key){
+bool CentralIO::compare(FibNode* a, FibNode* b, int key){
     if (key == 0) {
         return (a->getname() < b->getname());
     } 
@@ -206,25 +206,23 @@ template<class T> bool CentralIO<T>::compare(FibNode<int>* a, FibNode<int>* b, i
         return (a->getpro() < b->getpro());
     }
     if (key == 2) {
-        return (a->getage() < b->getage())
+        return (a->getage() < b->getage());
     }
 }
-template<class T> void CentralIO<T>::sortbykey(vector<FibNode<int>*> fiblist,int key)
+void CentralIO::sortbykey(vector<FibNode*> fiblist,int key)
 {
-    FibNode<int>* temp;
-    for (int i = 0; i < fiblist.size()-1; i++)
+    FibNode* temp;
+    for (int i = 0; i < int(fiblist.size())-1; i++)
     {
-        for (int j = 0; j < fiblist.size()-1-i; j++)
+        for (int j = 0; j < int(fiblist.size())-1-i; j++)
         {
-            if (!this->compare(FibNode<int>* fiblist[j], FibNode<int>* fiblist[j+1], int key))
+            if (!this->compare(FibNode* fiblist[j], FibNode* fiblist[j+1], int key))
             {
                 temp=fiblist[j];
-                fiblist[j]=fiblist[j+];
+                fiblist[j]=fiblist[j+1];
                 fiblist[j+1]=temp;
             }
             
         }
-        
     }
-    
 }
