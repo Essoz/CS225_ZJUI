@@ -1,4 +1,15 @@
-central: central_main.cpp
-	g++ -g -Wall -std=c++11 central_main.cpp  -o CentralHeap
-clean: 
-	rm ex1
+CXX = g++
+CXXFLAGS = -Wall -Werror -Wextra -pedantic -std=c++17 -g -fsanitize=address
+LDFLAGS =  -fsanitize=address
+
+SRC = central_main.cpp
+OBJ = $(SRC:.cc=.o)
+EXEC = central
+
+all: $(EXEC)
+
+$(EXEC): $(OBJ)
+	$(CXX) $(LDFLAGS) -o $@ $(OBJ) $(LBLIBS)
+
+clean:
+	rm central 

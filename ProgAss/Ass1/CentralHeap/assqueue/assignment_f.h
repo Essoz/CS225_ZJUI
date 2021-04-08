@@ -25,15 +25,15 @@ bool Assignment::Assign(FibNode* reg, int date) {
         return true;
     }
 
-    if (highrisk_table_incheck(reg->getid())){
+    if (heap->highrisk_table_incheck(reg->getid())){
 
         _assign(reg, date);
-        highrisk_table_remove(reg->getid());
+        heap->highrisk_table_remove(reg->getid());
         
     
-    } else if (hash_table_incheck(reg->getid())){
+    } else if (heap->hash_table_incheck(reg->getid())){
         _assign(reg,date);
-        hash_table_remove(reg->getid());
+        heap->hash_table_remove(reg->getid());
     } 
     return true;
 }
@@ -46,7 +46,7 @@ void Assignment::_assign(FibNode* reg, int date) {
         
         if (all_locations->location_list[*(Registry->location_dist)[i]].checkAvailability(date)) {
             int temp_time_assigned = assignedInsert(date, reg);
-            Appointment* reg_app = new Appointment(
+            Appoint* reg_app = new Appoint(
             all_locations->location_list[*(Registry->location_dist)[i]][date], date, temp_time_assigned);
             reg->setappoint(reg_app);
             assigned_table_insert(reg);

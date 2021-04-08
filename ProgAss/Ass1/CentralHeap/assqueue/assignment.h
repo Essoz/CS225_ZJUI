@@ -1,7 +1,8 @@
 #ifndef ASSIGNMENT_H
 #define ASSIGNMENT_H
 #include "../fibheap_f.h"
-
+#include "../fibheap.h"
+#include<vector>
 class AllLocations;
 class Location;
 
@@ -77,13 +78,13 @@ Location::Location(int id, vector<string>&time_slot) {
 /* Local registries */
 class Registry{
     public:
-        Registry(int id, vector* location_dist);
+        Registry(int id, vector<int>* location_dist);
         int id;
-        vector* location_dist;
+        vector<int>* location_dist;
     private:
 };
 
-Registry::Registry(int id, vector* location_dist) {
+Registry::Registry(int id, vector<int>* location_dist) {
     Registry::id = id;
     Registry::location_dist = location_dist;
 };
