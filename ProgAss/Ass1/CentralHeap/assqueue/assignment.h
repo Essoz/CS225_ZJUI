@@ -1,11 +1,9 @@
 #ifndef ASSIGNMENT_H
 #define ASSIGNMENT_H
-#include "../alist.h"
-#include "../alist.cpp"
-#include "../fibheap.h"
-#include "../fibheap_f.h"
+
 #include "assignment_f.h"
-#include <vector>
+
+
 
 template<class T> class Assignment{
     public: 
@@ -29,6 +27,7 @@ Assignment::Assignment(AllLocations* all_locations) {
 class AllLocations{
     public:
         friend class Assignment;
+        AllLocations(vector<Location*>&location_list);
         int getNumLocs();
         int calcCapacity(int date);
         void maintainCuredList(int week);
@@ -41,6 +40,10 @@ class AllLocations{
         vector<vector<FibNode<int>*>> cured_list;
 
 };
+
+AllLocations::AllLocations(vector<Location*>&location_list) {
+    AllLocations::location_list = location_list;
+}
 
 class Location{
     public:

@@ -1,4 +1,4 @@
-ex1: ex1_test.cpp fibheap.h fibheap_f.h
-	g++ -g -Wall -std=c++11 ex1_test.cpp  -o ex1
+central: central_main.cpp
+	g++ -g -Wall -std=c++11 central_main.cpp  -o CentralHeap
 clean: 
 	rm ex1

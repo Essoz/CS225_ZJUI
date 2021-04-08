@@ -1,20 +1,17 @@
 #ifndef CENTRAL_HASH_H
 #define CENTRAL_HASH_H
-// #include "FibNode<int>.h"
+// #include "central_hash.cpp"
 #include <iostream>	
 #include <math.h>
 #include <cstdlib>
 #include <map>
 #include <vector>
-
-// #include "../../FibNode<int>.h"
-#include "../fibheap.h"
 using namespace std;
 
 /*
  *  File: hash.h
  *
- *  Writter: Yuxuan Jiang
+ *  Writter: Tianyu Zhang
  *
  *  Description:
  *  This header file contains the class of "hash", which is the hash table defined
@@ -24,17 +21,16 @@ using namespace std;
 
 class Hash_Chaining
 {
-    friend class Queue;
 public:
     Hash_Chaining(int length);
     int calculate_hashvalue(int id, int size);
-    void insertion(FibNode<int>* item);
-    void deletion(FibNode<int>* item);
-    // Return the pointer of the FibNode<int> instance in the hash table:
-    FibNode<int>* retrieval(int id);
-
+    void insertion(Patient* item);
+    //void deletion(Patient* item);
+    // Return the pointer of the patient instance in the hash table:
+    Patient* retrieval(int id);
+    int get_numitems();
 private:
-    std::vector<FibNode<int>*>** hashtable;  // The hashtable
+    std::vector<vector<Patient*>*>* hashtable;      // The hashtable
     int hash_numitems;                  // length of hashtable
     int hash_maxsize;                   // defines the size of the hashtable
 };

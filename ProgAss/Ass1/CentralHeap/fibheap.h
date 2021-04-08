@@ -30,7 +30,7 @@ template<class T> class FibHeap{
         void Cut(FibNode<T>* handle);
         static FibHeap<T>* Union(FibHeap<T>* heap1, FibHeap<T>* heap2);
         int GetNum();
-        void PatientCreate(vector<string>* infolist);
+        void PatientCreate(vector<string>&infolist);
         //
         /* <=== Helper Functions for DDL management ===> */
         /* to be done list
@@ -87,8 +87,8 @@ template<class T> FibHeap<T>::FibHeap(){
 template<class T> class FibNode: public Patient{
     public:
         friend class FibHeap<T>;
-        FibNode(int id, Risk risk, Profession professionLevel, Age a, Information* info, int year, int date, int withdraw, int ddl);
-        void PatientCreate(vector<string>* infolist);
+        FibNode(vector<string>&infolist);
+        void PatientCreate(vector<string>&infolist);
         FibNode<T>* parent;
         FibNode<T>* child;
         FibNode<T>* left;
@@ -98,7 +98,7 @@ template<class T> class FibNode: public Patient{
         int degree;
 };
 
-template<class T> FibNode<T>::FibNode(vector<string>* infolist){
+template<class T> FibNode<T>::FibNode(vector<string>&infolist){
     parent = NULL;
     child = NULL;
     left = NULL;

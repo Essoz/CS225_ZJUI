@@ -1,9 +1,9 @@
-#include "central_io.h"
 #include <fstream>
 #include <string>
 #include <sstream>
 #include <queue>
 #include <vector>
+#include "central_io.h"
 using namespace std;
 
 
@@ -52,7 +52,7 @@ template<class T> bool CentralIO<T>::Read2Heap(){
         }
     
     // clear this list for next use
-    FibNode<int>* newnode = new FibNode<int>(&temp_list);
+    FibNode<int>* newnode = new FibNode<int>(temp_list);
     temp_list.clear();
     //check hash set
     if (newnode->withdraw) {

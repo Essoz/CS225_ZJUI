@@ -365,7 +365,7 @@ int String2Int(string key){
  * Effect
  * Nodes will be added into the central heap (or withdrawn, or update), respectively
  */
-template<class T> void FibNode<T>::PatientCreate(vector<string>* infolist){
+template<class T> void FibNode<T>::PatientCreate(vector<string>&infolist){
     setid(String2Int(infolist[0]));
     setrisk(String2Int(infolist[1]));
     setpro(String2Int(infolist[2]));
