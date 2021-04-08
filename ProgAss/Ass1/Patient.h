@@ -21,10 +21,10 @@ using namespace std;
  */
 
 enum Risk {
-    no,low,medium,high
+    no, low, medium, high
 };
 enum Profession {
-    vIII,VII,VI,V,IV,III,II,I
+    VIII, VII, VI, V, IV, III, II, I
 };
 enum Age {
     old, elderly, senior, adult, youngadult, adolescent, children,  
@@ -190,7 +190,7 @@ Patient::Patient(int id, Risk risk, Profession professionLevel, Age a, Informati
     setappoint(NULL);   // No appoinment yet
 };
 
-// The priotiry is represented by a int number, different fields occupy different places (letter_ddl is not considered):
+// The priority is represented by a int number, different fields occupy different places (letter_ddl is not considered):
 int Patient::calculate_prio()
 {
     int prio = 0;
