@@ -2,7 +2,7 @@
 #define ASSIGNMENT_F_H
 #include "assignment.h"
 
-template<class T> bool Assignment::Assign(FibNode<int>* reg, int date) {
+bool Assignment::Assign(FibNode<int>* reg, int date) {
 
     
     // if no ddl or extension
@@ -12,10 +12,10 @@ template<class T> bool Assignment::Assign(FibNode<int>* reg, int date) {
     // this leaves the case where the node can be assigned
 
     // medium risk overwrites withdrawn
-    if (reg->getrisk() = 2) date += 30;
+    if (reg->getrisk() == 2) date += 30;
     else if (reg->getwithdraw() == 2) date += 14;
 
-    if (ddl_incheck(reg)){
+    if (heap->ddl_incheck(reg)){
         // if ddl has not passed, 
         if (date < reg->getddl()){
             // remove the original appointment
@@ -41,7 +41,7 @@ template<class T> bool Assignment::Assign(FibNode<int>* reg, int date) {
 }
 /* insert in assigned_hash_table
  */
-template<class T> void Assignment::_assign(FibNode<int>* reg, int date) {
+void Assignment::_assign(FibNode<int>* reg, int date) {
     Registry* registry = reg->getreg();
     for (int i = 0; i < Registry->location_dist->size(); i++) {
         

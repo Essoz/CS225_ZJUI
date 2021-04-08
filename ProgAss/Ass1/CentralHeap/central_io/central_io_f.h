@@ -40,7 +40,7 @@ template<class T> bool CentralIO<T>::Read2Heap(){
         if (line.size() == 0) break; 
         
         // reading registrations from files generated from local registries
-        for (int i = 0, i < line.size(); i++) {
+        for (int i = 0; i < line.size(); i++) {
             if (line[i] = ",") {
                 // put this string into the vector
                 temp_list.push_back(temp);

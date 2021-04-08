@@ -23,8 +23,6 @@ using std::endl;
 
  */
 
-
-
 /* <===> Test Passed <===> */
 template<class T> void FibHeap<T>::Insert(FibNode<T>* fib_node){
     if(min_ptr){
@@ -367,21 +365,21 @@ int String2Int(string key){
  */
 template<class T> void FibNode<T>::PatientCreate(vector<string>&infolist){
     setid(String2Int(infolist[0]));
-    setrisk(String2Int(infolist[1]));
-    setpro(String2Int(infolist[2]));
-    setage(String2Int(infolist[3]));
+    setrisk(Risk (String2Int(infolist[1])) );
+    setpro(Profession (String2Int(infolist[2])) );
+    setage(Age (String2Int(infolist[3])) );
     setyear(String2Int(infolist[4]));
     setdate(String2Int(infolist[5]));
     setwithdraw(String2Int(infolist[6]));
     setddl(String2Int(infolist[7]));
     setpriority(String2Int(infolist[8]));
 
-    Infomation temp_info;
+    Information temp_info;
     temp_info.name = infolist[9];
     temp_info.email = infolist[10];
-    temp_info.phone = String2Int[infolist[11]];
-    temp_info.birthday = String2Int[infolist[12]];
-    setinfo(temp_info);
+    temp_info.phone = infolist[11];
+    temp_info.birthday = infolist[12];
+    setinfo(&temp_info);
 
     key = getpriority();
 };
@@ -458,7 +456,7 @@ template<class T> void FibHeap<T>::ddl_insert(FibNode<T>* node){
     }
 
     // TODO the sorting of the queue may generate a BUG
-    ddl_queue.insert(ddl_queue.begin() + i, newnode);
+    ddl_queue.insert(ddl_queue.begin() + i, node);
 
 };
 template<class T> bool FibHeap<T>::ddl_incheck(FibNode<T>* node){

@@ -1,6 +1,8 @@
 #ifndef CENTRAL_HASH_H
 #define CENTRAL_HASH_H
 // #include "central_hash.cpp"
+#include "../fibheap.h"
+#include "../fibheap_f.h"
 #include <iostream>	
 #include <math.h>
 #include <cstdlib>
@@ -24,13 +26,13 @@ class Hash_Chaining
 public:
     Hash_Chaining(int length);
     int calculate_hashvalue(int id, int size);
-    void insertion(Patient* item);
-    //void deletion(Patient* item);
+    void insertion(FibNode<int>* node);
+    void deletion(int id);
     // Return the pointer of the patient instance in the hash table:
-    Patient* retrieval(int id);
+    FibNode<int>* retrieval(int id);
     int get_numitems();
 private:
-    std::vector<vector<Patient*>*>* hashtable;      // The hashtable
+    std::vector<vector<FibNode<int>*>*>* hashtable;      // The hashtable
     int hash_numitems;                  // length of hashtable
     int hash_maxsize;                   // defines the size of the hashtable
 };

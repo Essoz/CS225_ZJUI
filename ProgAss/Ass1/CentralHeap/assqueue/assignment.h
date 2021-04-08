@@ -1,25 +1,29 @@
 #ifndef ASSIGNMENT_H
 #define ASSIGNMENT_H
 
+#include "../fibheap_f.h"
 #include "assignment_f.h"
 
+class AllLocations;
+class Location;
 
-
-template<class T> class Assignment{
+class Assignment{
     public: 
-        Assignment(AllLocations* all_locations);
-        bool Assign(FibNode<T>* reg, int date); // on false goes to the next day
+        Assignment(AllLocations* all_locations, FibHeap<int>* heap);
+        bool Assign(FibNode<int>* reg, int date); // on false goes to the next day
         bool checkAvailability(int date);
     private:
-        void _assign(FibNode<T>* reg, int date);
+        void _assign(FibNode<int>* reg, int date);
         AllLocations* all_locations;
+        FibHeap<int>* heap;
         // maxnum; // number of locations 
         // currentnum; // current number of available locations //TODO I don't have to 
         // Assignment(int )
 
 };
-Assignment::Assignment(AllLocations* all_locations) {
+Assignment::Assignment(AllLocations* all_locations, FibHeap<int>* heap) {
     Assignment::all_locations = all_locations;  
+    Assignment::heap = heap;
 }
 
 

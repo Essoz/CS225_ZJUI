@@ -1,10 +1,7 @@
-#ifndef CENTRAL_HEAP_CPP
-#define CENTRAL_HEAP_CPP
-
 // #include "fibheap.h"
 #include "fibheap_f.h"
 #include "alist.h"
-#include "hashing/central_hash.h"
+#include "hashing/central_hash.cpp"
 #include "assqueue/assignment_f.h"
 #include "central_io/central_io_f.h"
 #include "appointment/appointment_f.h"
@@ -30,18 +27,18 @@ int main(){
     vector<string> time_slot_3 = {"9:00", "13:00","17:00",};
     vector<string> time_slot_4 = {"1:00", "2:00", "2:30", "2:25", "liar CS225"};
 
-    Location Location_0 = Location(0, &time_slot_0);
-    Location Location_1 = Location(1, &time_slot_1);
-    Location Location_2 = Location(2, &time_slot_2);
-    Location Location_3 = Location(3, &time_slot_3);
-    Location Location_4 = Location(4, &time_slot_4);
+    Location* Location_0 = new Location(0, &time_slot_0);
+    Location* Location_1 = new Location(1, &time_slot_1);
+    Location* Location_2 = new Location(2, &time_slot_2);
+    Location* Location_3 = new Location(3, &time_slot_3);
+    Location* Location_4 = new Location(4, &time_slot_4);
 
     vector<(Location*)> location_list;
-    location_list.push_back(&Location_0);
-    location_list.push_back(&Location_1);
-    location_list.push_back(&Location_2);
-    location_list.push_back(&Location_3);
-    location_list.push_back(&Location_4);
+    location_list.push_back(Location_0);
+    location_list.push_back(Location_1);
+    location_list.push_back(Location_2);
+    location_list.push_back(Location_3);
+    location_list.push_back(Location_4);
 
     // testcases (registry)
     vector<int> location_dist_0 = {0,1,2,3,4};
@@ -110,8 +107,4 @@ int main(){
 
 
     }
-    
-
 }
-
-#endif
