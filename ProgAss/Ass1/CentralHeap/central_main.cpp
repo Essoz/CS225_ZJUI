@@ -9,7 +9,7 @@
 
 int timer = 0;
 const int interval = 1; // unit in day
-string path = "xxx/submission.csv";
+string path = "../Submit.csv";
 int date;
 int main(){
     int order;
@@ -27,11 +27,11 @@ int main(){
     vector<string> time_slot_3 = {"9:00", "13:00","17:00",};
     vector<string> time_slot_4 = {"1:00", "2:00", "2:30", "2:25", "liar CS225"};
 
-    Location* Location_0 = new Location(0, &time_slot_0);
-    Location* Location_1 = new Location(1, &time_slot_1);
-    Location* Location_2 = new Location(2, &time_slot_2);
-    Location* Location_3 = new Location(3, &time_slot_3);
-    Location* Location_4 = new Location(4, &time_slot_4);
+    Location* Location_0 = new Location(0, time_slot_0);
+    Location* Location_1 = new Location(1, time_slot_1);
+    Location* Location_2 = new Location(2, time_slot_2);
+    Location* Location_3 = new Location(3, time_slot_3);
+    Location* Location_4 = new Location(4, time_slot_4);
 
     vector<(Location*)> location_list;
     location_list.push_back(Location_0);
@@ -66,14 +66,22 @@ int main(){
     // initialize an IO instance for later use
     CentralIO<int> central_IO = CentralIO<int>(&CentralQueue, path);
     
-    while (/*file not empty*/) {
+    while (true) {
         date = timer / 2; 
         //  time counter 
         timer += 1; 
         
         // read file from file
-        central_IO.Read2Heap();
-
+        int failure = 0;    // number of failed attempts
+        while (central_IO.Read2Heap() == false){
+            failure++;
+            sleep(1);       // wait for 1 second
+            if (failure == 5) {
+                cout << "no file found, aborting";
+                exit(3);
+            }
+        }
+        
         // the wrapper function above 
         
         // start processing

@@ -19,8 +19,8 @@ bool Assignment::Assign(FibNode<int>* reg, int date) {
         // if ddl has not passed, 
         if (date < reg->getddl()){
             // remove the original appointment
-            Location* old_loc = all_locations->location_list[reg->getappointment()->loc->id].
-            old_loc->removeAppointment(reg->getappointment());
+            Location* old_loc = all_locations->location_list[reg->getappoint()->loc->id].
+            old_loc->removeAppointment(reg->getappoint());
             _assign(reg,date);
         }  
         // else do nothing because there is no need for re-assigning
@@ -51,7 +51,7 @@ void Assignment::_assign(FibNode<int>* reg, int date) {
             all_locations->location_list[*(Registry->location_dist)[i]][date]
             Appointment* reg_app = new Appointment(
             , date, temp_time_assigned);
-            reg->setappointment(reg_app);
+            reg->setappoint(reg_app);
             assigned_table_insert(reg);
         }
     }

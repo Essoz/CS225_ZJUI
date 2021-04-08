@@ -52,7 +52,7 @@ AllLocations::AllLocations(vector<Location*>&location_list) {
 class Location{
     public:
         friend class AllLocations;
-        Location(int id, vector<string>* time_slot);
+        Location(int id, vector<string>&time_slot);
         int id;
         int daily_capacity;
         int checkAvailability(int date);
@@ -60,17 +60,17 @@ class Location{
         void assignedClear(int date); // TODO
         FibNode<int>* findAppointment(Appointment* app);
         void removeAppointment(Appointment* app);
+        vector<string> time_slot;
     private:
         vector<vector<FibNode<int>*>> assigned_queue;  // the first dimension is day
         vector<vector<FibNode<int>*>> cured_queue;  // the first dimension is week
-        vector<string>* time_slot;
 };
 
 
-Location::Location(int id, vector<string>* time_slot) {
+Location::Location(int id, vector<string>&time_slot) {
     Location::id = id;
     Location::time_slot = time_slot;
-    daily_capacity = time_slot->size();
+    daily_capacity = time_slot.size();
 };
 
 

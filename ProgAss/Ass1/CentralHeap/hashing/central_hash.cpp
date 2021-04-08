@@ -18,7 +18,7 @@ using std::hash;
  */
 
 // Constructor:
-Hash_Chaining::Hash_Chaining(int length)
+Hash_Chaining::Hash_Chaining(int length = 20)
 {
     // Initialize the attributes of the hashtable
     hash_maxsize = length;

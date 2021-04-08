@@ -368,11 +368,12 @@ template<class T> void FibNode<T>::PatientCreate(vector<string>&infolist){
     setrisk(Risk (String2Int(infolist[1])) );
     setpro(Profession (String2Int(infolist[2])) );
     setage(Age (String2Int(infolist[3])) );
-    setyear(String2Int(infolist[4]));
-    setdate(String2Int(infolist[5]));
-    setwithdraw(String2Int(infolist[6]));
-    setddl(String2Int(infolist[7]));
-    setpriority(String2Int(infolist[8]));
+    setreg_id(String2Int(infolist[4]))
+    setyear(String2Int(infolist[5]));
+    setdate(String2Int(infolist[6]));
+    setwithdraw(String2Int(infolist[7]));
+    setddl(String2Int(infolist[8]));
+    setpriority(String2Int(infolist[9]));
 
     Information temp_info;
     temp_info.name = infolist[9];

@@ -24,7 +24,7 @@ using namespace std;
 class Hash_Chaining
 {
 public:
-    Hash_Chaining(int length);
+    Hash_Chaining(int length = 20);
     int calculate_hashvalue(int id, int size);
     void insertion(FibNode<int>* node);
     void deletion(int id);

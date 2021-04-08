@@ -26,6 +26,13 @@ using namespace std;
 template<class T> bool CentralIO<T>::Read2Heap(){
     ifstream infile;
     infile.open(path, ifstream::in);
+
+    // wait for information from local registries
+    if (infile.eof()){
+        infile.close();
+        return false;
+    }
+
     if (infile.fail()) { 
         cout << "File not found" <<endl; 
         return false;
