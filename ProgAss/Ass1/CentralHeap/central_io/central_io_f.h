@@ -195,7 +195,11 @@ bool CentralIO::_Monthly(int month, int key){
  * 1. 0 (a >= b)
  * 2. 1 (a < b)
  */
+<<<<<<< HEAD
 bool CentralIO::compare(FibNode* a, FibNode* b, int key){
+=======
+template<class T> bool CentralIO<T>::compare(FibNode<int>* a, FibNode<int>* b, int key){
+>>>>>>> a7397de2185cb5dc6672ca7f0ecbea58a85b8968
     if (key == 0) {
         return (a->getname() < b->getname());
     } 
@@ -205,4 +209,23 @@ bool CentralIO::compare(FibNode* a, FibNode* b, int key){
     if (key == 2) {
         return (a->getage() < b->getage())
     }
+}
+template<class T> void CentralIO<T>::sortbykey(vector<FibNode<int>*> fiblist,int key)
+{
+    FibNode<int>* temp;
+    for (int i = 0; i < fiblist.size()-1; i++)
+    {
+        for (int j = 0; j < fiblist.size()-1-i; j++)
+        {
+            if (!this->compare(FibNode<int>* fiblist[j], FibNode<int>* fiblist[j+1], int key))
+            {
+                temp=fiblist[j];
+                fiblist[j]=fiblist[j+];
+                fiblist[j+1]=temp;
+            }
+            
+        }
+        
+    }
+    
 }

@@ -305,7 +305,18 @@ int FibHeap::GetNum(){
 
 
 /* This Function is for Testing */
+<<<<<<< HEAD
 void FibHeap::PrintTree(){
+=======
+template<class T> void FibHeap<T>::PrintTree(){
+    fiblist.clear();
+    if (!fiblist.empty())
+    {
+        cout<<"The fiblist is not empty!"<<endl;
+        return;
+    }
+    
+>>>>>>> a7397de2185cb5dc6672ca7f0ecbea58a85b8968
     cout << "\n=========================\n"; 
 	
     if (min_ptr == NULL){
@@ -317,6 +328,7 @@ void FibHeap::PrintTree(){
     int i = 0;
     do{
         cout << "Heap " << i++ << " :: " <<root_pt->key;
+        fiblist.insert(fiblist.end(),root_pt);
         _PrintTree(root_pt->child);
         cout << "\n------------\n";
         // move to the next heap
@@ -332,6 +344,7 @@ void FibHeap::_PrintTree(FibNode* node){
     cout << "[";
     do{
         cout<< node_pt->key <<", ";
+        fiblist.insert(fiblist.end(),node_pt);
         _PrintTree(node_pt->child);
         node_pt = node_pt->right;
     }while(node_pt != node);
