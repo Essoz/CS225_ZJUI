@@ -48,15 +48,29 @@ template<class T> class FibHeap{
         void withdraw_table_insert(FibNode<T>* node);
         FibNode<T>* withdraw_table_remove(int id);
         
+        void highrisk_table_insert(FibNode<T>* node);
+        FibNode<T>* highrisk_table_remove(int id);
+        FibNode<T>* highrisk_table_find(int id);
+        bool highrisk_intable_check(int id);
+        FibHeap<T> highrisk_queue;
+
+        void assigned_table_insert(FibNode<T>* node);
+        FibNode<T>* assigned_table_remove(int id);
+        FibNode<T>* assigned_table_find(int id);
+        bool assigned_intable_check(int id);
+
         void ddl_insert(FibNode<T>* node);
         bool ddl_incheck(FibNode<T>* node);
         FibNode<T>* ddl_delete(FibNode<T>* node);
+        
     private:
         void _PrintTree(FibNode<T>* node);
         FibNode<T>* min_ptr;
         int numitems;
         Hash_Chaining withdraw_table;
         Hash_Chaining processin_table;
+        Hash_Chaining highrisk_table;
+        Hash_Chaining assigned_table;
         vector<FibNode<T>*> ddl_queue;
 
 

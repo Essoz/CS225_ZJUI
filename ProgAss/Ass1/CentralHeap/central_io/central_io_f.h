@@ -64,14 +64,29 @@ template<class T> bool CentralIO<T>::Read2Heap(){
              * 4. remove the node from ddl queue (if the node was in that queue)
              * 5. release memory occupied by the old node
              */
+            FibNode<int>* old;
             heap->withdraw_table_insert(newnode);
-            FibNode<int>* old = heap->hash_table_remove(newnode);
-            heap->Delete(old);
+
+            if (hash_intable_check(newnode->getid())){
+                old = heap->hash_table_remove(newnode->getid());
+                heap->Delete(old);
+
+            } else if (highrisk_intable_check(newnode->getid())){
+                old = heap->highrisk_table_remove(newnode->getid());
+                heap->highrisk_queue.Delete(old);
+            } else if (assigned_intable_check(newnode->getid())) {
+                // all above branches leave the case where the node is already assigned and not in any heaps
+                old = assigned_table_find(newnode->getid());
+                Appointment* app = old->getappoint();
+                app->loc->removeAppointment(app);
+                delete app;
+            }
+
                 // if the node was in the DDL queue, remove the node from the queue
             if (heap->ddl_incheck(old))
-                heap->ddl_delete(old);
+                heap->ddl_delete(old);      //TODO Bug here may not exist in the ddl queue
             // insert the new one in case of any update
-            heap->withdraw_table_insert(newnode);
+            // heap->withdraw_table_insert(newnode);
             delete old;
             // withdraw == 1 (this indicates a withdraw has been prompted, we have to search this node in the hashtable and move the node from the heap to the withdrawn set, set withdraw = 2) 
             // put this node into the withdrawn hashset 
@@ -83,7 +98,6 @@ template<class T> bool CentralIO<T>::Read2Heap(){
              * 3. insert the node into the heap
              * 4. if ddl, add this node into the ordered list of ddl
              */
-            
             heap->withdraw_table_remove(newnode->getid());
             heap->hash_table_insert(newnode);
 
@@ -91,7 +105,7 @@ template<class T> bool CentralIO<T>::Read2Heap(){
                 heap->ddl_insert(newnode);
             }
             heap->Insert(newnode);
-            heap->withdraw_table_remove(newnode->getid());
+            // heap->withdraw_table_remove(newnode->getid());
             heap->hash_table_insert(newnode);
             // remove this node from the withdrawn hashset.
         }
@@ -122,8 +136,12 @@ template<class T> bool CentralIO<T>::Read2Heap(){
         // do node swap and delete the original node
 
         // but there are several cases to consider:
-        // 1. the element is also in the ddl queue
+        // 1. the element is also in the ddl queues
+    } else if (newnode->getrisk() == 3) {
+        heap->highrisk_table_insert(newnode);
+        heap->highrisk_queue.Insert(newnode);
     }
+        // if high risk encountered
         heap->Insert(newnode);
         heap->hash_table_insert(newnode);
         if (newnode->getddl() != -1) {
@@ -137,28 +155,47 @@ template<class T> bool CentralIO<T>::Read2Heap(){
 
 
 /* TODO <=== Helper Function for Generating Reports ===> */
-template<class T> bool CentralIO<T>::ReportWeekly(int key){
+template<class T> bool CentralIO<T>::ReportWeekly(int week, int key){
     /* Generate Weekly Report for 
      * 1. People who have been treated including their profession, age category, risk status, and the waiting time from registration to treatment
      * 2. the registered people with a set appointment including their profession category, age category, risk status and their waiting time until now
      * 3. the queueing people without a set appointment including their profession category, age category, risk status and their waiting time until now
      */
-
-    
+    _WeeklyCured(week, key);
+    _WeeklyAssigned(week, key);
+    _WeeklyQueueing(week, key);
 }
-template<class T> bool CentralIO<T>::ReportMonthly(int key){
-
+template<class T> bool CentralIO<T>::ReportMonthly(int month, int key){
+    _Monthly(month, key);
 }
 
-template<class T> bool CentralIO<T>::_WeeklyCured(){
-
+template<class T> bool CentralIO<T>::_WeeklyCured(int week, int key){
+    cout << "\nWeekly Cured, " << key;
 }
-template<class T> bool CentralIO<T>::_WeeklyAssigned(){
-
+template<class T> bool CentralIO<T>::_WeeklyAssigned(int week, int key){
+    cout << "\nWeekly Assigned, " << key;
 }
-template<class T> bool CentralIO<T>::_WeeklyQueueing(){
-
+template<class T> bool CentralIO<T>::_WeeklyQueueing(int week, int key){
+    cout << "\nWeeklyQueueing, " << key;
 }
-template<class T> bool CentralIO<T>::_Monthly(){
+template<class T> bool CentralIO<T>::_Monthly(int month, int key){
+    cout << "\n Monthly, " << key;
+    return true;
+}
 
+/*
+ * OUTPUT
+ * 1. 0 (a >= b)
+ * 2. 1 (a < b)
+ */
+template<class T> bool CentralIO<T>::compare(FibNode<T>* a, FibNode<T>* b, int key){
+    if (key == 0) {
+        return (a->getname() < b->getname());
+    } 
+    if (key == 1) {
+        return (a->getpro() < b->getpro());
+    }
+    if (key == 2) {
+        return (a->getage() < b->getage())
+    }
 }

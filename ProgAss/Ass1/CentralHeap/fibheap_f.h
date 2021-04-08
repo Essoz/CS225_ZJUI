@@ -406,7 +406,7 @@ template<class T> FibNode<T>* FibHeap<T>::hash_table_remove(int id){
     // first record the address of the node to be deleted
     FibNode<T>* old = processin_table.retrieval(id);
     // then delete the entry from the central heap
-    processin_table.deletion(old);
+    processin_table.deletion(id);
     // return the pointer to the old node
     return old;    
 };
@@ -427,7 +427,7 @@ template<class T> void FibHeap<T>::hash_table_insert(FibNode<T>* node){
 template<class T> FibNode<T>* FibHeap<T>::hash_table_swap(FibNode<T>* node){
     int id = node->getid();
     FibNode<T>* old = processin_table.retrieval(id);
-    processin_table.deletion(old);
+    processin_table.deletion(id);
     hash_table_insert(node);
     return old;
 };
@@ -437,7 +437,7 @@ template<class T> void FibHeap<T>::withdraw_table_insert(FibNode<T>* node){
 };
 template<class T> FibNode<T>* FibHeap<T>::withdraw_table_remove(int id){
     FibNode<T>* old = withdraw_table.retrieval(id);
-    withdraw_table.deletion(old);
+    withdraw_table.deletion(id);
     return old;
 };
 
@@ -484,4 +484,44 @@ template<class T> FibNode<T>* FibHeap<T>::ddl_delete(FibNode<T>* node){
     FibNode<T>* old = ddl_queue[i];
     ddl_queue.erase(ddl_queue.begin() + i); // remove the i-th element
     return old;   
+};
+
+template<class T> void FibHeap<T>::highrisk_table_insert(FibNode<T>* node) {
+    highrisk_table.insertion(node);
+}
+template<class T> FibNode<T>* FibHeap<T>::highrisk_table_remove(int id) {
+    FibNode<T>* old = highrisk_table.retrieval(id);
+
+    highrisk_table.deletion(id);
+
+    return old;
+}
+template<class T> FibNode<T>* FibHeap<T>::highrisk_table_find(int id) {
+    return highrisk_table.retrieval(id);
+}
+template<class T> bool FibHeap<T>::highrisk_intable_check(int id) {
+    if (highrisk_table.retrieval(id) == NULL) return false;
+    return true;
+}
+
+template<class T> FibNode<T>* FibHeap<T>::assigned_table_find(int id){
+    return assigned_table.retrieval(id);
+};
+template<class T> bool FibHeap<T>::assigned_intable_check(int id){
+    if (assigned_table.retrieval(id) == NULL) return false;
+    // else the element is in the hashtable
+    return true;
+};
+
+template<class T> FibNode<T>* FibHeap<T>::assigned_table_remove(int id){
+    // first record the address of the node to be deleted
+    FibNode<T>* old = assigned_table.retrieval(id);
+    // then delete the entry from the central heap
+    assigned_table.deletion(id);
+    // return the pointer to the old node
+    return old;    
+};
+
+template<class T> void FibHeap<T>::assigned_table_insert(FibNode<T>* node){
+    assigned_table.insertion(node);
 };
