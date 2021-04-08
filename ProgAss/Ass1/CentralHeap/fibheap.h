@@ -66,6 +66,7 @@ template<class T> class FibHeap{
     private:
         void _PrintTree(FibNode<T>* node);
         FibNode<T>* min_ptr;
+        vector<FibNode<T>*> fiblist;
         int numitems;
         Hash_Chaining withdraw_table;
         Hash_Chaining processin_table;

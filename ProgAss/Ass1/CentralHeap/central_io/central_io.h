@@ -31,6 +31,7 @@ template<class T> class CentralIO{
         bool ReportWeekly(int week,int key);
         bool ReportMonthly(int month, int key);
         bool compare(FibNode<int>* a, FibNode<int>* b, int key);
+        void sortbykey(vector<FibNode<int>*> fiblist,int key);
         bool Write2File(string path);
 
     private:
