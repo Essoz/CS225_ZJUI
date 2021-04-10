@@ -1,10 +1,7 @@
-#include <fstream>
-#include <string>
-#include <sstream>
-#include <queue>
-#include <vector>
+#ifndef CENTRAL_IO_F
+#define CENTRAL_IO_F
+
 #include "central_io.h"
-using namespace std;
 
 /* READ2HEAP
  * INPUT == NULL
@@ -21,6 +18,11 @@ using namespace std;
 
 
  */
+CentralIO::CentralIO(FibHeap* heap, string path){
+    CentralIO::heap = heap;
+    CentralIO::path = path;
+};
+
 bool CentralIO::Read2Heap(){
     ifstream infile;
     infile.open(path, ifstream::in);
@@ -39,14 +41,14 @@ bool CentralIO::Read2Heap(){
     string temp;
     string line;   
     while (true){
-        ifstream::getline(infile, line);
+        getline(infile, line);
         
         // terminate the reading process on encountering an empty line
         if (int(line.size()) == 0) break; 
         
         // reading registrations from files generated from local registries
         for (int i = 0; i < int(line.size()); i++) {
-            if (line[i].c_str() == ",") {
+            if (line.substr(i,1).c_str() == ",") {
                 // put this string into the vector
                 temp_list.push_back(temp);
                 // clear the temp string for the next argument
@@ -78,11 +80,11 @@ bool CentralIO::Read2Heap(){
 
             } else if (heap->highrisk_intable_check(newnode->getid())){
                 old = heap->highrisk_table_remove(newnode->getid());
-                heap->highrisk_queue.Delete(old);
+                heap->highrisk_queue->Delete(old);
             } else if (heap->assigned_intable_check(newnode->getid())) {
                 // all above branches leave the case where the node is already assigned and not in any heaps
                 old = heap->assigned_table_find(newnode->getid());
-                Appointment* app = old->getappoint();
+                Appointment* app = old->getAppointment();       // TODO, rewrite all function related to APPOINTMENT needed here
                 app->loc->removeAppointment(app);
                 delete app;
             }
@@ -144,7 +146,7 @@ bool CentralIO::Read2Heap(){
         // 1. the element is also in the ddl queues
     } else if (newnode->getrisk() == 3) {
         heap->highrisk_table_insert(newnode);
-        heap->highrisk_queue.Insert(newnode);
+        heap->highrisk_queue->Insert(newnode);
     }
         // if high risk encountered
         heap->Insert(newnode);
@@ -212,14 +214,14 @@ bool CentralIO::compare(FibNode* a, FibNode* b, int key)
     return false;
 }
 
-void CentralIO::sortbykey(vector<FibNode*> fiblist,int key)
+void CentralIO::sortByKey(vector<FibNode*>&fiblist,int key)
 {
     FibNode* temp;
     for (int i = 0; i < int(fiblist.size())-1; i++)
     {
         for (int j = 0; j < int(fiblist.size())-1-i; j++)
         {
-            if (!this->compare(FibNode* fiblist[j], FibNode* fiblist[j+1], int key))
+            if (!this->compare(fiblist[j], fiblist[j+1], key))
             {
                 temp=fiblist[j];
                 fiblist[j]=fiblist[j+1];
@@ -229,3 +231,5 @@ void CentralIO::sortbykey(vector<FibNode*> fiblist,int key)
         }
     }
 }
+
+#endif

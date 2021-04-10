@@ -1,11 +1,14 @@
 #ifndef APPOINTMENT_H
 #define APPOINTMENT_H
 #include <string>
+#include "../fibheap.h"
+#include "../assqueue/assignment.h"
 using namespace std;
-class Appoint{
+
+class Appointment{
     public:
         friend class AllLocation;
-        Appoint(Location* loc, int date_assigned, int time_slot_assigned);
+        Appointment(Location* loc, int date_assigned, int time_slot_assigned);
         
         Location* loc;
         string assigned_date;
@@ -15,17 +18,14 @@ class Appoint{
         void setCured();
         int getDate();
         int getTime();
+        string getLocation();
     private:
+        string location_assigned;
         int date_assigned;
         int date_cured;
         int time_slot_assigned;
 };
 
-Appoint::Appoint(Location* loc, int date_assigned, int time_slot_assigned){
-    Appoint::loc = loc;
-    Appoint::date_assigned = date_assigned;
-    Appoint::time_slot_assigned = time_slot_assigned;
-    setCured();
-};
+
 
 #endif

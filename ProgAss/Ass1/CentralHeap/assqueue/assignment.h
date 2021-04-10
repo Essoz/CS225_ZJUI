@@ -1,10 +1,17 @@
 #ifndef ASSIGNMENT_H
 #define ASSIGNMENT_H
-#include "../fibheap_f.h"
 #include "../fibheap.h"
-#include<vector>
+#include "../appointment/appointment.h"
+
+#include <string>
+#include <vector>
+using namespace std;
+
+
 class AllLocations;
 class Location;
+class AllRegistries;
+class Registry;
 
 class Assignment{
     public: 
@@ -14,16 +21,14 @@ class Assignment{
     private:
         void _assign(FibNode* reg, int date);
         AllLocations* all_locations;
+        AllRegistries* all_registries;
         FibHeap* heap;
         // maxnum; // number of locations 
         // currentnum; // current number of available locations //TODO I don't have to 
         // Assignment(int )
 
 };
-Assignment::Assignment(AllLocations* all_locations, FibHeap* heap) {
-    Assignment::all_locations = all_locations;  
-    Assignment::heap = heap;
-}
+
 
 
 /* Locations for medical treatment */
@@ -32,6 +37,7 @@ class AllLocations{
         friend class Assignment;
         AllLocations(vector<Location*>&location_list);
         int getNumLocs();
+        Location* getLocation(int id);
         int calcCapacity(int date);
         void maintainCuredList(int week);
     private:
@@ -40,53 +46,56 @@ class AllLocations{
         int current_capacity;
         int num_locations;
         vector<Location*> location_list;
-        vector<vector<FibNode*>> cured_list;
+        vector<vector<FibNode*>> cured_list;        // This Cured List is for cured printing
 
 };
 
-AllLocations::AllLocations(vector<Location*>&location_list) {
-    AllLocations::location_list = location_list;
-}
+
 
 class Location{
     public:
         friend class AllLocations;
         Location(int id, vector<string>&time_slot);
-        int id;
-        int daily_capacity;
+        int getID();
         int checkAvailability(int date);
+        int getCapacity();
         int assignedInsert(int date, FibNode* new_node);
         void assignedClear(int date); // TODO
         FibNode* findAppointment(Appointment* app);
         void removeAppointment(Appointment* app);
-        vector<string> time_slot;
+        string getTimeSlotAssigned(int time_slot_assigned);
+
     private:
+        int id;
+        int daily_capacity;
+        vector<string> time_slot;
         vector<vector<FibNode*>> assigned_queue;  // the first dimension is day
         vector<vector<FibNode*>> cured_queue;  // the first dimension is week
 };
 
 
-Location::Location(int id, vector<string>&time_slot) {
-    Location::id = id;
-    Location::time_slot = time_slot;
-    daily_capacity = int(time_slot.size());
+
+
+class AllRegistries{
+    public:
+        friend class Assignment;
+        AllRegistries(vector<Registry*>&registry_list);
+        Registry* getRegistry(int id);
+    private:
+        vector<Registry*> registry_list;
+
 };
-
-
 
 
 /* Local registries */
 class Registry{
     public:
-        Registry(int id, vector<int>* location_dist);
+        Registry(int id, vector<int>&location_dist);
         int id;
-        vector<int>* location_dist;
+        vector<int>&getLocationDist();
     private:
+        vector<int> location_dist;
 };
 
-Registry::Registry(int id, vector<int>* location_dist) {
-    Registry::id = id;
-    Registry::location_dist = location_dist;
-};
 
 #endif

@@ -1,13 +1,4 @@
 #include "central_hash.h"
-#include <iostream>	
-#include <math.h>
-#include <cstdlib>
-#include <map>
-#include <vector>
-using namespace std;
-using std::cout;
-using std::cin;
-using std::hash;
 
 /*
  *  File: hash.cpp

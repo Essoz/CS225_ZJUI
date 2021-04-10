@@ -1,16 +1,6 @@
-#ifdef fibheap_f_h
-#define fibheap_f_h
+#ifndef FIBHEAP_F_H
+#define FIBHEAP_F_H
 #include "fibheap.h"
-#include <stdio.h>
-#include <iostream>
-#include <cstdlib>
-#include <cmath>
-#include <string>
-#include <vector>
-using namespace std;
-using std::cin;
-using std::cout;
-using std::endl;
 
 #define INFIMUM -100000
 /* FibHeap - Insert
@@ -22,6 +12,24 @@ using std::endl;
  1. numitems ++
  2. the node is inserted to the left of the min node
  */
+
+
+FibNode::FibNode(vector<string>&infolist){
+    parent = NULL;
+    child = NULL;
+    left = NULL;
+    right = NULL;
+    degree = 0;
+    mark = false;       // default marking == false
+    // key = priority;
+    PatientCreate(infolist);
+};
+
+// build an empty heap
+FibHeap::FibHeap(){
+    min_ptr = NULL;
+    numitems = 0;
+};
 
 /* <===> Test Passed <===> */
 void FibHeap::Insert(FibNode* fib_node){
@@ -304,7 +312,7 @@ int FibHeap::GetNum(){
 
 
 /* This Function is for Testing */
-template<class T> void FibHeap<T>::PrintTree(){
+void FibHeap::PrintTree(){
     fiblist.clear();
     if (!fiblist.empty())
     {
@@ -376,8 +384,8 @@ void FibNode::PatientCreate(vector<string>&infolist){
     setid(String2Int(infolist[0]));
     setrisk(Risk (String2Int(infolist[1])) );
     setpro(Profession (String2Int(infolist[2])) );
-    setage(Age (String2Int(infolist[3])) );
-    setreg_id(String2Int(infolist[4]))
+    setage(Age (String2Int(infolist[3])));
+    setreg_id(String2Int(infolist[4]));
     setyear(String2Int(infolist[5]));
     setdate(String2Int(infolist[6]));
     setwithdraw(String2Int(infolist[7]));

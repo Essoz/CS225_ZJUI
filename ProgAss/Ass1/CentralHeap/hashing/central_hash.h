@@ -1,6 +1,6 @@
 #ifndef CENTRAL_HASH_H
 #define CENTRAL_HASH_H
-#include "../fibheap_f.h"
+#include "../fibheap.h"
 #include <iostream>	
 #include <math.h>
 #include <cstdlib>

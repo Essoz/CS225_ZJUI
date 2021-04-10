@@ -1,11 +1,18 @@
-#ifndef fibheap_h
-#define fibheap_h
-#include "../Patient.h"
-#include "hashing/central_hash.h"
+#ifndef FIBHEAP_H
+#define FIBHEAP_H
+#include <stdio.h>
+#include <iostream>
+#include <cstdlib>
+#include <cmath>
 #include <string>
 #include <vector>
 
+#include "central_patient.h"
+#include "hashing/central_hash.h"
+using namespace std;
+
 class FibHeap;
+
 
 class FibNode: public Patient{
     friend class FibHeap;
@@ -21,16 +28,7 @@ class FibNode: public Patient{
         int degree;
 };
 
-FibNode::FibNode(vector<string>&infolist){
-    parent = NULL;
-    child = NULL;
-    left = NULL;
-    right = NULL;
-    degree = 0;
-    mark = false;       // default marking == false
-    // key = priority;
-    PatientCreate(infolist);
-};
+
 
 class FibHeap
 {
@@ -77,7 +75,7 @@ class FibHeap
         FibNode* highrisk_table_remove(int id);
         FibNode* highrisk_table_find(int id);
         bool highrisk_intable_check(int id);
-        FibHeap highrisk_queue;
+        FibHeap* highrisk_queue;    // table generated within highrisk_queue is not used
 
         void assigned_table_insert(FibNode* node);
         FibNode* assigned_table_remove(int id);
@@ -100,10 +98,6 @@ class FibHeap
         vector<FibNode*> ddl_queue;
 };
 
-// build an empty heap
-FibHeap::FibHeap(){
-    min_ptr = NULL;
-    numitems = 0;
-};
+
 
 #endif /* fibheap_h */

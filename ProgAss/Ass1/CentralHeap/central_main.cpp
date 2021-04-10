@@ -1,9 +1,9 @@
-#include "fibheap_f.h"
-#include "alist.cpp"
+#include "fibheap.h"
+#include "alist.h"
 #include "hashing/central_hash.h"
-#include "assqueue/assignment_f.h"
-#include "central_io/central_io_f.h"
-#include "appointment/appointment_f.h"
+#include "central_io/central_io.h"
+#include "appointment/appointment.h"
+#include "assqueue/assignment.h"
 //#include <bits/stdc++.h>
 #include <string>
 #include <vector>
@@ -57,11 +57,13 @@ int main(){
     //Registry Registry_3(3, &location_dist_3);
     //Registry Registry_4(4, &location_dist_4);
     //Registry Registry_5(5, &location_dist_5);
+    FibHeap* central_queue = new FibHeap;
+    FibHeap* highrisk_queue = new FibHeap;
+    central_queue->highrisk_queue = highrisk_queue;
     AllLocations* loc = new AllLocations(location_list);
-    Assignment AssignRegistration(loc);
-    FibHeap CentralQueue;
+    Assignment AssignRegistration(loc, central_queue);
     // initialize an IO instance for later use
-    CentralIO central_IO = CentralIO(&CentralQueue, path);
+    CentralIO central_IO = CentralIO(central_queue, path);
     
     while (true) {
         date = timer / 2; 
@@ -85,16 +87,16 @@ int main(){
 
         // first assign nodes in the heap
         if (AssignRegistration.checkAvailability(date)) {
-            while (AssignRegistration.Assign((CentralQueue.Minimum())) && CentralQueue.GetNum()) {
+            while (AssignRegistration.Assign((central_queue->Minimum()), date) && central_queue->GetNum()) {
                 // keep assign until no further registrations can be assigned
-                CentralQueue.ExtractMin();
+                central_queue->ExtractMin();
                 // TODO table management
             }
         }
         if (AssignRegistration.checkAvailability(date)) {
-            while (AssignRegistration.Assign((CentralQueue.highrisk_queue.Minimum())) && CentralQueue.highrisk_queue.GetNum()) {
+            while (AssignRegistration.Assign((central_queue->highrisk_queue->Minimum()), date) && central_queue->highrisk_queue->GetNum()) {
                 // keep assign until no further registrations can be assigned
-                CentralQueue.highrisk_queue.ExtractMin();
+                central_queue->highrisk_queue->ExtractMin();
                 // TODO table management
             }
         }
