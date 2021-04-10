@@ -4,7 +4,8 @@
 #include "../fibheap.h"
 #include "../assqueue/assignment.h"
 using namespace std;
-
+// class FibHeap;
+// class FibNode;
 class Appointment{
     public:
         friend class AllLocation;

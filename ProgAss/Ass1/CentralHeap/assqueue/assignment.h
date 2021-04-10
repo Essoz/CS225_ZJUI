@@ -1,12 +1,15 @@
 #ifndef ASSIGNMENT_H
 #define ASSIGNMENT_H
-#include "../fibheap.h"
-#include "../appointment/appointment.h"
+// #include "../fibheap.h"
+// #include "../appointment/appointment.h"
 
 #include <string>
 #include <vector>
 using namespace std;
 
+class FibHeap;
+class FibNode;
+class Appointment;
 
 class AllLocations;
 class Location;

@@ -11,24 +11,7 @@
 #include "hashing/central_hash.h"
 using namespace std;
 
-class FibHeap;
-
-
-class FibNode: public Patient{
-    friend class FibHeap;
-    public:
-        FibNode(vector<string>&infolist);
-        void PatientCreate(vector<string>&infolist);
-        FibNode* parent;
-        FibNode* child;
-        FibNode* left;
-        FibNode* right;
-        bool mark;
-        int key;
-        int degree;
-};
-
-
+class FibNode;
 
 class FibHeap
 {
@@ -98,6 +81,18 @@ class FibHeap
         vector<FibNode*> ddl_queue;
 };
 
-
+class FibNode: public Patient{
+    friend class FibHeap;
+    public:
+        FibNode(vector<string>&infolist);
+        void PatientCreate(vector<string>&infolist);
+        FibNode* parent;
+        FibNode* child;
+        FibNode* left;
+        FibNode* right;
+        bool mark;
+        int key;
+        int degree;
+};
 
 #endif /* fibheap_h */

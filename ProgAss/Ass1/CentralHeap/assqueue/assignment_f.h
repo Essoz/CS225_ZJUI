@@ -2,6 +2,8 @@
 #define ASSIGNMENT_F_H
 
 #include "assignment.h"
+#include "fibheap.h"
+#include "../appointment/appointment.h"
 // using namespace std;
 
 /* Assignment::Assign
