@@ -50,17 +50,27 @@ int main(){
     vector<int> location_dist_4 = {4,0,1,2,3};
     vector<int> location_dist_5 = {4,3,2,1,0};
 
-    //Registry Registry_0(0, &location_dist_0);
-    //Registry Registry_1(1, &location_dist_1);
-    //Registry Registry_2(2, &location_dist_2);
-    //Registry Registry_3(3, &location_dist_3);
-    //Registry Registry_4(4, &location_dist_4);
-    //Registry Registry_5(5, &location_dist_5);
+    Registry* Registry_0 = new Registry(0, location_dist_0);
+    Registry* Registry_1 = new Registry(1, location_dist_1);
+    Registry* Registry_2 = new Registry(2, location_dist_2);
+    Registry* Registry_3 = new Registry(3, location_dist_3);
+    Registry* Registry_4 = new Registry(4, location_dist_4);
+    Registry* Registry_5 = new Registry(5, location_dist_5);
+    
+    vector<Registry*> registry_list(6);
+    registry_list.push_back(Registry_0);
+    registry_list.push_back(Registry_1);
+    registry_list.push_back(Registry_2);    
+    registry_list.push_back(Registry_3);
+    registry_list.push_back(Registry_4);
+    registry_list.push_back(Registry_5);
+
     FibHeap* central_queue = new FibHeap;
     FibHeap* highrisk_queue = new FibHeap;
     central_queue->highrisk_queue = highrisk_queue;
-    AllLocations* loc = new AllLocations(location_list);
-    Assignment AssignRegistration(loc, central_queue);
+    AllLocations* Locs = new AllLocations(location_list);
+    AllRegistries* Regs = new AllRegistries(registry_list);
+    Assignment AssignRegistration(Locs, central_queue);
     // initialize an IO instance for later use
     CentralIO central_IO = CentralIO(central_queue, path);
     

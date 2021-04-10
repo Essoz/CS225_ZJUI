@@ -137,6 +137,9 @@ bool Assignment::checkAvailability(int date) {
 int AllLocations::getNumLocs(){
     return num_locations;
 }
+Location* AllLocations::getLocation(int id) {
+    return location_list.at(id);
+}
 
 int AllLocations::calcCapacity(int date){
     current_occupied = 0;
@@ -173,6 +176,7 @@ int Location::assignedInsert(int date, FibNode* new_node) {
 int Location::getID() {
     return id;
 }
+
 int Location::getCapacity() {
     return daily_capacity;
 }
@@ -221,4 +225,7 @@ vector<int>& Registry::getLocationDist() {
     return location_dist;
 }
 
+Registry* AllRegistries::getRegistry(int id) {
+    return registry_list.at(id);
+}
 #endif
