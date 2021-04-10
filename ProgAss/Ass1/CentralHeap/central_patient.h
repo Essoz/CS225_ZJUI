@@ -1,8 +1,8 @@
 #ifndef Patient_h
 #define Patient_h
+#include "appointment/appointment.h"
 #include <stdio.h>
 #include <string>
-#include "appointment/appointment.h"
 using namespace std;
 
 /*
@@ -52,6 +52,7 @@ typedef struct
     int date;       // The appointment date, from 1-365
 } Appointment;
 */
+
 class Patient
 {
 private:
@@ -177,7 +178,5 @@ public:
     // Other helper functions:
     int calculate_prio();     // Calculate the priority
 };
-
-
 
 #endif /* Patient_h */

@@ -14,7 +14,7 @@
 #include <string>
 #include <queue>
 #include <vector>
-#include "../fibheap.h"
+#include "../fibheap_f.h"
 using namespace std;
 
 // TODO: ADD this class as a friend class of FibHeap

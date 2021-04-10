@@ -1,13 +1,12 @@
-#include "fibheap.h"
-#include "alist.h"
-#include "hashing/central_hash.h"
-#include "central_io/central_io.h"
-#include "appointment/appointment.h"
-#include "assqueue/assignment.h"
-//#include <bits/stdc++.h>
+#include "alist.cpp"
+#include "central_io/central_io_f.h"
+#include "assqueue/assignment_f.h"
+#include "appointment/appointment_f.h"
+#include "hashing/central_hash.cpp"
+
+#include <unistd.h>
 #include <string>
 #include <vector>
-#include <unistd.h>
 using namespace std;
 
 int timer = 0;

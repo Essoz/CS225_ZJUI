@@ -1,20 +1,14 @@
 #ifndef ASSIGNMENT_H
 #define ASSIGNMENT_H
-// #include "../fibheap.h"
-// #include "../appointment/appointment.h"
-
 #include <string>
 #include <vector>
 using namespace std;
 
-class FibHeap;
 class FibNode;
+class FibHeap;
 class Appointment;
-
 class AllLocations;
-class Location;
 class AllRegistries;
-class Registry;
 
 class Assignment{
     public: 
@@ -31,29 +25,6 @@ class Assignment{
         // Assignment(int )
 
 };
-
-
-
-/* Locations for medical treatment */
-class AllLocations{
-    public:
-        friend class Assignment;
-        AllLocations(vector<Location*>&location_list);
-        int getNumLocs();
-        Location* getLocation(int id);
-        int calcCapacity(int date);
-        void maintainCuredList(int week);
-    private:
-        int max_capacity;
-        int current_occupied;
-        int current_capacity;
-        int num_locations;
-        vector<Location*> location_list;
-        vector<vector<FibNode*>> cured_list;        // This Cured List is for cured printing
-
-};
-
-
 
 class Location{
     public:
@@ -76,8 +47,34 @@ class Location{
         vector<vector<FibNode*>> cured_queue;  // the first dimension is week
 };
 
+/* Locations for medical treatment */
+class AllLocations{
+    public:
+        friend class Assignment;
+        AllLocations(vector<Location*>&location_list);
+        int getNumLocs();
+        Location* getLocation(int id);
+        int calcCapacity(int date);
+        void maintainCuredList(int week);
+    private:
+        int max_capacity;
+        int current_occupied;
+        int current_capacity;
+        int num_locations;
+        vector<Location*> location_list;
+        vector<vector<FibNode*>> cured_list;        // This Cured List is for cured printing
 
+};
 
+/* Local registries */
+class Registry{
+    public:
+        Registry(int id, vector<int>&location_dist);
+        int id;
+        vector<int>& getLocationDist();
+    private:
+        vector<int> location_dist;
+};
 
 class AllRegistries{
     public:
@@ -88,17 +85,5 @@ class AllRegistries{
         vector<Registry*> registry_list;
 
 };
-
-
-/* Local registries */
-class Registry{
-    public:
-        Registry(int id, vector<int>&location_dist);
-        int id;
-        vector<int>&getLocationDist();
-    private:
-        vector<int> location_dist;
-};
-
 
 #endif

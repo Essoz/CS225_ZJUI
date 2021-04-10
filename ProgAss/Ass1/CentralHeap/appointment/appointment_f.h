@@ -1,6 +1,6 @@
 #ifndef APPOINTMENT_F_h
 #define APPOINTMENT_F_H
-#include "appointment.h"
+//#include "appointment.h"
 
 Appointment::Appointment(Location* loc, int date_assigned, int time_slot_assigned){
     Appointment::loc = loc;

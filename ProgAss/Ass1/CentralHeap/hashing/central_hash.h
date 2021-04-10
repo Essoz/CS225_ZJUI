@@ -1,6 +1,5 @@
 #ifndef CENTRAL_HASH_H
 #define CENTRAL_HASH_H
-// #include "../fibheap.h"
 #include <iostream>	
 #include <math.h>
 #include <cstdlib>
@@ -19,10 +18,6 @@ using namespace std;
  *  in the Local_Queue.h. It is modified from the HW5, ex2.
  *  We apply hashing with chaining here.
  */
-
-
-class FibNode;
-class FibHeap;
 
 class Hash_Chaining
 {

@@ -7,7 +7,7 @@
 #include <string>
 #include <vector>
 
-#include "central_patient.h"
+#include "central_patient_f.h"
 #include "hashing/central_hash.h"
 using namespace std;
 
@@ -74,10 +74,10 @@ class FibHeap
         FibNode* min_ptr;
         vector<FibNode*> fiblist;
         int numitems;
-        Hash_Chaining withdraw_table;
-        Hash_Chaining processin_table;
-        Hash_Chaining highrisk_table;
-        Hash_Chaining assigned_table;
+        Hash_Chaining* withdraw_table;
+        Hash_Chaining* processin_table;
+        Hash_Chaining* highrisk_table;
+        Hash_Chaining* assigned_table;
         vector<FibNode*> ddl_queue;
 };
 

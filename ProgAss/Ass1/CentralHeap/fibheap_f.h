@@ -404,10 +404,10 @@ void FibNode::PatientCreate(vector<string>&infolist){
 
 /* <=== Functions for Hash tables ===> */
 FibNode* FibHeap::hash_table_find(int id){
-    return processin_table.retrieval(id);
+    return processin_table->retrieval(id);
 };
 bool FibHeap::hash_intable_check(int id){
-    if (processin_table.retrieval(id) == NULL) return false;
+    if (processin_table->retrieval(id) == NULL) return false;
     // else the element is in the hashtable
     return true;
 };
@@ -420,15 +420,15 @@ bool FibHeap::hash_intable_check(int id){
  */
 FibNode* FibHeap::hash_table_remove(int id){
     // first record the address of the node to be deleted
-    FibNode* old = processin_table.retrieval(id);
+    FibNode* old = processin_table->retrieval(id);
     // then delete the entry from the central heap
-    processin_table.deletion(id);
+    processin_table->deletion(id);
     // return the pointer to the old node
     return old;    
 };
 
 void FibHeap::hash_table_insert(FibNode* node){
-    processin_table.insertion(node);
+    processin_table->insertion(node);
 };
 
 /* hash_table_swap
@@ -442,18 +442,18 @@ void FibHeap::hash_table_insert(FibNode* node){
 
 FibNode* FibHeap::hash_table_swap(FibNode* node){
     int id = node->getid();
-    FibNode* old = processin_table.retrieval(id);
-    processin_table.deletion(id);
+    FibNode* old = processin_table->retrieval(id);
+    processin_table->deletion(id);
     hash_table_insert(node);
     return old;
 };
 
 void FibHeap::withdraw_table_insert(FibNode* node){
-    withdraw_table.insertion(node);
+    withdraw_table->insertion(node);
 };
 FibNode* FibHeap::withdraw_table_remove(int id){
-    FibNode* old = withdraw_table.retrieval(id);
-    withdraw_table.deletion(id);
+    FibNode* old = withdraw_table->retrieval(id);
+    withdraw_table->deletion(id);
     return old;
 };
 
@@ -503,43 +503,43 @@ FibNode* FibHeap::ddl_delete(FibNode* node){
 };
 
 void FibHeap::highrisk_table_insert(FibNode* node) {
-    highrisk_table.insertion(node);
+    highrisk_table->insertion(node);
 }
 FibNode* FibHeap::highrisk_table_remove(int id) {
-    FibNode* old = highrisk_table.retrieval(id);
+    FibNode* old = highrisk_table->retrieval(id);
 
-    highrisk_table.deletion(id);
+    highrisk_table->deletion(id);
 
     return old;
 }
 FibNode* FibHeap::highrisk_table_find(int id) {
-    return highrisk_table.retrieval(id);
+    return highrisk_table->retrieval(id);
 }
 bool FibHeap::highrisk_intable_check(int id) {
-    if (highrisk_table.retrieval(id) == NULL) return false;
+    if (highrisk_table->retrieval(id) == NULL) return false;
     return true;
 }
 
 FibNode* FibHeap::assigned_table_find(int id){
-    return assigned_table.retrieval(id);
+    return assigned_table->retrieval(id);
 };
 bool FibHeap::assigned_intable_check(int id){
-    if (assigned_table.retrieval(id) == NULL) return false;
+    if (assigned_table->retrieval(id) == NULL) return false;
     // else the element is in the hashtable
     return true;
 };
 
 FibNode* FibHeap::assigned_table_remove(int id){
     // first record the address of the node to be deleted
-    FibNode* old = assigned_table.retrieval(id);
+    FibNode* old = assigned_table->retrieval(id);
     // then delete the entry from the central heap
-    assigned_table.deletion(id);
+    assigned_table->deletion(id);
     // return the pointer to the old node
     return old;    
 };
 
 void FibHeap::assigned_table_insert(FibNode* node){
-    assigned_table.insertion(node);
+    assigned_table->insertion(node);
 };
 
 #endif /* fibheap_f_h */

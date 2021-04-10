@@ -1,10 +1,8 @@
 #ifndef ASSIGNMENT_F_H
 #define ASSIGNMENT_F_H
 
-#include "assignment.h"
-#include "fibheap.h"
-#include "../appointment/appointment.h"
-// using namespace std;
+//#include "assignment.h"
+using namespace std;
 
 /* Assignment::Assign
  * INPUT
@@ -86,8 +84,7 @@ bool Assignment::Assign(FibNode* reg, int date) {
                 heap->highrisk_table_remove(reg->getid());
                 //actual remove the node
                 heap->highrisk_queue->ExtractMin();
-            
-
+            }
         }  
         // else do nothing because there is no need for re-assigning
         return true;
@@ -104,7 +101,6 @@ bool Assignment::Assign(FibNode* reg, int date) {
         heap->hash_table_remove(reg->getid());
     } 
     return true;
-    }
 }
 
 /* Assignment::_assign
@@ -117,7 +113,7 @@ bool Assignment::Assign(FibNode* reg, int date) {
  * 1. reg - ss
  * 
  */
- 
+
 void Assignment::_assign(FibNode* reg, int date) {
     Registry* registry = all_registries->getRegistry(reg->getreg_id());  //TODO, constructor here!!!!!!!!
     Location* temp_location;
