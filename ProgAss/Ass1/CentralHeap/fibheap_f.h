@@ -29,6 +29,10 @@ FibNode::FibNode(vector<string>&infolist){
 FibHeap::FibHeap(){
     min_ptr = NULL;
     numitems = 0;
+    withdraw_table = new Hash_Chaining;
+    processin_table = new Hash_Chaining;
+    highrisk_table = new Hash_Chaining;
+    assigned_table = new Hash_Chaining;
 };
 
 /* <===> Test Passed <===> */
@@ -393,10 +397,10 @@ void FibNode::PatientCreate(vector<string>&infolist){
     setpriority(stoi(infolist[9]));
 
     Information temp_info;
-    temp_info.name = infolist[9];
-    temp_info.email = infolist[10];
-    temp_info.phone = infolist[11];
-    temp_info.birthday = infolist[12];
+    temp_info.name = infolist[10];
+    temp_info.email = infolist[11];
+    temp_info.phone = infolist[12];
+    temp_info.birthday = infolist[13];
     setinfo(&temp_info);
 
     key = getpriority();

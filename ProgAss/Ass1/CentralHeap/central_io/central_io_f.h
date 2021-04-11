@@ -57,6 +57,9 @@ bool CentralIO::Read2Heap(){
                 temp.clear();
                 continue;
             }
+            if (line.substr(i,1) == "\r") {
+                continue;
+            }
             temp.append(line.substr(i,1));
         }
         temp_list.push_back(temp);
