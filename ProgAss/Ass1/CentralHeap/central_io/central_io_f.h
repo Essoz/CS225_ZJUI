@@ -163,7 +163,7 @@ bool CentralIO::Read2Heap(){
         heap->hash_table_insert(newnode);
         if (newnode->getddl() != -1) {
             heap->ddl_insert(newnode);
-            assignment->_assign(newnode, newnode->getddl());
+            assignment->_assign(newnode, newnode->getddl() - 1);
         }    
     }
     return true;

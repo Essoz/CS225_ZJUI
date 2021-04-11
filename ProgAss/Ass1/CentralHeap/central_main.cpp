@@ -1,3 +1,5 @@
+#define DEBUG true
+
 #include "alist.cpp"
 #include "central_io/central_io_f.h"
 #include "assqueue/assignment_f.h"
@@ -108,14 +110,14 @@ int main(){
 
         // first assign nodes in the heap
         if (AssignRegistration.checkAvailability(date)) {
-            while (AssignRegistration.Assign((central_queue->Minimum()), date) && central_queue->GetNum()) {
+            while (central_queue->GetNum() && AssignRegistration.Assign((central_queue->Minimum()), date)) {
                 // keep assign until no further registrations can be assigned
                 central_queue->ExtractMin();
                 // TODO table management
             }
         }
         if (AssignRegistration.checkAvailability(date)) {
-            while (AssignRegistration.Assign((central_queue->highrisk_queue->Minimum()), date) && central_queue->highrisk_queue->GetNum()) {
+            while (central_queue->highrisk_queue->GetNum() && AssignRegistration.Assign((central_queue->highrisk_queue->Minimum()), date)) {
                 // keep assign until no further registrations can be assigned
                 central_queue->highrisk_queue->ExtractMin();
                 // TODO table management
@@ -124,8 +126,9 @@ int main(){
 
 
         // collect the list of cured assignments
-        // Locs->maintainCuredList()
+        Locs->maintainCuredList(timer);
         // if counter % 7 == 0, generate reports
+        timer == 14;
         if (timer % 14 == 0){
             central_IO.ReportWeekly(timer / 14, order);
         }
@@ -135,7 +138,7 @@ int main(){
 
         // if counter % 30 == 0, generate weekly reports
 
-
+        if (DEBUG) break;
     }
     return 0;
 }

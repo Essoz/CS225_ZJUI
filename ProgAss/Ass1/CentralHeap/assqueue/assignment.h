@@ -57,7 +57,9 @@ class AllLocations{
         int getNumLocs();
         Location* getLocation(int id);
         int calcCapacity(int date);
+        void updateLocs(int date);
         void maintainCuredList(int week);
+
     private:
         int max_capacity;
         int current_occupied;

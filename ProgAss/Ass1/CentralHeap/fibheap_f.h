@@ -100,6 +100,7 @@ void FibHeap::Cut(FibNode* handle){
     }
 
     Insert(handle);
+    numitems--;
 
     // do marking or cascaded cut
     if (par_ptr->mark == false){
@@ -217,16 +218,17 @@ FibNode* FibHeap::ExtractMin(){
         numitems--;
         if (min_ptr == min_ptr->right){
             min_ptr = NULL;
-	} else {
+        } else {
             min_ptr->right->left = min_ptr->left;
             min_ptr->left->right = min_ptr->right;
             min_ptr = min_ptr->right;
 
-            Consolidate();
-            // TODO: Fill the definition for FINDMIN()
-            
-	    //since finding the new min is handled by consolidation, no need for FindMin here
-	    //FindMin();
+        
+        Consolidate();
+        // TODO: Fill the definition for FINDMIN()
+        
+        //since finding the new min is handled by consolidation, no need for FindMin here
+        //FindMin();
 	    
         }
         return current_node;

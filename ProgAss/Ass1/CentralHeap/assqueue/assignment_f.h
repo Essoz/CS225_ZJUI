@@ -77,7 +77,7 @@ bool Assignment::Assign(FibNode* reg, int date) {
 
     if (heap->ddl_incheck(reg)){
         // if ddl has not passed, 
-        if (date < reg->getddl()){
+        if (date < (reg->getddl() - 1)){
             // remove the original appointment
             Location* old_loc = reg->getAppointment()->loc;
             old_loc->removeAppointment(reg->getAppointment());
@@ -131,6 +131,7 @@ void Assignment::_assign(FibNode* reg, int date) {
             temp_location, date, temp_time_assigned);
             reg->setAppointment(reg_app);
             heap->assigned_table_insert(reg);
+            break;
         }
     }
 }
@@ -158,16 +159,15 @@ int AllLocations::calcCapacity(int date){
 
 void AllLocations::maintainCuredList(int date){
     int week = date / 7;
-    if (week >= cured_list.size()){
+    
         // vector<FibNode*> temp;
-        for (int i = 0; i < int(location_list.size()); i++) {
-            for (int j = 0; j < int(location_list[i]->cured_queue.at(week).size()); j++) {
-                cured_list.at(week).push_back(location_list[i]->cured_queue.at(week)[j]);
-            }
+    for (int i = 0; i < int(location_list.size()); i++) {
+        for (int j = 0; j < int(location_list[i]->cured_queue.at(week).size()); j++) {
+            cured_list.at(week).push_back(location_list[i]->cured_queue.at(week)[j]);
         }
-    } else {
-        cout << "\nYOU ARE FUCKED UP at AllLocations::maintainCuredList\n";
     }
+    // cout << "\nYOU ARE FUCKED UP at AllLocations::maintainCuredList\n";
+    
 }
 /*
  * OUTPUT
@@ -234,5 +234,14 @@ vector<int>& Registry::getLocationDist() {
 
 Registry* AllRegistries::getRegistry(int id) {
     return registry_list.at(id);
+}
+
+void AllLocations::updateLocs(int date) {
+    for (int i = 0; i < int(location_list.size()); i++) {
+        if(date >= 1)
+        location_list.at(i)->assignedClear(date - 1);
+    }
+    if (date % 7 == 1)   // because t
+    maintainCuredList(date);
 }
 #endif
