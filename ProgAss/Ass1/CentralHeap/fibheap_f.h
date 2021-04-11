@@ -381,16 +381,16 @@ int String2Int(string key){
  * Nodes will be added into the central heap (or withdrawn, or update), respectively
  */
 void FibNode::PatientCreate(vector<string>&infolist){
-    setid(String2Int(infolist[0]));
-    setrisk(Risk (String2Int(infolist[1])) );
-    setpro(Profession (String2Int(infolist[2])) );
-    setage(Age (String2Int(infolist[3])));
-    setreg_id(String2Int(infolist[4]));
-    setyear(String2Int(infolist[5]));
-    setdate(String2Int(infolist[6]));
-    setwithdraw(String2Int(infolist[7]));
-    setddl(String2Int(infolist[8]));
-    setpriority(String2Int(infolist[9]));
+    setid(stoi(infolist[0]));
+    setrisk(Risk (stoi(infolist[1])) );
+    setpro(Profession (stoi(infolist[2])) );
+    setage(Age (stoi(infolist[3])));
+    setreg_id(stoi(infolist[4]));
+    setyear(stoi(infolist[5]));
+    setdate(stoi(infolist[6]));
+    setwithdraw(stoi(infolist[7]));
+    setddl(stoi(infolist[8]));
+    setpriority(stoi(infolist[9]));
 
     Information temp_info;
     temp_info.name = infolist[9];

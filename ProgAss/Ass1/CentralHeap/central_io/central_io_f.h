@@ -2,7 +2,8 @@
 #define CENTRAL_IO_F
 
 #include "central_io.h"
-
+// #include <string>
+using namespace std;
 /* READ2HEAP
  * INPUT == NULL
  * OUTPUT == NULL
@@ -40,6 +41,7 @@ bool CentralIO::Read2Heap(){
     vector<string> temp_list;
     string temp;
     string line;   
+    getline(infile, line);  // remove the title of the CSV file
     while (true){
         getline(infile, line);
         
@@ -48,15 +50,16 @@ bool CentralIO::Read2Heap(){
         
         // reading registrations from files generated from local registries
         for (int i = 0; i < int(line.size()); i++) {
-            if (line.substr(i,1).c_str() == ",") {
+            if (line.substr(i,1) == ",") {
                 // put this string into the vector
                 temp_list.push_back(temp);
                 // clear the temp string for the next argument
                 temp.clear();
                 continue;
             }
-            temp.push_back(line[i]);
+            temp.append(line.substr(i,1));
         }
+        temp_list.push_back(temp);
     
     // clear this list for next use
     FibNode* newnode = new FibNode(temp_list);

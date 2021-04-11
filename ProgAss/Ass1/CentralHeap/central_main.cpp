@@ -11,16 +11,19 @@ using namespace std;
 
 int timer = 0;
 const int interval = 1; // unit in day
-string path = "../Submit.csv";
+string path;
 int date;
 int main(){
     char order;
     cout << "Please Choose how do you want to order the report" << endl;
-        cout << "0: Name\n1: Profession Category\n2: Age Group (Ascending Order)\n";
-        cin >> order;
-        if ((order != '0') && (order != '1') && (order != '2'))
-            cout << "You must choose 0, 1 or 2\n\n";
+    cout << "0: Name\n1: Profession Category\n2: Age Group (Ascending Order)\n";
+    cin >> order;
+    if ((order != '0') && (order != '1') && (order != '2'))
+        cout << "You must choose 0, 1 or 2\n\n";
     
+    // cout << "Please Provide a path to the file" << endl;
+    // cin >> path;
+    path = "../Local/Submit.csv";
     /* <======= TEST CASES ======> */
     // testcases (location)
     vector<string> time_slot_0 = {"8:00", "9:00","10:00","14:00", "16:00"};
@@ -35,7 +38,7 @@ int main(){
     Location* Location_3 = new Location(3, time_slot_3);
     Location* Location_4 = new Location(4, time_slot_4);
 
-    vector<Location*> location_list(5);
+    vector<Location*> location_list;
     location_list.push_back(Location_0);
     location_list.push_back(Location_1);
     location_list.push_back(Location_2);
@@ -57,7 +60,7 @@ int main(){
     Registry* Registry_4 = new Registry(4, location_dist_4);
     Registry* Registry_5 = new Registry(5, location_dist_5);
     
-    vector<Registry*> registry_list(6);
+    vector<Registry*> registry_list;
     registry_list.push_back(Registry_0);
     registry_list.push_back(Registry_1);
     registry_list.push_back(Registry_2);    
@@ -74,7 +77,16 @@ int main(){
     // initialize an IO instance for later use
     CentralIO central_IO = CentralIO(central_queue, path);
     
+    cout << "Welcome to the Central Queueing System (beta version). " << endl;
+
     while (true) {
+        
+        
+        cout << "The system time is now at Year 2021, Month " 
+             << to_string((timer+1) / 30 + 1) << ", Date " << to_string((timer+1) % 30);
+        if (timer / 2 * 2 == timer) cout << ", Afternoon\n";
+        else cout << ", Morning\n";
+
         date = timer / 2; 
         //  time counter 
         timer += 1; 
