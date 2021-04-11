@@ -9,10 +9,12 @@ class FibHeap;
 class Appointment;
 class AllLocations;
 class AllRegistries;
+class CentralIO;
 
 class Assignment{
     public: 
-        Assignment(AllLocations* all_locations, FibHeap* heap);
+    friend class CentralIO;
+        Assignment(AllLocations* all_locations, AllRegistries* all_registries, FibHeap* heap);
         bool Assign(FibNode* reg, int date); // on false goes to the next day
         bool checkAvailability(int date);
     private:

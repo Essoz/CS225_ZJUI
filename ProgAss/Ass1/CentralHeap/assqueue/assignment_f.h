@@ -27,9 +27,11 @@ using namespace std;
  */
 
 
-Assignment::Assignment(AllLocations* all_locations, FibHeap* heap) {
+Assignment::Assignment(AllLocations* all_locations, AllRegistries* all_registries, FibHeap* heap) {
     Assignment::all_locations = all_locations;  
+    Assignment::all_registries = all_registries;
     Assignment::heap = heap;
+
 }
 
 AllLocations::AllLocations(vector<Location*>&location_list) {
@@ -38,12 +40,16 @@ AllLocations::AllLocations(vector<Location*>&location_list) {
     for (int i = 0; i < num_locations; i++) {
         max_capacity += location_list[i]->getCapacity();
     }
+    cured_list.resize(52);
+
 }
 
 Location::Location(int id, vector<string>&time_slot) {
     Location::id = id;
     Location::time_slot = time_slot;
     daily_capacity = int(time_slot.size());
+    assigned_queue.resize(360);
+    cured_queue.resize(52);
 }
 
 AllRegistries::AllRegistries(vector<Registry*>&registry_list) {
@@ -150,7 +156,8 @@ int AllLocations::calcCapacity(int date){
     return current_capacity;
 }   
 
-void AllLocations::maintainCuredList(int week){
+void AllLocations::maintainCuredList(int date){
+    int week = date / 7;
     if (week >= cured_list.size()){
         // vector<FibNode*> temp;
         for (int i = 0; i < int(location_list.size()); i++) {

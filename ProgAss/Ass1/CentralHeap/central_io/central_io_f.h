@@ -19,9 +19,10 @@ using namespace std;
 
 
  */
-CentralIO::CentralIO(FibHeap* heap, string path){
+CentralIO::CentralIO(FibHeap* heap, string path, Assignment* assignment){
     CentralIO::heap = heap;
     CentralIO::path = path;
+    CentralIO::assignment = assignment;
 };
 
 bool CentralIO::Read2Heap(){
@@ -63,7 +64,7 @@ bool CentralIO::Read2Heap(){
             temp.append(line.substr(i,1));
         }
         temp_list.push_back(temp);
-    
+        temp.clear();
     // clear this list for next use
     FibNode* newnode = new FibNode(temp_list);
     temp_list.clear();
@@ -77,13 +78,13 @@ bool CentralIO::Read2Heap(){
              * 4. remove the node from ddl queue (if the node was in that queue)
              * 5. release memory occupied by the old node
              */
-            FibNode* old;
+            FibNode* old = NULL;
             heap->withdraw_table_insert(newnode);
 
             if (heap->hash_intable_check(newnode->getid())){
                 old = heap->hash_table_remove(newnode->getid());
                 heap->Delete(old);
-
+                
             } else if (heap->highrisk_intable_check(newnode->getid())){
                 old = heap->highrisk_table_remove(newnode->getid());
                 heap->highrisk_queue->Delete(old);
@@ -96,11 +97,13 @@ bool CentralIO::Read2Heap(){
             }
 
                 // if the node was in the DDL queue, remove the node from the queue
-            if (heap->ddl_incheck(old))
+            
+            if (old && heap->ddl_incheck(old)){
                 heap->ddl_delete(old);      //TODO Bug here may not exist in the ddl queue
             // insert the new one in case of any update
             // heap->withdraw_table_insert(newnode);
-            delete old;
+            }
+            if (old) delete old; 
             // withdraw == 1 (this indicates a withdraw has been prompted, we have to search this node in the hashtable and move the node from the heap to the withdrawn set, set withdraw = 2) 
             // put this node into the withdrawn hashset 
         } else {
@@ -116,6 +119,7 @@ bool CentralIO::Read2Heap(){
 
             if (newnode->getddl() != -1) {
                 heap->ddl_insert(newnode);
+
             }
             heap->Insert(newnode);
             // heap->withdraw_table_remove(newnode->getid());
@@ -159,6 +163,7 @@ bool CentralIO::Read2Heap(){
         heap->hash_table_insert(newnode);
         if (newnode->getddl() != -1) {
             heap->ddl_insert(newnode);
+            assignment->_assign(newnode, newnode->getddl());
         }    
     }
     return true;

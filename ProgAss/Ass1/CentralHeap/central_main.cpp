@@ -73,9 +73,9 @@ int main(){
     central_queue->highrisk_queue = highrisk_queue;
     AllLocations* Locs = new AllLocations(location_list);
     AllRegistries* Regs = new AllRegistries(registry_list);
-    Assignment AssignRegistration(Locs, central_queue);
+    Assignment AssignRegistration(Locs, Regs, central_queue);
     // initialize an IO instance for later use
-    CentralIO central_IO = CentralIO(central_queue, path);
+    CentralIO central_IO = CentralIO(central_queue, path, &AssignRegistration);
     
     cout << "Welcome to the Central Queueing System (beta version). " << endl;
 
@@ -123,6 +123,8 @@ int main(){
         }
 
 
+        // collect the list of cured assignments
+        // Locs->maintainCuredList()
         // if counter % 7 == 0, generate reports
         if (timer % 14 == 0){
             central_IO.ReportWeekly(timer / 14, order);
