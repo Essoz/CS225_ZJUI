@@ -52,7 +52,7 @@ queue<Patient*>* IO::write_all(queue<Patient*>* queue)
 	{
 		fprintf(update, "%d,%d,%d,",
 			queue->front()->getid(), queue->front()->getrisk(), queue->front()->getpro());
-		fprintf(update, "%d,%d,%d,%d",
+		fprintf(update, "%d,%d,%d,%d,",
 			queue->front()->getage(), queue->front()->getreg_id(),
 			queue->front()->getyear(), queue->front()->getdate());
 		fprintf(update, "%d,%d,%d,",
