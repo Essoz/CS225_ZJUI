@@ -169,7 +169,7 @@ bool CentralIO::Read2Heap(){
             heap->highrisk_table_remove(newnode->getid());
             heap->highrisk_queue->Delete(old);
 
-            if (newnode->getid() == 3) {
+            if (newnode->getrisk() == 3) {
                 heap->highrisk_table_insert(newnode);
                 heap->highrisk_queue->Insert(newnode);
             } else { 
@@ -196,7 +196,7 @@ bool CentralIO::Read2Heap(){
             
         } else {
             // do normal insertion
-            if (newnode->getid() == 3) {
+            if (newnode->getrisk() == 3) {
                 heap->highrisk_queue->Insert(newnode);
                 heap->highrisk_table_insert(newnode);
             } else {
