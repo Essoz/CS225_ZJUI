@@ -266,7 +266,7 @@ bool CentralIO::_WeeklyCured(int week, int key){
     // sort the list
     sortByKey(print_list, key);
     // generate report using print_list (sorted)
-    if (Write2File(print_list, week * 7, key) == NULL) exit(3);
+    if (Write2File(print_list, week * 7, key) == false) exit(3);
 
     cout << "\nWeek " << week << "'s report (Cured patients ordered W.R.T key "<< key;
     cout << ") has been generated" << endl;
@@ -293,13 +293,14 @@ bool CentralIO::_WeeklyQueueing(int week, int key){
 
     sortByKey(print_list, key);
 
-    if (Write2File(print_list, week * 7, key) == NULL) exit(3);
+    if (Write2File(print_list, week * 7, key) == false) exit(3);
 
     cout << "\nWeek " << week << "'s report (Queueing patients ordered W.R.T key "<< key;
     cout << ") has been generated" << endl;
     return true;
 }
 bool CentralIO::_Monthly(int month, int key){
+    /*
     string filename = "MonthlyStat_";
     filename += to_string(month) + ".md";
 
@@ -308,13 +309,14 @@ bool CentralIO::_Monthly(int month, int key){
     out << "### Number of Treated People  " << endl;
     int num_treated = 0;
     for (int i = 0; i < int(assignment->all_locations->cured_list.size()); i++) {
-        num_treated += assignment->all_locations->cured_list
+        num_treated += assignment->all_locations->cured_list;
     }
     out << assignment->all_locations->cured_list.size() <<"  "<< endl;
 
-    out << "### Number "
-    out.close()
+    out << "### Number ";
+    out.close();
     cout << "\nMonth " << month << "'s report has been generated." << endl;
+    */
     return true;
 }
 
