@@ -28,6 +28,8 @@ public:
     void deletion(int id);
     // Return the pointer of the patient instance in the hash table:
     FibNode* retrieval(int id);
+    // Return a list containing all the patients' pointer:
+    vector<FibNode*>* list_patient();
     int get_numitems();
 private:
     std::vector<std::vector<FibNode*>*>* hashtable;      // The hashtable
@@ -35,4 +37,4 @@ private:
     int hash_maxsize;                   // defines the size of the hashtable
 };
 
-#endif /* Local_hash_h */
+#endif /* Central_hash_h */
