@@ -85,9 +85,9 @@ int main(){
         
         
         cout << "The system time is now at Year 2021, Month " 
-             << to_string((timer+1) / 30 + 1) << ", Date " << to_string((timer+1) % 30);
-        if (timer / 2 * 2 == timer) cout << ", Afternoon\n";
-        else cout << ", Morning\n";
+             << to_string((date+1) / 30 + 1) << ", Date " << to_string((date+1) % 30);
+        if (timer / 2 * 2 == timer) cout << ", Morning\n";
+        else cout << ", Afternoon\n";
 
         date = timer / 2; 
         //  time counter 

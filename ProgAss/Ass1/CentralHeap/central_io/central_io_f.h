@@ -44,123 +44,167 @@ bool CentralIO::Read2Heap(){
     string line;   
     getline(infile, line);  // remove the title of the CSV file
     while (true){
-        getline(infile, line);
-        
-        // terminate the reading process on encountering an empty line
-        if (int(line.size()) == 0) break; 
-        
-        // reading registrations from files generated from local registries
-        for (int i = 0; i < int(line.size()); i++) {
-            if (line.substr(i,1) == ",") {
-                // put this string into the vector
-                temp_list.push_back(temp);
-                // clear the temp string for the next argument
-                temp.clear();
-                continue;
-            }
-            if (line.substr(i,1) == "\r") {
-                continue;
-            }
-            temp.append(line.substr(i,1));
-        }
-        temp_list.push_back(temp);
-        temp.clear();
-    // clear this list for next use
-    FibNode* newnode = new FibNode(temp_list);
-    temp_list.clear();
-    //check hash set
-    if (newnode->getwithdraw()) {
-        if (newnode->getwithdraw() == 1){
-            /*
-             * 1. remove the node from hash table
-             * 2. remove the node from the heap
-             * 3. insert the new node into the withdraw_table
-             * 4. remove the node from ddl queue (if the node was in that queue)
-             * 5. release memory occupied by the old node
-             */
-            FibNode* old = NULL;
-            heap->withdraw_table_insert(newnode);
-
-            if (heap->hash_intable_check(newnode->getid())){
-                old = heap->hash_table_remove(newnode->getid());
-                heap->Delete(old);
-                
-            } else if (heap->highrisk_intable_check(newnode->getid())){
-                old = heap->highrisk_table_remove(newnode->getid());
-                heap->highrisk_queue->Delete(old);
-            } else if (heap->assigned_intable_check(newnode->getid())) {
-                // all above branches leave the case where the node is already assigned and not in any heaps
-                old = heap->assigned_table_find(newnode->getid());
-                Appointment* app = old->getAppointment();       // TODO, rewrite all function related to APPOINTMENT needed here
-                app->loc->removeAppointment(app);
-                delete app;
-            }
-
-                // if the node was in the DDL queue, remove the node from the queue
+            getline(infile, line);
             
-            if (old && heap->ddl_incheck(old)){
-                heap->ddl_delete(old);      //TODO Bug here may not exist in the ddl queue
-            // insert the new one in case of any update
-            // heap->withdraw_table_insert(newnode);
+            // terminate the reading process on encountering an empty line
+            if (int(line.size()) == 0) break; 
+            
+            // reading registrations from files generated from local registries
+            for (int i = 0; i < int(line.size()); i++) {
+                if (line.substr(i,1) == ",") {
+                    // put this string into the vector
+                    temp_list.push_back(temp);
+                    // clear the temp string for the next argument
+                    temp.clear();
+                    continue;
+                }
+                if (line.substr(i,1) == "\r") {
+                    continue;
+                }
+                temp.append(line.substr(i,1));
             }
-            if (old) delete old; 
-            // withdraw == 1 (this indicates a withdraw has been prompted, we have to search this node in the hashtable and move the node from the heap to the withdrawn set, set withdraw = 2) 
-            // put this node into the withdrawn hashset 
-        } else {
-            // withdraw == 2 (this indicates the node now needs an re-insertion into the heap with a 14-day extension )
-            /*
-             * 1. remove the node from withdraw_table
-             * 2. add the node into hash_table
-             * 3. insert the node into the heap
-             * 4. if ddl, add this node into the ordered list of ddl
-             */
-            heap->withdraw_table_remove(newnode->getid());
-            heap->hash_table_insert(newnode);
+            temp_list.push_back(temp);
+            temp.clear();
+        // clear this list for next use
+        FibNode* newnode = new FibNode(temp_list);
+        temp_list.clear();
+        //check hash set
+        if (newnode->getwithdraw()) {
+            if (newnode->getwithdraw() == 1){
+                /*
+                * 1. remove the node from hash table
+                * 2. remove the node from the heap
+                * 3. insert the new node into the withdraw_table
+                * 4. remove the node from ddl queue (if the node was in that queue)
+                * 5. release memory occupied by the old node
+                */
+                FibNode* old = NULL;
+                heap->withdraw_table_insert(newnode);
 
+                if (heap->hash_intable_check(newnode->getid())){
+                    old = heap->hash_table_remove(newnode->getid());
+                    heap->Delete(old);
+                    
+                } else if (heap->highrisk_intable_check(newnode->getid())){
+                    old = heap->highrisk_table_remove(newnode->getid());
+                    heap->highrisk_queue->Delete(old);
+                } else if (heap->assigned_intable_check(newnode->getid())) {
+                    // all above branches leave the case where the node is already assigned and not in any heaps
+                    old = heap->assigned_table_find(newnode->getid());
+                    Appointment* app = old->getAppointment();       // TODO, rewrite all function related to APPOINTMENT needed here
+                    app->loc->removeAppointment(app);
+                    delete app;
+                }
+
+                    // if the node was in the DDL queue, remove the node from the queue
+                
+                if (old && heap->ddl_incheck(old)){
+                    heap->ddl_delete(old);      //TODO Bug here may not exist in the ddl queue
+                // insert the new one in case of any update
+                // heap->withdraw_table_insert(newnode);
+                }
+                
+                if (old) delete old; 
+                // withdraw == 1 (this indicates a withdraw has been prompted, we have to search this node in the hashtable and move the node from the heap to the withdrawn set, set withdraw = 2) 
+                // put this node into the withdrawn hashset 
+            } else {
+                // withdraw == 2 (this indicates the node now needs an re-insertion into the heap with a 14-day extension )
+                /*
+                * 1. remove the node from withdraw_table
+                * 2. add the node into hash_table
+                * 3. insert the node into the heap
+                * 4. if ddl, add this node into the ordered list of ddl
+                */
+
+                heap->withdraw_table_remove(newnode->getid());
+                if (newnode->getrisk() == 3){
+                    heap->highrisk_table_insert(newnode);
+                    heap->highrisk_queue->Insert(newnode);
+                } else {
+                    heap->hash_table_insert(newnode);
+                    heap->Insert(newnode);
+                }
+
+                if (newnode->getddl() != -1) {
+                    heap->ddl_insert(newnode);
+                }
+            }
+
+        // the part for update
+
+        } else if (heap->hash_intable_check(newnode->getid())){
+            if (newnode->getrisk() == Risk (3)) {
+                cout << "You are FUCKED up by the local queue\n";
+                cout << "FUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUCK at you? CentralIO line 137\n";
+            }
+            // the node is in hashtable
+            //invoke the swap function
+            /*
+            * 1. swap the two node in the hash table
+            * 2. swap the two node in the fibonacci 
+            */
+            FibNode* old;
+            old = heap->hash_table_swap(newnode); 
+            // delete the older version of the previous registration
+
+            heap->Delete(old);
+            heap->Insert(newnode);  // TODO Actually I can invoke a decrease key function here
+
+            // do ddl update (if necessary)
+            if (old->getddl() != -1){
+                heap->ddl_delete(old);
+            }
+            if (newnode->getddl() != -1){
+                heap->ddl_insert(newnode);
+            }
+            delete old;
+            // do node swap and delete the original node
+
+            // but there are several cases to consider:
+            // 1. the element is also in the ddl queues
+        } else if (heap->highrisk_intable_check(newnode->getid())){
+            
+            FibNode* old;
+            old = heap->highrisk_table->retrieval(newnode->getid()); 
+            heap->highrisk_table_remove(newnode->getid());
+            heap->highrisk_queue->Delete(old);
+
+            if (newnode->getid() == 3) {
+                heap->highrisk_table_insert(newnode);
+                heap->highrisk_queue->Insert(newnode);
+            } else { 
+                heap->hash_table_insert(newnode);
+                heap->Insert(newnode);
+            }
+            // do ddl update (if necessary)
+            if (old->getddl() != -1) {
+                heap->ddl_delete(old);
+            }
             if (newnode->getddl() != -1) {
                 heap->ddl_insert(newnode);
-
             }
-            heap->Insert(newnode);
-            // heap->withdraw_table_remove(newnode->getid());
-            heap->hash_table_insert(newnode);
-            // remove this node from the withdrawn hashset.
-        }
-    } else if (heap->hash_intable_check(newnode->getid())){
-        // the node is in hashtable
-        //invoke the swap function
-        /*
-         * 1. swap the two node in the hash table
-         * 2. swap the two node in the fibonacci 
-         */
-        FibNode* old;
-        old = heap->hash_table_swap(newnode); 
-        // delete the older version of the previous registration
+            delete old;
 
-        
-        heap->Delete(old);
-        heap->Insert(newnode);  // TODO Actually I can invoke a decrease key function here
-
-        // do ddl update (if necessary)
-        if (old->getddl() != -1){
-            heap->ddl_delete(old);
-        }
-        if (newnode->getddl() != -1){
-            heap->ddl_insert(newnode);
+            // if (heap->highrisk_intable_check(newnode->getid())){
+            //     // in case of an update
+            //     heap->highrisk_table_remove(newnode->getid());
+            //     heap->highrisk_table_insert(newnode);
+            // } else {
+            // // if high risk encountered
+            // heap->highrisk_table_insert(newnode);
+            // heap->highrisk_queue->Insert(newnode);
+            
+        } else {
+            // do normal insertion
+            if (newnode->getid() == 3) {
+                heap->highrisk_queue->Insert(newnode);
+                heap->highrisk_table_insert(newnode);
+            } else {
+                heap->Insert(newnode);
+                heap->hash_table_insert(newnode);
+            }
         }
         
-        delete old;
-        // do node swap and delete the original node
-
-        // but there are several cases to consider:
-        // 1. the element is also in the ddl queues
-    } else if (newnode->getrisk() == 3) {
-        heap->highrisk_table_insert(newnode);
-        heap->highrisk_queue->Insert(newnode);
-    }
-        // if high risk encountered
-        heap->Insert(newnode);
-        heap->hash_table_insert(newnode);
         if (newnode->getddl() != -1) {
             heap->ddl_insert(newnode);
             assignment->_assign(newnode, newnode->getddl() - 1);
