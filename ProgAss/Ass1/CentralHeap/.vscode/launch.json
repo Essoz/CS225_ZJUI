@@ -8,7 +8,7 @@
             "name": "(gdb) 你爹来了",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/CentralHeap/central",
+            "program": "${workspaceFolder}/central",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",

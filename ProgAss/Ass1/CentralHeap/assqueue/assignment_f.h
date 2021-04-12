@@ -27,9 +27,11 @@ using namespace std;
  */
 
 
-Assignment::Assignment(AllLocations* all_locations, FibHeap* heap) {
+Assignment::Assignment(AllLocations* all_locations, AllRegistries* all_registries, FibHeap* heap) {
     Assignment::all_locations = all_locations;  
+    Assignment::all_registries = all_registries;
     Assignment::heap = heap;
+
 }
 
 AllLocations::AllLocations(vector<Location*>&location_list) {
@@ -38,12 +40,16 @@ AllLocations::AllLocations(vector<Location*>&location_list) {
     for (int i = 0; i < num_locations; i++) {
         max_capacity += location_list[i]->getCapacity();
     }
+    cured_list.resize(52);
+
 }
 
 Location::Location(int id, vector<string>&time_slot) {
     Location::id = id;
     Location::time_slot = time_slot;
     daily_capacity = int(time_slot.size());
+    assigned_queue.resize(360);
+    cured_queue.resize(52);
 }
 
 AllRegistries::AllRegistries(vector<Registry*>&registry_list) {
@@ -71,7 +77,7 @@ bool Assignment::Assign(FibNode* reg, int date) {
 
     if (heap->ddl_incheck(reg)){
         // if ddl has not passed, 
-        if (date < reg->getddl()){
+        if (date < (reg->getddl() - 1)){
             // remove the original appointment
             Location* old_loc = reg->getAppointment()->loc;
             old_loc->removeAppointment(reg->getAppointment());
@@ -125,6 +131,7 @@ void Assignment::_assign(FibNode* reg, int date) {
             temp_location, date, temp_time_assigned);
             reg->setAppointment(reg_app);
             heap->assigned_table_insert(reg);
+            break;
         }
     }
 }
@@ -150,17 +157,20 @@ int AllLocations::calcCapacity(int date){
     return current_capacity;
 }   
 
-void AllLocations::maintainCuredList(int week){
-    if (week >= cured_list.size()){
+void AllLocations::maintainCuredList(int date){
+    int week = date / 7;
+    
         // vector<FibNode*> temp;
-        for (int i = 0; i < int(location_list.size()); i++) {
-            for (int j = 0; j < int(location_list[i]->cured_queue.at(week).size()); j++) {
-                cured_list.at(week).push_back(location_list[i]->cured_queue.at(week)[j]);
-            }
-        }
-    } else {
-        cout << "\nYOU ARE FUCKED UP at AllLocations::maintainCuredList\n";
+    for (int i = 0; i < int(location_list.size()); i++) {
+        cured_list.at(week).insert(cured_list.at(week).begin(), 
+        location_list[i]->cured_queue.at(week).begin(),
+        location_list[i]->cured_queue.at(week).end()
+        );
+        // for (int j = 0; j < int(location_list[i]->cured_queue.at(week).size()); j++) {
+        //     cured_list.at(week).push_back(location_list[i]->cured_queue.at(week)[j]);
+        // }
     }
+    // cout << "\nYOU ARE FUCKED UP at AllLocations::maintainCuredList\n";
 }
 /*
  * OUTPUT
@@ -227,5 +237,23 @@ vector<int>& Registry::getLocationDist() {
 
 Registry* AllRegistries::getRegistry(int id) {
     return registry_list.at(id);
+}
+/* AllLocations::updateLocs(int date) 
+ * **This Function Must Be Called On a Daily Basis** 
+ * INPUT
+ * 1. date
+ * OUTPUT
+ * 1. NONE
+ * EFFECT
+ * 1. it calls assignedClear() on every location to move each day's cured assignments from assigned queue to cured queue
+ * 2. it gathers all cured assignments (in last week) from locations to AllLocations on the beginning of each weel
+ */ 
+void AllLocations::updateLocs(int date) {
+    for (int i = 0; i < int(location_list.size()); i++) {
+        if (date >= 1)
+        location_list.at(i)->assignedClear(date - 1);
+    }
+    if (date % 7 == 1)   // because t
+    maintainCuredList(date);
 }
 #endif

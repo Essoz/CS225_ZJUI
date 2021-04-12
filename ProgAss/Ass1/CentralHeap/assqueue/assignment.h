@@ -9,10 +9,12 @@ class FibHeap;
 class Appointment;
 class AllLocations;
 class AllRegistries;
+class CentralIO;
 
 class Assignment{
     public: 
-        Assignment(AllLocations* all_locations, FibHeap* heap);
+    friend class CentralIO;
+        Assignment(AllLocations* all_locations, AllRegistries* all_registries, FibHeap* heap);
         bool Assign(FibNode* reg, int date); // on false goes to the next day
         bool checkAvailability(int date);
     private:
@@ -51,11 +53,14 @@ class Location{
 class AllLocations{
     public:
         friend class Assignment;
+        friend class CentralIO;
         AllLocations(vector<Location*>&location_list);
         int getNumLocs();
         Location* getLocation(int id);
         int calcCapacity(int date);
+        void updateLocs(int date);
         void maintainCuredList(int week);
+
     private:
         int max_capacity;
         int current_occupied;

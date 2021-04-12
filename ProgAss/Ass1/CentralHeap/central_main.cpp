@@ -1,3 +1,5 @@
+#define DEBUG true
+
 #include "alist.cpp"
 #include "central_io/central_io_f.h"
 #include "assqueue/assignment_f.h"
@@ -11,16 +13,19 @@ using namespace std;
 
 int timer = 0;
 const int interval = 1; // unit in day
-string path = "../Submit.csv";
+string path;
 int date;
 int main(){
     char order;
     cout << "Please Choose how do you want to order the report" << endl;
-        cout << "0: Name\n1: Profession Category\n2: Age Group (Ascending Order)\n";
-        cin >> order;
-        if ((order != '0') && (order != '1') && (order != '2'))
-            cout << "You must choose 0, 1 or 2\n\n";
+    cout << "0: Name\n1: Profession Category\n2: Age Group (Ascending Order)\n";
+    cin >> order;
+    if ((order != '0') && (order != '1') && (order != '2'))
+        cout << "You must choose 0, 1 or 2\n\n";
     
+    // cout << "Please Provide a path to the file" << endl;
+    // cin >> path;
+    path = "../Local/Submit.csv";
     /* <======= TEST CASES ======> */
     // testcases (location)
     vector<string> time_slot_0 = {"8:00", "9:00","10:00","14:00", "16:00"};
@@ -35,7 +40,7 @@ int main(){
     Location* Location_3 = new Location(3, time_slot_3);
     Location* Location_4 = new Location(4, time_slot_4);
 
-    vector<Location*> location_list(5);
+    vector<Location*> location_list;
     location_list.push_back(Location_0);
     location_list.push_back(Location_1);
     location_list.push_back(Location_2);
@@ -57,7 +62,7 @@ int main(){
     Registry* Registry_4 = new Registry(4, location_dist_4);
     Registry* Registry_5 = new Registry(5, location_dist_5);
     
-    vector<Registry*> registry_list(6);
+    vector<Registry*> registry_list;
     registry_list.push_back(Registry_0);
     registry_list.push_back(Registry_1);
     registry_list.push_back(Registry_2);    
@@ -70,11 +75,20 @@ int main(){
     central_queue->highrisk_queue = highrisk_queue;
     AllLocations* Locs = new AllLocations(location_list);
     AllRegistries* Regs = new AllRegistries(registry_list);
-    Assignment AssignRegistration(Locs, central_queue);
+    Assignment AssignRegistration(Locs, Regs, central_queue);
     // initialize an IO instance for later use
-    CentralIO central_IO = CentralIO(central_queue, path);
+    CentralIO central_IO = CentralIO(central_queue, path, &AssignRegistration);
     
+    cout << "Welcome to the Central Queueing System (beta version). " << endl;
+
     while (true) {
+        
+        
+        cout << "The system time is now at Year 2021, Month " 
+             << to_string((timer+1) / 30 + 1) << ", Date " << to_string((timer+1) % 30);
+        if (timer / 2 * 2 == timer) cout << ", Afternoon\n";
+        else cout << ", Morning\n";
+
         date = timer / 2; 
         //  time counter 
         timer += 1; 
@@ -96,14 +110,14 @@ int main(){
 
         // first assign nodes in the heap
         if (AssignRegistration.checkAvailability(date)) {
-            while (AssignRegistration.Assign((central_queue->Minimum()), date) && central_queue->GetNum()) {
+            while (central_queue->GetNum() && AssignRegistration.Assign((central_queue->Minimum()), date)) {
                 // keep assign until no further registrations can be assigned
                 central_queue->ExtractMin();
                 // TODO table management
             }
         }
         if (AssignRegistration.checkAvailability(date)) {
-            while (AssignRegistration.Assign((central_queue->highrisk_queue->Minimum()), date) && central_queue->highrisk_queue->GetNum()) {
+            while (central_queue->highrisk_queue->GetNum() && AssignRegistration.Assign((central_queue->highrisk_queue->Minimum()), date)) {
                 // keep assign until no further registrations can be assigned
                 central_queue->highrisk_queue->ExtractMin();
                 // TODO table management
@@ -111,6 +125,8 @@ int main(){
         }
 
 
+        // do update every date
+        Locs->updateLocs(date);
         // if counter % 7 == 0, generate reports
         if (timer % 14 == 0){
             central_IO.ReportWeekly(timer / 14, order);
@@ -118,10 +134,9 @@ int main(){
         if (timer % 60 == 0){
             central_IO.ReportMonthly(timer / 60, order);
         }
-
         // if counter % 30 == 0, generate weekly reports
 
-
+        if (DEBUG) break;
     }
     return 0;
 }

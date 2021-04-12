@@ -7,6 +7,7 @@ using namespace std;
 class Appointment{
     public:
         friend class AllLocation;
+        Appointment();
         Appointment(Location* loc, int date_assigned, int time_slot_assigned);
         
         Location* loc;
