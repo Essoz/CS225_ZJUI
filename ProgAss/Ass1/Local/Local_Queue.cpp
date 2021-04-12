@@ -115,7 +115,7 @@ void Queue::update(int id, int up_type, int info)
 		break;
 	}
 	// Calculate the updated priority number:
-	patient->calculate_prio();
+	patient->setpriority(patient->calculate_prio());
 	// Remember, do not forget to add this updated patient into the queue,
 	// even it already exists in the queue:
 	l_queue->push(patient);
