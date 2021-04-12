@@ -208,7 +208,8 @@ FibNode* FibHeap::ExtractMin(){
         FibNode* current_node = min_ptr->child;
         FibNode* next_node = NULL;
         
-        for (int i = 0; i < min_ptr->degree; i++){
+        int min_degree = min_ptr->degree;
+        for (int i = 0; i < min_degree; i++){
             next_node = current_node->left;
             Cut(current_node);
             current_node = next_node;

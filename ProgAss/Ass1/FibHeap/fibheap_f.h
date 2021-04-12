@@ -88,12 +88,13 @@ template<class T> void FibHeap<T>::Cut(FibNode<T>* handle){
     }
 
     Insert(handle);
+    numitems--;
 
     // do marking or cascaded cut
     if (par_ptr->mark == false){
         par_ptr->mark = true;   // TODO: Should root nodes be marked?
     } else {
-        if(par_ptr->parent) Cut(par_ptr);
+        if (par_ptr->parent) Cut(par_ptr);
     }
 
     // decrement degree of the parent node
@@ -145,6 +146,7 @@ template<class T> void FibHeap<T>::Consolidate(){
         if (arr[i]) Insert(arr[i]); // all cases are handled by this insert function
     } 
     numitems = num; //since the insert operation will change numitems
+    delete[] arr;
 }
 /* FibHeap - HeapLink
  * Input
@@ -195,7 +197,8 @@ template<class T> FibNode<T>* FibHeap<T>::ExtractMin(){
         FibNode<T>* current_node = min_ptr->child;
         FibNode<T>* next_node = NULL;
         
-        for (int i = 0; i < min_ptr->degree; i++){
+        int min_degree = min_ptr->degree;
+        for (int i = 0; i < min_degree; i++){
             next_node = current_node->left;
             Cut(current_node);
             current_node = next_node;
@@ -205,7 +208,7 @@ template<class T> FibNode<T>* FibHeap<T>::ExtractMin(){
         numitems--;
         if (min_ptr == min_ptr->right){
             min_ptr = NULL;
-	} else {
+        } else {
             min_ptr->right->left = min_ptr->left;
             min_ptr->left->right = min_ptr->right;
             min_ptr = min_ptr->right;
