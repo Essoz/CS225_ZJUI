@@ -125,17 +125,15 @@ int main(){
         }
 
 
-        // collect the list of cured assignments
-        Locs->maintainCuredList(timer);
+        // do update every date
+        Locs->updateLocs(date);
         // if counter % 7 == 0, generate reports
-        timer == 14;
         if (timer % 14 == 0){
             central_IO.ReportWeekly(timer / 14, order);
         }
         if (timer % 60 == 0){
             central_IO.ReportMonthly(timer / 60, order);
         }
-
         // if counter % 30 == 0, generate weekly reports
 
         if (DEBUG) break;

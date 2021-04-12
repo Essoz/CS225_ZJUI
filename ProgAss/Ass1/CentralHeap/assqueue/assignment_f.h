@@ -162,12 +162,15 @@ void AllLocations::maintainCuredList(int date){
     
         // vector<FibNode*> temp;
     for (int i = 0; i < int(location_list.size()); i++) {
-        for (int j = 0; j < int(location_list[i]->cured_queue.at(week).size()); j++) {
-            cured_list.at(week).push_back(location_list[i]->cured_queue.at(week)[j]);
-        }
+        cured_list.at(week).insert(cured_list.at(week).begin(), 
+        location_list[i]->cured_queue.at(week).begin(),
+        location_list[i]->cured_queue.at(week).end()
+        );
+        // for (int j = 0; j < int(location_list[i]->cured_queue.at(week).size()); j++) {
+        //     cured_list.at(week).push_back(location_list[i]->cured_queue.at(week)[j]);
+        // }
     }
     // cout << "\nYOU ARE FUCKED UP at AllLocations::maintainCuredList\n";
-    
 }
 /*
  * OUTPUT
@@ -235,10 +238,19 @@ vector<int>& Registry::getLocationDist() {
 Registry* AllRegistries::getRegistry(int id) {
     return registry_list.at(id);
 }
-
+/* AllLocations::updateLocs(int date) 
+ * **This Function Must Be Called On a Daily Basis** 
+ * INPUT
+ * 1. date
+ * OUTPUT
+ * 1. NONE
+ * EFFECT
+ * 1. it calls assignedClear() on every location to move each day's cured assignments from assigned queue to cured queue
+ * 2. it gathers all cured assignments (in last week) from locations to AllLocations on the beginning of each weel
+ */ 
 void AllLocations::updateLocs(int date) {
     for (int i = 0; i < int(location_list.size()); i++) {
-        if(date >= 1)
+        if (date >= 1)
         location_list.at(i)->assignedClear(date - 1);
     }
     if (date % 7 == 1)   // because t

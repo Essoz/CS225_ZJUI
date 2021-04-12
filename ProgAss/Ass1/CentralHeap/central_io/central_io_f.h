@@ -168,8 +168,61 @@ bool CentralIO::Read2Heap(){
     }
     return true;
 }
+/* CentralIO::Write2File
+ * INPUT
+ * 1. print_list -- a vector of registrations to be printed
+ * 2. date       -- the date when a Write2File function is invoked (this affects the name of files)
+ * 3. type       -- indicates the type of print (cured, assigned, waiting)
+ * OUTPUT
+ * 1. true/false -- whether the report generation has succeeded
+ */
 
+bool CentralIO::Write2File(vector<FibNode*>&print_list, int date, int type) {
+    string filename = "Report_";
+    if (type == 3) {
+        filename += "Month_" + to_string(date / 30 + 1);
+    } else {
+        filename += "Week_" + to_string(date / 7 + 1);
+    }
 
+    switch (type) {
+        case 0:
+        filename = "Report_Week_" + to_string(date / 7 + 1) + "_Cured.csv";
+        break;
+
+        case 1:
+        filename = "Report_Week_" + to_string(date / 7 + 1) + "_Assigned.csv";
+        break;
+
+        case 2:
+        filename = "Report_Week_" + to_string(date / 7 + 1) + "_Waiting.csv";
+        break;
+
+        case 3:
+        filename = "Report_Month_" + to_string(date / 30 + 1) + ".csv";
+
+        default:
+        cout << "You are fucked at CentralIO::Write2File" << date << type << endl;
+        exit(3);
+    }   
+
+    ofstream out("output/"+ filename);
+    out << "ProfessionCategory,AgeCategory,RiskStatus,WaitingTime";
+    for (int i = 0; i < int(print_list.size()); i++) {
+        out << print_list[i]->getpro();
+        out << ",";
+        out << print_list[i]->getage();
+        out << ",";
+        out << print_list[i]->getrisk();
+        out << ",";
+        if (type == 0)
+            out << print_list[i]->getAppointment()->getDate() - print_list[i]->getdate() << endl;
+        else
+            out << date - print_list[i]->getdate();
+    }
+    out.close();
+    return true;
+}
 
 
 /* TODO <=== Helper Function for Generating Reports ===> */
@@ -184,32 +237,91 @@ bool CentralIO::ReportWeekly(int week, int key){
     _WeeklyQueueing(week, key);
     return true;
 }
+
+
+
+
 bool CentralIO::ReportMonthly(int month, int key){
     _Monthly(month, key);
     return true;
 }
 
+
+/*
+ * INPUT
+ * OUTPUT
+ * 1. Whether the report generation has succeed or not
+ * EFFECT
+ *      This function will take all information to be printed 
+ *      from *assignment->all_locations->cured_list*. And call 
+ *      CentralIO::sortByKey() to sort the vector w.r.t the order 
+ *      given.
+ */
 bool CentralIO::_WeeklyCured(int week, int key){
-    cout << "\nWeekly Cured, " << key;
+    vector<FibNode*> print_list;
+    
+    // copy the list to be printed 
+    print_list.assign(assignment->all_locations->cured_list[week].begin(),
+    assignment->all_locations->cured_list[week].end());
+    // sort the list
+    sortByKey(print_list, key);
+    // generate report using print_list (sorted)
+    if (Write2File(print_list, week * 7, key) == NULL) exit(3);
+
+    cout << "\nWeek " << week << "'s report (Cured patients ordered W.R.T key "<< key;
+    cout << ") has been generated" << endl;
     return true;
 }
 bool CentralIO::_WeeklyAssigned(int week, int key){
-    cout << "\nWeekly Assigned, " << key;
+    vector<FibNode*> print_list;
+
+    // print_list 
+    // TODO This needs further Verification
+    print_list;
+
+    
+    cout << "\nWeek " << week << "'s report (Assigned patients ordered W.R.T key "<< key;
+    cout << ") has been generated" << endl;
+    return true;
+
     return true;
 }
 bool CentralIO::_WeeklyQueueing(int week, int key){
-    cout << "\nWeeklyQueueing, " << key;
+    vector<FibNode*> print_list;
+
+    print_list.assign(heap->fiblist.begin(), heap->fiblist.end());
+
+    sortByKey(print_list, key);
+
+    if (Write2File(print_list, week * 7, key) == NULL) exit(3);
+
+    cout << "\nWeek " << week << "'s report (Queueing patients ordered W.R.T key "<< key;
+    cout << ") has been generated" << endl;
     return true;
 }
 bool CentralIO::_Monthly(int month, int key){
-    cout << "\n Monthly, " << key;
+    string filename = "MonthlyStat_";
+    filename += to_string(month) + ".md";
+
+    ofstream out("output/"+filename);
+    out << "# Central Queueing System Monthly Statistic Report | 2021, Month " << month << endl;
+    out << "### Number of Treated People  " << endl;
+    int num_treated = 0;
+    for (int i = 0; i < int(assignment->all_locations->cured_list.size()); i++) {
+        num_treated += assignment->all_locations->cured_list
+    }
+    out << assignment->all_locations->cured_list.size() <<"  "<< endl;
+
+    out << "### Number "
+    out.close()
+    cout << "\nMonth " << month << "'s report has been generated." << endl;
     return true;
 }
 
 /*
  * OUTPUT
  * 1. 0 (a >= b)
- * 2. 1 (a < b)
+ * 2. 1 (a <  b)
  */
 bool CentralIO::compare(FibNode* a, FibNode* b, int key)
 {
@@ -238,7 +350,6 @@ void CentralIO::sortByKey(vector<FibNode*>&fiblist,int key)
                 fiblist[j]=fiblist[j+1];
                 fiblist[j+1]=temp;
             }
-            
         }
     }
 }

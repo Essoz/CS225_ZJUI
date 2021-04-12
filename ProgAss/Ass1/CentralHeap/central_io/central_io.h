@@ -14,6 +14,7 @@
 #include <string>
 #include <queue>
 #include <vector>
+#include <fstream>
 #include "../fibheap_f.h"
 #include "../assqueue/assignment.h"
 using namespace std;
@@ -27,7 +28,7 @@ class CentralIO{
         bool ReportMonthly(int month, int key);
         bool compare(FibNode* a, FibNode* b, int key);
         void sortByKey(vector<FibNode*>&fiblist,int key);       //TODO sortbykey
-        bool Write2File(string path);
+        bool Write2File(vector<FibNode*>&print_list, int date, int type);
 
     private:
         FibHeap* heap;   // This variable set the heap on which this IO instance operates.

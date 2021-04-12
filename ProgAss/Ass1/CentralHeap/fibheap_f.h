@@ -326,7 +326,7 @@ void FibHeap::PrintTree(){
         return;
     }
     
-    cout << "\n=========================\n"; 
+    // cout << "\n=========================\n"; 
 	
     if (min_ptr == NULL){
         cout << "The Heap Structure is Empty" <<endl;
@@ -336,10 +336,10 @@ void FibHeap::PrintTree(){
     FibNode* root_pt = min_ptr;
     int i = 0;
     do{
-        cout << "Heap " << i++ << " :: " <<root_pt->key;
+        // cout << "Heap " << i++ << " :: " <<root_pt->key;
         fiblist.insert(fiblist.end(),root_pt);
         _PrintTree(root_pt->child);
-        cout << "\n------------\n";
+        // cout << "\n------------\n";
         // move to the next heap
         root_pt = root_pt->right;
     }while(root_pt != min_ptr);
@@ -350,14 +350,14 @@ void FibHeap::PrintTree(){
 void FibHeap::_PrintTree(FibNode* node){
     if (node == NULL){return;}
     FibNode* node_pt = node;
-    cout << "[";
+    // cout << "[";
     do{
-        cout<< node_pt->key <<", ";
+        // cout<< node_pt->key <<", ";
         fiblist.insert(fiblist.end(),node_pt);
         _PrintTree(node_pt->child);
         node_pt = node_pt->right;
     }while(node_pt != node);
-    cout << "]";
+    // cout << "]";
 }
 
 /* <=== Computing Assignment 1 Helper Function ===>*/
@@ -367,26 +367,26 @@ void FibHeap::_PrintTree(FibNode* node){
  * Output
  * 1. key in type int
  */
-int String2Int(string key){
-    int key_int = 0;
+// int String2Int(string key){
+//     int key_int = 0;
     
-    for (int i = int(key.size()) - 1; i >= 0; i--){
-        key_int += key[i] * pow(10, key.size() - i) ; // an explicit type cast may be needed here
-    }
+//     for (int i = int(key.size()) - 1; i >= 0; i--){
+//         key_int += key[i] * pow(10, key.size() - i) ; // an explicit type cast may be needed here
+//     }
 
-    return key_int;
-};
+//     return key_int;
+// };
 
 
 /* Patient Create 
  * Input
  * 1. a vector list containing all necessary information for creating a registration in the heap
  * Output
- * NONE
+ * 1. NONE
  * Effect
  * Nodes will be added into the central heap (or withdrawn, or update), respectively
  */
-void FibNode::PatientCreate(vector<string>&infolist){
+void FibNode::PatientCreate(vector<string>&infolist) {
     setid(stoi(infolist[0]));
     setrisk(Risk (stoi(infolist[1])) );
     setpro(Profession (stoi(infolist[2])) );

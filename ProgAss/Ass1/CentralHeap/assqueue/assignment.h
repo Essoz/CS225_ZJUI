@@ -53,6 +53,7 @@ class Location{
 class AllLocations{
     public:
         friend class Assignment;
+        friend class CentralIO;
         AllLocations(vector<Location*>&location_list);
         int getNumLocs();
         Location* getLocation(int id);
