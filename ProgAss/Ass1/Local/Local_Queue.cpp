@@ -71,19 +71,19 @@ void Queue::update(int id, int up_type, int info)
 	switch (up_type)
 	{
 	case 0:		// Risk
-		if (info > patient->getrisk())
+		if (info < patient->getrisk())
 		{
 			patient->setrisk(Risk(info));
 		}
 		break;
 	case 1:		// Profession
-		if (info > patient->getpro())
+		if (info < patient->getpro())
 		{
 		patient->setpro(Profession(info));
 		}
 		break;
 	case 2:		// Age
-		if (info > patient->getage())
+		if (info < patient->getage())
 		{
 			patient->setage(Age(info));
 		}
