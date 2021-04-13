@@ -48,7 +48,7 @@ void Queue::new_patient(Risk risk, Profession prof, Age a, Information* info, in
 	int date = cur_date;
 	int reg_id = regis_id;	// set the registry id
 	Patient* patient;	// Create a new patient instance in the MEM heap
-	patient = new Patient(id, risk, prof, a, info, reg_id, year, date, 0, ddl);
+	patient = new Patient(id, risk, prof, a, info, reg_id, year, date, ddl);
 	// Add the patient into the local queue:
 	l_queue->push(patient);
 	// Add the patient into the hash table:
@@ -100,11 +100,20 @@ void Queue::update(int id, int up_type, int info)
 			patient->setdate(info);
 		}
 		break;
-	case 5:		// Withdraw
-		if (info > patient->getwithdraw())
-		{
-			patient->setwithdraw(info);
+	case 5:		// Withdraw_status
+		if (0 == patient->getwithdraw() && 0 == patient->getre_reg() && info == 1)
+		{	// Withdraw
+			patient->setwithdraw(1);
+		} else if (0 < patient->getwithdraw() && 0 == patient->getre_reg() && info == 2) {
+			// Re-register
+			if (0 == patient->getactivated())
+			{	// The only update today:
+				patient->setwithdraw(0);
+			}
+			patient->setre_reg(1);
 		}
+		// Increase the activated:
+		patient->setactivated(patient->getactivated() + 1);
 		break;
 	case 6:		// Letter_ddl
 		patient->setddl(info);

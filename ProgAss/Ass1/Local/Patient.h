@@ -58,15 +58,17 @@ private:
     int registry_id;    // The id of the local registry
     int year;           // The registeration year
     int date;        // The date for registeration, the range is 1-365
-    int withdraw;    // If the patient has withdrew before
-    // 0 for never withdraw, 1 for withdraw, 2 for withdraw and re-regiseter
+    // The three variables pertain to the status of withdraw. Non-zero value means satisfication.
+    int activated;   // Indicate that the patient has been in the queue for x times because of the change of withdraw status
+    int withdraw;    // Indicate that the patient has withdrew before
+    int re_reg;      // Indicate that the patient has registered after withdraw
     int letter_ddl; // The deadline of the priority letter, should be -1 if no letter is handed in
     int priority;   // The priority of treatment
     Appointment* appointment;
 
 public:
     Patient();
-    Patient(int id, Risk risk, Profession professionLevel, Age a, Information* info, int regis_id, int year, int date, int withdraw, int ddl);      // Constructor for new patient
+    Patient(int id, Risk risk, Profession professionLevel, Age a, Information* info, int regis_id, int year, int date, int ddl);      // Constructor for new patient
 
     /*set functions*/
     void setid(int id) {
@@ -90,9 +92,17 @@ public:
     void setdate(int D) {
         date = D;
     }
+    void setactivated(int A)
+    {
+        activated = A;
+    }
     void setwithdraw(int W)
     {
         withdraw = W;
+    }
+    void setre_reg(int R)
+    {
+        re_reg = R;
     }
     void setddl(int ddl)
     {
@@ -144,9 +154,17 @@ public:
     int getdate() {
         return date;
     }
+    int getactivated()
+    {
+        return activated;
+    }
     int getwithdraw()
     {
         return withdraw;
+    }
+    int getre_reg()
+    {
+        return re_reg;
     }
     int getddl()
     {
@@ -173,7 +191,7 @@ public:
     int calculate_prio();     // Calculate the priority
 };
 
-Patient::Patient(int id, Risk risk, Profession professionLevel, Age a, Information* info, int regis_id, int year, int date, int withdraw, int ddl)
+Patient::Patient(int id, Risk risk, Profession professionLevel, Age a, Information* info, int regis_id, int year, int date, int ddl)
 {
     setid(id);
     setrisk(risk);
@@ -183,7 +201,9 @@ Patient::Patient(int id, Risk risk, Profession professionLevel, Age a, Informati
     setreg_id(regis_id);
     setyear(year);
     setdate(date);
-    setwithdraw(withdraw);
+    setactivated(1);
+    setwithdraw(0);
+    setre_reg(0);
     setddl(ddl);
     // The priority needs to be calculated first:
     int prio = calculate_prio();
