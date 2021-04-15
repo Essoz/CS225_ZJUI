@@ -65,13 +65,13 @@ void FibHeap::Insert(FibNode* fib_node){
 //  4. execute consolidate
  */
 void FibHeap::DecreaseKey(FibNode* handle, int new_key){
-    int num = GetNum();
+    // int num = GetNum();
     handle->key = new_key;
     if(handle->parent && new_key < handle->parent->key){
         Cut(handle);
     }
     // Consolidate();
-    numitems = num; //since insertions within Cut modifies Cut 
+    // numitems = num; //since insertions within Cut modifies Cut 
 }
 /* FibHeap - Cut
  * Input
@@ -98,7 +98,7 @@ void FibHeap::Cut(FibNode* handle){
         handle->left->right = handle->right;
         handle->right->left = handle->left;
     }
-
+    handle->parent = NULL;
     Insert(handle);
     numitems--;
 

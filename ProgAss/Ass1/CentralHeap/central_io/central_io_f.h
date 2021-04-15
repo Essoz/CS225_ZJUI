@@ -92,7 +92,9 @@ bool CentralIO::Read2Heap(){
                     // all above branches leave the case where the node is already assigned and not in any heaps
                     old = heap->assigned_table_find(newnode->getid());
                     Appointment* app = old->getAppointment();       // TODO, rewrite all function related to APPOINTMENT needed here
-                    app->loc->removeAppointment(app);
+                    // if the patient has already been assigned remove the appointment
+                    if (app) app->loc->removeAppointment(app);
+                    heap->assigned_table_remove(old->getid());
                     delete app;
                 }
 
@@ -103,7 +105,7 @@ bool CentralIO::Read2Heap(){
                 // insert the new one in case of any update
                 // heap->withdraw_table_insert(newnode);
                 }
-                
+                 
                 if (old) delete old; 
                 // withdraw == 1 (this indicates a withdraw has been prompted, we have to search this node in the hashtable and move the node from the heap to the withdrawn set, set withdraw = 2) 
                 // put this node into the withdrawn hashset 

@@ -179,9 +179,9 @@ void AllLocations::maintainCuredList(int date){
 int Location::assignedInsert(int date, FibNode* new_node) {
     if (checkAvailability(date)) {
         assigned_queue.at(date).push_back(new_node);
-        return true;
+        // return true;
     } else {exit(3);} 
-    return (assigned_queue.at(date).end() - assigned_queue.at(date).begin());
+    return (assigned_queue[date].size() - 1);
 }
 int Location::getID() {
     return id;

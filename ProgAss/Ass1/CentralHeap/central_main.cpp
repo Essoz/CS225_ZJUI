@@ -1,4 +1,4 @@
-#define DEBUG true
+#define DEBUG false
 
 #include "alist.cpp"
 #include "central_io/central_io_f.h"
@@ -25,7 +25,8 @@ int main(){
     
     // cout << "Please Provide a path to the file" << endl;
     // cin >> path;
-    path = "../Local/Submit.csv";
+    if (DEBUG) path ="../Local/test_withdraw.csv";
+    else path = "../Local/Submit.csv";
     /* <======= TEST CASES ======> */
     // testcases (location)
     vector<string> time_slot_0 = {"8:00", "9:00","10:00","14:00", "16:00"};
@@ -81,6 +82,7 @@ int main(){
     
     cout << "Welcome to the Central Queueing System (beta version). " << endl;
 
+    cin.get();
     while (true) {
         
         
@@ -88,6 +90,9 @@ int main(){
              << to_string((date+1) / 30 + 1) << ", Date " << to_string((date+1) % 30);
         if (timer / 2 * 2 == timer) cout << ", Morning\n";
         else cout << ", Afternoon\n";
+
+        cout << "Press enter to continue...\n";
+        cin.get();
 
         date = timer / 2; 
         //  time counter 
@@ -126,6 +131,7 @@ int main(){
 
 
         // do update every date
+        if (timer % 2 == 1)
         Locs->updateLocs(date);
         // if counter % 7 == 0, generate reports
         if (timer % 14 == 0){
