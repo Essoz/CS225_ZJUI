@@ -40,7 +40,7 @@ while (Order!=0)
 	test->getio()->read_update(Filename2, test);
 	test->setl_queue(test->report(test->getl_queue()));
 	cout<<"The file sent to the center has been packed into file named Submit.csv"<<endl<<endl;
-	cout<<"If you want to finish the Local registry program, enter 0,else enter other number"<<endl<<endl<<endl;
+	cout<<"If you want to finish the Local registry program, enter 0,else enter other number"<<endl<<endl;
 	cin>>Order;
 }
 cout<<"Down for the local registry system"<<endl;
