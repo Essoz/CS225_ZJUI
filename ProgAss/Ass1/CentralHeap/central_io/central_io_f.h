@@ -83,7 +83,10 @@ bool CentralIO::Read2Heap(){
 
                 if (heap->hash_intable_check(newnode->getid())){
                     old = heap->hash_table_remove(newnode->getid());
+
+                    // heap->debugPrintTree();
                     heap->Delete(old);
+                    // heap->debugPrintTree();
                     
                 } else if (heap->highrisk_intable_check(newnode->getid())){
                     old = heap->highrisk_table_remove(newnode->getid());

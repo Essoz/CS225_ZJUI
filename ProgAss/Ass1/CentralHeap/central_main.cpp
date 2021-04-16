@@ -85,6 +85,8 @@ int main(){
     cin.get();
     while (true) {
         
+        date = timer / 2; 
+        //  time counter 
         
         cout << "The system time is now at Year 2021, Month " 
              << to_string((date+1) / 30 + 1) << ", Date " << to_string((date+1) % 30);
@@ -94,8 +96,6 @@ int main(){
         cout << "Press enter to continue...\n";
         cin.get();
 
-        date = timer / 2; 
-        //  time counter 
         timer += 1; 
         
         // read file from file
@@ -112,6 +112,7 @@ int main(){
         // the wrapper function above 
         
         // start processing
+        central_queue->debugPrintTree();
 
         // first assign nodes in the heap
         if (AssignRegistration.checkAvailability(date)) {
@@ -128,6 +129,8 @@ int main(){
                 // TODO table management
             }
         }
+
+        central_queue->debugPrintTree();
 
 
         // do update every date

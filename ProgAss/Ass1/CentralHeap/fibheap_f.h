@@ -67,8 +67,12 @@ void FibHeap::Insert(FibNode* fib_node){
 void FibHeap::DecreaseKey(FibNode* handle, int new_key){
     // int num = GetNum();
     handle->key = new_key;
-    if(handle->parent && new_key < handle->parent->key){
+    if (handle->parent && new_key < handle->parent->key){
         Cut(handle);
+    } else if (handle->parent == NULL) {
+        if (new_key < min_ptr->key) {
+            min_ptr = handle;
+        }
     }
     // Consolidate();
     // numitems = num; //since insertions within Cut modifies Cut 
@@ -120,8 +124,8 @@ void FibHeap::Cut(FibNode* handle){
  * Effect
  */
 void FibHeap::Consolidate(){
-    int D_n = log(GetNum())/log(2);
-    D_n++;
+    int D_n = log(GetNum())/log(2) + 2;
+    // D_n++;
     int num = GetNum();
     // initiate the auxillary array
     FibNode** arr = new FibNode* [D_n];
@@ -549,4 +553,41 @@ void FibHeap::assigned_table_insert(FibNode* node){
     assigned_table->insertion(node);
 };
 
+
+/* This Function is for Testing */
+void FibHeap::debugPrintTree(){
+    cout << "\n=========================\n"; 
+	
+    if (min_ptr == NULL){
+        cout << "The Heap Structure is Empty" <<endl;
+        return;
+    }
+    
+    FibNode* root_pt = min_ptr;
+    int i = 0;
+    do{
+        cout << "Heap " << i++ << " :: " <<root_pt->getid();
+        debug_PrintTree(root_pt->child);
+        cout << "\n------------\n";
+        // move to the next heap
+        root_pt = root_pt->right;
+    }while(root_pt != min_ptr);
+    
+}
+
+/* Recursive Printing*/
+void FibHeap::debug_PrintTree(FibNode* node){
+    if (node == NULL){return;}
+    FibNode* node_pt = node;
+    cout << "[";
+    do{
+        cout<< node_pt->getid() <<", ";
+        debug_PrintTree(node_pt->child);
+        node_pt = node_pt->right;
+    }while(node_pt != node);
+    cout << "]";
+}
+
 #endif /* fibheap_f_h */
+
+

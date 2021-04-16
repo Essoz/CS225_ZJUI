@@ -68,9 +68,12 @@ class FibHeap
         void ddl_insert(FibNode* node);
         bool ddl_incheck(FibNode* node);
         FibNode* ddl_delete(FibNode* node);
+
+        void debugPrintTree();
         
     private:
         void _PrintTree(FibNode* node);
+        void debug_PrintTree(FibNode* node);
         FibNode* min_ptr;
         vector<FibNode*> fiblist;
         int numitems;
