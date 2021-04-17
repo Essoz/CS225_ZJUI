@@ -70,9 +70,29 @@ for (int i = 1; i < fib_heap_1->GetNum() - 1; i++){
  
     /* PASSED <==== A Test for DecreaseKey ====> */	
     fib_heap_1->DecreaseKey(node_list_1[2], -10); //decrease -4 to -10
+    fib_heap_1->DecreaseKey(node_list_1[6], -20);
+    
+    fib_heap_1->DecreaseKey(node_list_1[1], -15);
+
+
+
+    cout << "FUCKTEST\n";
     fib_heap_1->PrintTree();
+
+    fib_heap_1->Delete(node_list_1[1]);
+    fib_heap_1->PrintTree();
+
+    fib_heap_1->Delete(node_list_1[2]);
+    fib_heap_1->PrintTree();
+    // fib_heap_1->Delete(node_list_1[2]);
+    // fib_heap_1->PrintTree();
+    // fib_heap_1->Delete(node_list_1[6]);
+    // fib_heap_1->PrintTree();
+    
+    
     assert(fib_heap_1->GetNum() == 17);
-    assert(fib_heap_1->Minimum()->degree == 3);
+    
+    // assert(fib_heap_1->Minimum()->degree == 3);
     assert(node_list_1[12]->degree == 3);   //examine the degree of node -7
     assert(fib_heap_1->Minimum()->key == -10);
 
