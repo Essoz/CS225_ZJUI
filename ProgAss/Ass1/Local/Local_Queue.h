@@ -1,6 +1,6 @@
 #ifndef Local_Queue_h
 #define Local_Queue_h
-#include "../Patient.h"
+#include "Patient.h"
 #include "Local_hash.h"
 #include "Local_IO.h"
 #include <queue>

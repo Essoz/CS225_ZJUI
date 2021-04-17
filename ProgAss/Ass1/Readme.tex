@@ -1,0 +1,41 @@
+\documentclass{article}
+\usepackage{indentfirst}
+\setlength{\parindent}{2em}
+\begin{document}
+\section*{Programming Assignment 1 - Group 10}
+\subsection*{Introduction}
+    This program is divided into two parts, the local registry and central treatment department. Each part will have its
+    own .exe file. To run this program, one needs to open two terminals. The detailed explanation will be described below 
+    the "Hierarchy" part.
+\subsection*{Hierarchy}
+\subsubsection*{1.Local}
+\indent(i) Local Queue\\
+\indent(ii) Local IO\\
+\indent(iii) Local Hashtable\\
+\indent(iv) Local Patient\\
+\indent(v) Local Main\\
+\indent(vi) Makefile and other input and output files for testing
+\subsubsection*{2.CentralHeap}
+\indent(i) Central FibHeap\\
+\indent(ii) Central IO\\
+\indent(iii) Central Hashtable\\
+\indent(iv) Central Patient\\
+\indent(v) Assignment Queue\\
+\indent(vi) Appointment Queue\\
+\indent(vii) AList\\
+\indent(viii) Central Main\\
+\indent(ix) Makefile and other input and output files for testing
+\subsection*{How to run this program?}
+    \begin{itemize}
+        \item As described above, open two terminals, one at local directory and one at central directory.
+        \item Run the test.exe in the Local part first, which will give you a Submit.csv file for output. Then, 
+              the program will pause, then you need to run the central.exe in Central part.
+        \item After the previous step, half a day has been passed. You need to repeat the last step over and over again 
+              to simulate the whole process.
+        \item When a week has passed, the central part will inform you to produce a weekly report, follow the instruction
+              displayed on the terminal.
+        \item When a month has passed, the central part will inform you to produce a monthly report, follow the instruction
+              displayed on the terminal.
+    \end{itemize}
+    The whole procedure may be boring, but we want to simulate the time gap between each report from local registry to center.
+\end{document}

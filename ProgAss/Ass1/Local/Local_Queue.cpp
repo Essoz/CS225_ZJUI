@@ -48,7 +48,7 @@ void Queue::new_patient(Risk risk, Profession prof, Age a, Information* info, in
 	int date = cur_date;
 	int reg_id = regis_id;	// set the registry id
 	Patient* patient;	// Create a new patient instance in the MEM heap
-	patient = new Patient(id, risk, prof, a, info, reg_id, year, date, 0, ddl);
+	patient = new Patient(id, risk, prof, a, info, reg_id, year, date, ddl);
 	// Add the patient into the local queue:
 	l_queue->push(patient);
 	// Add the patient into the hash table:
@@ -71,19 +71,19 @@ void Queue::update(int id, int up_type, int info)
 	switch (up_type)
 	{
 	case 0:		// Risk
-		if (info > patient->getrisk())
+		if (info < patient->getrisk())
 		{
 			patient->setrisk(Risk(info));
 		}
 		break;
 	case 1:		// Profession
-		if (info > patient->getpro())
+		if (info < patient->getpro())
 		{
 		patient->setpro(Profession(info));
 		}
 		break;
 	case 2:		// Age
-		if (info > patient->getage())
+		if (info < patient->getage())
 		{
 			patient->setage(Age(info));
 		}
@@ -100,11 +100,23 @@ void Queue::update(int id, int up_type, int info)
 			patient->setdate(info);
 		}
 		break;
-	case 5:		// Withdraw
-		if (info > patient->getwithdraw())
-		{
-			patient->setwithdraw(info);
+	case 5:		// Withdraw_status
+		if (0 == patient->getwithdraw() && 0 == patient->getre_reg() && info == 1)
+		{	// Withdraw
+			patient->setwithdraw(1);
+		} else if (0 < patient->getwithdraw() && 0 == patient->getre_reg() && info == 2) {
+			// Re-register
+			if (0 == patient->getactivated())
+			{	// The only update today:
+				patient->setwithdraw(0);
+			}
+			patient->setre_reg(1);
+		} else {
+			// The input withdraw number doesn't match any condition, so do nothing:
+			break;
 		}
+		// After modifying the status, increase the "activated":
+		patient->setactivated(patient->getactivated() + 1);
 		break;
 	case 6:		// Letter_ddl
 		patient->setddl(info);
@@ -115,7 +127,7 @@ void Queue::update(int id, int up_type, int info)
 		break;
 	}
 	// Calculate the updated priority number:
-	patient->calculate_prio();
+	patient->setpriority(patient->calculate_prio());
 	// Remember, do not forget to add this updated patient into the queue,
 	// even it already exists in the queue:
 	l_queue->push(patient);
@@ -168,7 +180,6 @@ queue<Patient*>* Queue::report(queue<Patient*>* l_queue)
 	if (0 == counter % 2)
 	{
 		cur_date++;
-		std::cout << cur_date << std::endl;
 		// Increase year when date reaches 365:
 		if (cur_date >= 365)
 		{

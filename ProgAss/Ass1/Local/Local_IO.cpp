@@ -55,8 +55,73 @@ queue<Patient*>* IO::write_all(queue<Patient*>* queue)
 		fprintf(update, "%d,%d,%d,%d,",
 			queue->front()->getage(), queue->front()->getreg_id(),
 			queue->front()->getyear(), queue->front()->getdate());
-		fprintf(update, "%d,%d,%d,",
-			queue->front()->getwithdraw(), queue->front()->getddl(),queue->front()->getpriority());
+		// We need to deal with the withdraw status seperately:
+		if (3 == queue->front()->getactivated() && 0 < queue->front()->getwithdraw() && 0 < queue->front()->getre_reg())
+		{	// Need to pop three times:
+			fprintf(update, "0,");
+			queue->front()->setactivated(queue->front()->getactivated() - 1);
+		}
+		else if (2 == queue->front()->getactivated()) 
+		{	// Need to pop two times:
+			if (0 < queue->front()->getwithdraw() && 0 < queue->front()->getre_reg())
+			{	// Withdraw + Re_reg:
+				fprintf(update, "1,");
+				queue->front()->setwithdraw(0);
+			}
+			else if (0 < queue->front()->getwithdraw() && 0 == queue->front()->getre_reg())
+			{	// Reg + Withdraw:
+				fprintf(update, "0,");
+			}
+			else
+			{
+				std::cout << "Invalid Logic!" << std::endl;
+				exit(1);
+			}
+			queue->front()->setactivated(queue->front()->getactivated() - 1);
+		}
+		else if (1 == queue->front()->getactivated())
+		{	// Need to pop one time:
+			if (0 == queue->front()->getwithdraw() && 0 == queue->front()->getre_reg())
+			{	// Only for Reg:
+				fprintf(update, "0,");
+			}
+			else if (0 < queue->front()->getwithdraw() && 0 == queue->front()->getre_reg())
+			{	// Only for Withdraw:
+				fprintf(update, "1,");
+			}
+			else if (0 == queue->front()->getwithdraw() && 0 < queue->front()->getre_reg())
+			{	// Only for Re_reg:
+				fprintf(update, "2,");
+			}
+			else
+			{
+				std::cout << "Invalid Logic!" << std::endl;
+				exit(1);
+			}
+			queue->front()->setactivated(queue->front()->getactivated() - 1);
+		}
+		else
+		{	// We do not have updates w.r.t withdraw status:
+			if (0 == queue->front()->getwithdraw() && 0 == queue->front()->getre_reg())
+			{	// Reg:
+				fprintf(update, "0,");
+			}
+			else if (0 < queue->front()->getwithdraw() && 0 == queue->front()->getre_reg())
+			{	// Withdraw:
+				fprintf(update, "1,");
+			}
+			else if (0 == queue->front()->getwithdraw() && 0 < queue->front()->getre_reg())
+			{	// Re_reg:
+				fprintf(update, "2,");
+			}
+			else
+			{
+				std::cout << "Invalid Logic!" << std::endl;
+				exit(1);
+			}
+		}
+		
+		fprintf(update, "%d,%d,", queue->front()->getddl(),queue->front()->getpriority());
 		fprintf(update, "%s,%s,%s,%s\n", 
 			queue->front()->getinfo()->name.c_str(), queue->front()->getinfo()->email.c_str(), 
 			queue->front()->getinfo()->phone.c_str(), queue->front()->getinfo()->birthday.c_str());
