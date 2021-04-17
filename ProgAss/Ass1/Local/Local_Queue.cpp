@@ -111,8 +111,11 @@ void Queue::update(int id, int up_type, int info)
 				patient->setwithdraw(0);
 			}
 			patient->setre_reg(1);
+		} else {
+			// The input withdraw number doesn't match any condition, so do nothing:
+			break;
 		}
-		// Increase the activated:
+		// After modifying the status, increase the "activated":
 		patient->setactivated(patient->getactivated() + 1);
 		break;
 	case 6:		// Letter_ddl
@@ -177,7 +180,6 @@ queue<Patient*>* Queue::report(queue<Patient*>* l_queue)
 	if (0 == counter % 2)
 	{
 		cur_date++;
-		std::cout << cur_date << std::endl;
 		// Increase year when date reaches 365:
 		if (cur_date >= 365)
 		{
