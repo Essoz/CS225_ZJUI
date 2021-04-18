@@ -107,7 +107,7 @@ FibNode* Hash_Chaining::retrieval(int id)
 }
 
 // Return a list containing all the patients' pointer:
-vector<FibNode*>* Hash_Chaining::list_patient()
+vector<FibNode*>& Hash_Chaining::list_patient()
 {
     // Creat a vector to store the pointers:
     vector<FibNode*>* list = new vector<FibNode*>;
@@ -121,5 +121,5 @@ vector<FibNode*>* Hash_Chaining::list_patient()
             list->push_back(hashtable->at(i)->at(j));
         }
     }
-    return list;
+    return *list;
 }

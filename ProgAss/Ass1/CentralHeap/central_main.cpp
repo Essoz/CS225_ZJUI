@@ -27,6 +27,10 @@ int main(){
     // cin >> path;
     if (DEBUG) path ="../Local/test_withdraw.csv";
     else path = "../Local/Submit.csv";
+    FibHeap* central_queue = new FibHeap;
+    FibHeap* highrisk_queue = new FibHeap;
+    central_queue->highrisk_queue = highrisk_queue;
+
     /* <======= TEST CASES ======> */
     // testcases (location)
     vector<string> time_slot_0 = {"8:00", "9:00","10:00","14:00", "16:00"};
@@ -35,11 +39,11 @@ int main(){
     vector<string> time_slot_3 = {"9:00", "13:00","17:00",};
     vector<string> time_slot_4 = {"1:00", "2:00", "2:30", "2:25", "liar CS225"};
 
-    Location* Location_0 = new Location(0, time_slot_0);
-    Location* Location_1 = new Location(1, time_slot_1);
-    Location* Location_2 = new Location(2, time_slot_2);
-    Location* Location_3 = new Location(3, time_slot_3);
-    Location* Location_4 = new Location(4, time_slot_4);
+    Location* Location_0 = new Location(0, time_slot_0, central_queue);
+    Location* Location_1 = new Location(1, time_slot_1, central_queue);
+    Location* Location_2 = new Location(2, time_slot_2, central_queue);
+    Location* Location_3 = new Location(3, time_slot_3, central_queue);
+    Location* Location_4 = new Location(4, time_slot_4, central_queue);
 
     vector<Location*> location_list;
     location_list.push_back(Location_0);
@@ -71,9 +75,6 @@ int main(){
     registry_list.push_back(Registry_4);
     registry_list.push_back(Registry_5);
 
-    FibHeap* central_queue = new FibHeap;
-    FibHeap* highrisk_queue = new FibHeap;
-    central_queue->highrisk_queue = highrisk_queue;
     AllLocations* Locs = new AllLocations(location_list);
     AllRegistries* Regs = new AllRegistries(registry_list);
     Assignment AssignRegistration(Locs, Regs, central_queue);
@@ -118,29 +119,32 @@ int main(){
         if (AssignRegistration.checkAvailability(date)) {
             while (central_queue->GetNum() && AssignRegistration.Assign((central_queue->Minimum()), date)) {
                 // keep assign until no further registrations can be assigned
-                central_queue->ExtractMin();
+                central_queue->hash_table_remove(central_queue->ExtractMin()->getid());
                 // TODO table management
             }
         }
         if (AssignRegistration.checkAvailability(date)) {
             while (central_queue->highrisk_queue->GetNum() && AssignRegistration.Assign((central_queue->highrisk_queue->Minimum()), date)) {
                 // keep assign until no further registrations can be assigned
-                central_queue->highrisk_queue->ExtractMin();
+                central_queue->highrisk_table_remove(highrisk_queue->ExtractMin()->getid());
                 // TODO table management
             }
         }
-
-        central_queue->debugPrintTree();
+        
+        // central_queue->debugPrintTree();
 
 
         // do update every date
-        if (timer % 2 == 1)
-        Locs->updateLocs(date);
+        if (timer % 2 == 1){
+            Locs->updateLocs(date);
+        }
         // if counter % 7 == 0, generate reports
-        if (timer % 14 == 0){
+        if (timer != 1 && timer % 14 == 1){
+            central_queue->PrintTree();
+            highrisk_queue->PrintTree();
             central_IO.ReportWeekly(timer / 14, order);
         }
-        if (timer % 60 == 0){
+        if (timer != 1 && timer % 60 == 1){
             central_IO.ReportMonthly(timer / 60, order);
         }
         // if counter % 30 == 0, generate weekly reports
