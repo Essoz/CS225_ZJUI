@@ -8,6 +8,9 @@
 #ifndef graph_h
 #define graph_h
 
+enum colortype{
+    null,black,white
+};
 template<class T> class vertexlist;
 
 template<class T> class edgelist;
@@ -30,6 +33,7 @@ public:
     vertex(T item = 0, vertex<T> *pt_next = 0, vertex<T> *pt_prev = 0);
     int numoutedges(void);
     T getitem(void);
+    colortype color=null;
     vertex<T> * getnext(void);
     vertex<T> * getprevious(void);
     elist<T> * getedges(void);
@@ -37,7 +41,6 @@ public:
     void setnext(vertex<T> * pt_next);
     void setprevious(vertex<T> * pt_prev);
     void setedges(elist<T> * pt_edges);
-private:
     T vertexid;
     vertex<T> * next;
     vertex<T> * previous;
@@ -48,6 +51,8 @@ private:
 template<class T> class vertexlist
 {
 public:
+    vertex<T> * dummy;
+    int numvertices;
     vertexlist(void);
     int getlength(void);
     int countedges(void);
@@ -57,11 +62,9 @@ public:
     bool remove(T item);
     void addedge(T first, T second);
     void removeedge(T first, T second);
+    vertex<T>* retrieve(T item);
     edgelist<T> * outgoingedges(T item);
     void prettyprint(void); // only for testing
-private:
-    vertex<T> * dummy;
-    int numvertices;
 };
 /*class neighbour:
 *it is the neighbor vertex from one vertex
@@ -101,7 +104,6 @@ public:
     bool contains(T item);
     void remove(T item);
     void addall(T item, edgelist<T> * pt);
-private:
     neighbour<T> * first;
     int length;
 };
@@ -138,7 +140,6 @@ public:
     int getnumedges(void);
     void add(T item1, T item2);
     void prettyprint(void); // only for testing
-private:
     edge<T> ** reprarray;   //store the pointer to class edge type
     int numedges;
 };
@@ -175,7 +176,7 @@ public:
     void delete_vertex(T item);
     
     edgelist<T> * incident_edges(T item);
-    int is_perfect_match(void);
+    bool is_perfect_match(void);
 private:
     vertexlist<T> * vertices;
 };
