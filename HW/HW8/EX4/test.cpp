@@ -51,7 +51,11 @@ int main()
 
     //write your test here//
     cout<<"test result:"<<endl;
-
+    (*mygraph).insert_edge(4,3);
+    (*mygraph).insert_edge(4,1);
+    (*mygraph).insert_vertex(7);
+    (*mygraph).delete_vertex(7);
+    (*mygraph).prettyprint();
     if(mygraph->is_perfect_match()){cout<<"can be done to a pigraph."<<endl;}
     return 0;
 }
