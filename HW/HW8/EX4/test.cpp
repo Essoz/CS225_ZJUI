@@ -48,6 +48,10 @@ int main()
     (*mygraph).deleteedge(2,8);
     (*mygraph).deleteedge(4,7);
     (*mygraph).prettyprint();
+
     //write your test here//
-    
+    cout<<"test result:"<<endl;
+
+    if(mygraph->is_perfect_match()){cout<<"can be done to a pigraph."<<endl;}
+    return 0;
 }

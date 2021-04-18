@@ -9,7 +9,7 @@
 #include <iostream>
 #include <cstdlib>
 #include "graph.h"
-using std::cout;
+using namespace std;
 
 /* The structure of a vertex is analogous to a node in a doubly linked list. In addition we keep an "edgelist" with each vertex, i.e. the list of neighbour vertices. */
 template<class T> vertex<T>::vertex(T item, vertex<T> *pt_next, vertex<T> *pt_prev)
@@ -123,7 +123,20 @@ template<class T> void vertexlist<T>::addvertex(T item)
         append(item);
     return;
 }
-
+template<class T> vertex<T>* vertexlist<T>:: retrieve(T item){
+    vertex<T> * pt = (*dummy).getnext();
+    for (int i = 0; i < numvertices; i++)   //for all vertex, check iteratively
+    {
+        if ((*pt).getitem() == item)
+        {
+            return pt;
+        }
+        else
+            pt = (*pt).getnext();
+    }
+    cout<<"can't find this item in the vertex list"<<endl;
+    return NULL;
+}
 /* To check if a vertex is already in the list the list is scanned until the element is found.
 *called by addvertex
  */
@@ -530,40 +543,86 @@ template<class T> void graph<T>::prettyprint(void)
 
 /*insertion and deletion of vertices and edges*/
 template<class T> void graph<T>::insert_edge(T origin, T destination)
-{
-	/*Implement your code here*/
+{   
+    (*vertices).addedge(origin, destination);
+    (*vertices).addedge(destination, origin);
     return;
 }
 
 template<class T> void graph<T>::insert_vertex(T item)
 {
-	/*Implement your code here*/
+	(*vertices).addvertex(item);
     return;
 }
 
 template<class T> void graph<T>::delete_edge(T origin, T destination)
 {
-	/*Implement your code here*/
+	(*vertices).removeedge(origin, destination);
+    (*vertices).removeedge(destination, origin);
     return;
 }
 
 template<class T> void graph<T>::delete_vertex(T item)
 {
-	/*Implement your code here*/
+	(*vertices).remove(item);
     return;
 }
 
 /*the determination of edges incident to a given vertex*/
 template<class T> edgelist<T> * graph<T>::incident_edges(T item)
 {
-	/*Implement your code here*/
-    return NULL;
+	edgelist<T> * result=0;
+    vertex<T> *ptv = (vertices->dummy).getnext();    //find the first vertex
+    for (int i = 0; i < vertices->numvertices; i++) //for all vertexes
+    {
+        edgelist<T> * pte = outgoingedges((*ptv).getitem());
+        for(int j=0; i<pte->numedges;i++)   //if the destination of one vertex's edgelist is the item, add to the result
+        {
+            if ((pte->reprarray[i])->destination()==item)
+            {
+                result->add((pte->reprarray[i])->origin(),item);
+            }
+        }
+        ptv=ptv->next;
+    }
+    return result;
 }
 
 /*determine the perfect match*/
-template<class T> int graph<T>::is_perfect_match(void)
+template<class T> bool graph<T>::is_perfect_match(void)
 {
-	/*Implement your code here*/
+    vertex<T>* element=vertices->dummy->getnext(); //the first element
+    vertex<T>* curvertex=0;
+    if (!element->color){element->color=black;} //check the color and change it
+    else {cout<<"The first vertex's color has been initialized before !"<<endl;}
+    for (int i = 0; i < vertices->numvertices; i++)
+    {
+        edgelist<T>* edgeforvertex= new edgelist<T>;
+        element->edgelist->addall(element->getitem(),edgeforvertex);
+        if(element->color==black){
+            for(int j=0;j<edgeforvertex->getnumedges();j++){
+                curvertex=vertices->retrieve((edgeforvertex->reprarray[j])->destination()); //find this vertex in the vertices list
+                if(curvertex->color=null){curvertex->color=white;}
+                else if(curvertex->color==black){
+                    cout<<"cant's match a bigraph!"<<endl;
+                    return false;
+                }
+            }
+        }
+        if(element->color==white){
+            for(int j=0;j<edgeforvertex->getnumedges();j++){
+                curvertex=vertices->retrieve((edgeforvertex->reprarray[j])->destination()); //find this vertex in the vertices list
+                if(curvertex->color==null){curvertex->color=black;}
+                else if(curvertex->color==white){
+                    cout<<"cant's match a bigraph!"<<endl;
+                    return false;
+                }
+            }
+        }
+        element=element->next;
+        delete edgeforvertex;
+    }
+    return true;
 	return 0;
 }
 
