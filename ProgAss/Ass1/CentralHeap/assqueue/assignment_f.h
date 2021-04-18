@@ -159,13 +159,13 @@ int AllLocations::calcCapacity(int date){
 }   
 
 void AllLocations::maintainCuredList(int date){
-    int week = date / 7;
+    int week = date / 7 - 1;
     
         // vector<FibNode*> temp;
     for (int i = 0; i < int(location_list.size()); i++) {
-        cured_list.at(week).insert(cured_list.at(week).begin(), 
+        cured_list.at(week).insert(cured_list.at(week).end(), 
         location_list[i]->cured_queue.at(week).begin(),
-        location_list[i]->cured_queue.at(week).end()
+        location_list[i]->cured_queue.at(week).begin() + location_list[i]->cured_queue.at(week).size()
         );
         // for (int j = 0; j < int(location_list[i]->cured_queue.at(week).size()); j++) {
         //     cured_list.at(week).push_back(location_list[i]->cured_queue.at(week)[j]);
