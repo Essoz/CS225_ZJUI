@@ -588,21 +588,29 @@ template<class T> edgelist<T> * graph<T>::incident_edges(T item)
     return result;
 }
 
-/*determine the perfect match*/
+/*the algorithem check whether the vertex can be divided into two subsets and form a bigraph
+*use a iteration process to color all vertex with black and white, if two adjacent vertexes are in same color
+* they can't form a bigraph
+*/
 template<class T> bool graph<T>::is_perfect_match(void)
 {
     vertex<T>* element=vertices->dummy->getnext(); //the first element
     vertex<T>* curvertex=0;
     if (!element->color){element->color=black;} //check the color and change it
     else {cout<<"The first vertex's color has been initialized before !"<<endl;}
+    cout<<"vertex "<<element->getitem()<<" color: "<<element->color<<endl;
     for (int i = 0; i < vertices->numvertices; i++)
     {
         edgelist<T>* edgeforvertex= new edgelist<T>;
         element->edgelist->addall(element->getitem(),edgeforvertex);
+        //cout<<"vertex "<<element->getitem()<<"color: "<<element->color<<endl;
         if(element->color==black){
             for(int j=0;j<edgeforvertex->getnumedges();j++){
                 curvertex=vertices->retrieve((edgeforvertex->reprarray[j])->destination()); //find this vertex in the vertices list
-                if(curvertex->color=null){curvertex->color=white;}
+                if(curvertex->color==null){
+                    curvertex->color=white;
+                    cout<<"vertex "<<curvertex->getitem()<<" color: "<<curvertex->color<<endl;
+                }
                 else if(curvertex->color==black){
                     cout<<"cant's match a bigraph!"<<endl;
                     return false;
@@ -612,7 +620,10 @@ template<class T> bool graph<T>::is_perfect_match(void)
         if(element->color==white){
             for(int j=0;j<edgeforvertex->getnumedges();j++){
                 curvertex=vertices->retrieve((edgeforvertex->reprarray[j])->destination()); //find this vertex in the vertices list
-                if(curvertex->color==null){curvertex->color=black;}
+                if(curvertex->color==null){
+                    curvertex->color=black;
+                    cout<<"vertex "<<curvertex->getitem()<<" color: "<<curvertex->color<<endl;
+                }
                 else if(curvertex->color==white){
                     cout<<"cant's match a bigraph!"<<endl;
                     return false;
@@ -625,7 +636,6 @@ template<class T> bool graph<T>::is_perfect_match(void)
     return true;
 	return 0;
 }
-
 
 /*********************************************************************************************/
 
