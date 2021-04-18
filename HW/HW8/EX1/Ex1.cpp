@@ -22,6 +22,7 @@ class BtreeNode
 	int n;				// The number of keys in this node
 	int t;				// Mini-degree for the tree, n must be in range (t-1, 2t-1) except for root node
 	bool leaf;			// If it is a leaf node
+	// BtreeNode* parent;		// To be modified.......
 public:
 	BtreeNode(int t,bool leaf)
     {
@@ -65,13 +66,15 @@ public:
     int find_min();		// TO DO
 	int findSucc(int k);// TO DO
 	int findPrec(int k);// TO DO
-	void traverse()		// Print all the elements in the tree
+	// Find the parent of given node with a certain key:
+	BtreeNode* find_par(BtreeNode* node, int k);
+	void traverse()		// Print all the elements in a non-empty tree
 	{
 		if(root == NULL) return;
 		else
 			root->traverse();
 	}
-	BtreeNode *search(int k)	// Get the node with key k
+	BtreeNode *search(int k)	// Get the node with key k in a non-empty tree
 	{
 		return (root==NULL) ? NULL : root->search(k);
 	}
@@ -85,6 +88,9 @@ int BtreeNode :: findId(int k)
 	for (i = 0; i < n && a[i] < k; i++);
 	return i;
 }
+
+
+
 // Remove the key with value k in this node:
 void BtreeNode :: remove(int k)
 {
@@ -153,6 +159,9 @@ void BtreeNode :: removeFromNonLeaf(int id)
 	}
 }
 
+
+
+// Find the predecessor of a key in a non-leaf node:
 int BtreeNode :: findPrec(int id)
 {
 	BtreeNode *curr = C[id];
@@ -160,7 +169,7 @@ int BtreeNode :: findPrec(int id)
 		curr = curr->C[curr->n];
 	return curr->a[curr->n-1];
 }
-
+// Find the successor of a key in a non-leaf node:
 int BtreeNode :: findSucc(int id)
 {
 	BtreeNode *curr = C[id+1];
@@ -168,6 +177,9 @@ int BtreeNode :: findSucc(int id)
 		curr = curr->C[0];
 	return curr->a[0];
 }
+
+
+
 
 void BtreeNode :: fill(int id)
 {
@@ -255,6 +267,9 @@ void BtreeNode ::merge(int id)
 	delete(sibling);
 	return ;
 }
+
+
+
 // Remove a key k in the tree:
 void Btree :: remove(int k)
 {
@@ -280,12 +295,16 @@ void Btree :: remove(int k)
 void BtreeNode :: traverse()
 {
 	int i;
+	// Used for previous n-1 childs:
 	for(i = 0; i < n; i++)
 	{
 		if(leaf == false)
 			C[i]->traverse();
 		cout << a[i] << " ";
 	}
+	// Used for the last child:
+	if(leaf == false)
+		C[i]->traverse();
 }
 // Find the node containing exactly the key with value k:
 BtreeNode * BtreeNode :: search(int k)
@@ -300,6 +319,9 @@ BtreeNode * BtreeNode :: search(int k)
 
 	return C[i]->search(k);
 }
+
+
+
 // Add a key k in the tree:
 void Btree ::insert(int k)
 {
@@ -377,6 +399,10 @@ void BtreeNode::splitChild(int i,BtreeNode *y)
 	a[i]=y->a[t-1];
 	n = n+1;
 }
+
+
+// For HW8:
+// (ii):
 //find the max key stored in B-tree//
 int Btree::find_max()
 {
@@ -403,6 +429,10 @@ int Btree::find_min()
 	}
 	return node->a[0];
 }
+
+// (iv):
+// Note: the nodes in B-tree do not have a pointer to its parent, so the implementation will
+// be somehow complicated......
 //find the predecessor of the given key//
 int Btree :: findPrec(int k)
 {
@@ -431,7 +461,7 @@ int Btree :: findPrec(int k)
 	// First, check if the key is the smallest key of the tree:
 	if (k == find_min())
 	{
-		cout << "The key has no predecessor!!" << endl;
+		cout << "The key has no predecessor!!";
 		return k;
 	}
 	// Second, check if the key is in the root node:
@@ -441,15 +471,16 @@ int Btree :: findPrec(int k)
 		return root->a[id - 1];
 	}
 	// Then, find the node where the parent of the key locates:
-	BtreeNode* node = root;
-	while (node->C[id] != pos)
+	BtreeNode* parent = find_par(pos, k);
+	// Loop to find a ancestor that the child is not the first child of children list:
+	while (parent->C[0] == pos)
 	{
-		node = node->C[id];
-		id = node->findId(k);
+		pos = parent;
+		parent = find_par(parent, k);
 	}
-	// Locate the node of predecessor:
-	BtreeNode* find = node->C[id - 1];
-	return find->a[find->n - 1];
+	// Locate the predecessor:
+	id = parent->findId(k);
+	return parent->a[id - 1];
 }
 
 //find the successor of the given key//
@@ -471,7 +502,7 @@ int Btree :: findSucc(int k)
 	else
 	{
 		// Check if the key is the last in the key list:
-		if (id_0 != pos->n)
+		if (id_0 != pos->n - 1)
 		{
 			return pos->a[id_0 + 1];
 		}
@@ -480,7 +511,7 @@ int Btree :: findSucc(int k)
 	// First, check if the key is the largest key of the tree:
 	if (k == find_max())
 	{
-		cout << "The key has no successor!!" << endl;
+		cout << "The key has no successor!!";
 		return k;
 	}
 	// Second, check if the key is in the root node:
@@ -490,15 +521,28 @@ int Btree :: findSucc(int k)
 		return root->a[id + 1];
 	}
 	// Then, find the node where the parent of the key locates:
-	BtreeNode* node = root;
-	while (node->C[id] != pos)
+	BtreeNode* parent = find_par(pos, k);
+	// Loop to find a ancestor that the child is not the last child of children list:
+	while (parent->C[parent->n] == pos)
 	{
-		node = node->C[id];
-		id = node->findId(k);
+		pos = parent;
+		parent = find_par(parent, k);
 	}
-	// Locate the node of successor:
-	BtreeNode* find = node->C[id + 1];
-	return find->a[0];
+	// Locate the predecessor:
+	id = parent->findId(k);
+	return parent->a[id + 1];
+}
+// Find the parent of given node with a certain key:
+BtreeNode* Btree::find_par(BtreeNode* node, int k)
+{
+	BtreeNode* par = root;	
+	int id = par->findId(k);
+	while (par->C[id] != node)
+	{
+		par = par->C[id];
+		id = par->findId(k);
+	}
+	return par;
 }
 
 int main()
@@ -527,9 +571,16 @@ int main()
 	t.insert(12);
 	t.insert(6);
     //write your test here//
-	cout << t.find_max() << endl;
-	cout << t.find_min() << endl;
-	cout << t.findPrec(13) << endl;
-	cout << t.findSucc(24) << endl;
+	cout << "Btree:" << endl;
+	t.traverse();
+	cout << endl;
+	cout << "Max key is " << t.find_max() << endl;
+	cout << "Min key is " << t.find_min() << endl;
+	cout << "The predecessor of 1 is " << t.findPrec(1) << endl;
+	cout << "The predecessor of 13 is " << t.findPrec(13) << endl;
+	cout << "The predecessor of 5 is " << t.findPrec(5) << endl;
+	cout << "The successor of 11 is " << t.findSucc(11) << endl;
+	cout << "The successor of 24 is " << t.findSucc(24) << endl;
+	cout << "The successor of 26 is " << t.findSucc(26) << endl;
     return 0;
 }

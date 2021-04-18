@@ -31,7 +31,7 @@ class Assignment{
 class Location{
     public:
         friend class AllLocations;
-        Location(int id, vector<string>&time_slot);
+        Location(int id, vector<string>&time_slot, FibHeap* heap);
         int getID();
         int checkAvailability(int date);
         int getCapacity();
@@ -44,6 +44,7 @@ class Location{
     private:
         int id;
         int daily_capacity;
+        FibHeap* heap;
         vector<string> time_slot;
         vector<vector<FibNode*>> assigned_queue;  // the first dimension is day
         vector<vector<FibNode*>> cured_queue;  // the first dimension is week

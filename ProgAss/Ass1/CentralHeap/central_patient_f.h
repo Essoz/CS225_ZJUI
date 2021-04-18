@@ -2,7 +2,8 @@
 #define CENTRAL_PATIENT_F_H
 #include "central_patient.h"
 
-Patient::Patient(){}
+Patient::Patient(){
+}
 
 Patient::Patient(int id, Risk risk, Profession professionLevel, Age a, Information* info, int regis_id, int year, int date, int withdraw, int ddl)
 {

@@ -33,6 +33,7 @@ FibHeap::FibHeap(){
     processin_table = new Hash_Chaining;
     highrisk_table = new Hash_Chaining;
     assigned_table = new Hash_Chaining;
+    cured_table = new Hash_Chaining;
 };
 
 /* <===> Test Passed <===> */
@@ -403,12 +404,12 @@ void FibNode::PatientCreate(vector<string>&infolist) {
     setddl(stoi(infolist[8]));
     setpriority(stoi(infolist[9]));
 
-    Information temp_info;
-    temp_info.name = infolist[10];
-    temp_info.email = infolist[11];
-    temp_info.phone = infolist[12];
-    temp_info.birthday = infolist[13];
-    setinfo(&temp_info);
+    Information* temp_info = new Information;
+    temp_info->name = infolist[10];
+    temp_info->email = infolist[11];
+    temp_info->phone = infolist[12];
+    temp_info->birthday = infolist[13];
+    setinfo(temp_info);
 
     key = getpriority();
 };
@@ -586,6 +587,15 @@ void FibHeap::debug_PrintTree(FibNode* node){
         node_pt = node_pt->right;
     }while(node_pt != node);
     cout << "]";
+}
+
+void FibHeap::cured_table_insert(FibNode* node) {
+    cured_table->insertion(node);
+}
+
+bool FibHeap::cured_intable_check(int id){
+    if (cured_table->retrieval(id)) return true;
+    else return false;
 }
 
 #endif /* fibheap_f_h */

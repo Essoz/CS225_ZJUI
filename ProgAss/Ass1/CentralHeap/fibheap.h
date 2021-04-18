@@ -68,6 +68,9 @@ class FibHeap
         void ddl_insert(FibNode* node);
         bool ddl_incheck(FibNode* node);
         FibNode* ddl_delete(FibNode* node);
+        
+        void cured_table_insert(FibNode* node);
+        bool cured_intable_check(int id);
 
         void debugPrintTree();
         
@@ -81,6 +84,7 @@ class FibHeap
         Hash_Chaining* processin_table;
         Hash_Chaining* highrisk_table;
         Hash_Chaining* assigned_table;
+        Hash_Chaining* cured_table;
         vector<FibNode*> ddl_queue;
 };
 

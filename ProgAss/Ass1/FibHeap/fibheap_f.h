@@ -53,13 +53,14 @@ template<class T> void FibHeap<T>::Insert(FibNode<T>* fib_node){
 //  4. execute consolidate
  */
 template<class T> void FibHeap<T>::DecreaseKey(FibNode<T>* handle, T new_key){
-    int num = GetNum();
     handle->key = new_key;
-    if(handle->parent && new_key < handle->parent->key){
+    if (handle->parent && new_key < handle->parent->key){
         Cut(handle);
+    } else if (handle->parent == NULL) {
+        if (new_key < min_ptr->key) {
+            min_ptr = handle;
+        }
     }
-    // Consolidate();
-    numitems = num; //since insertions within Cut modifies Cut 
 }
 /* FibHeap - Cut
  * Input
@@ -86,7 +87,7 @@ template<class T> void FibHeap<T>::Cut(FibNode<T>* handle){
         handle->left->right = handle->right;
         handle->right->left = handle->left;
     }
-
+    handle->parent = NULL;
     Insert(handle);
     numitems--;
 
@@ -196,6 +197,7 @@ template<class T> FibNode<T>* FibHeap<T>::ExtractMin(){
     if (min_ptr){
         FibNode<T>* current_node = min_ptr->child;
         FibNode<T>* next_node = NULL;
+        min_ptr->parent = NULL;
         
         int min_degree = min_ptr->degree;
         for (int i = 0; i < min_degree; i++){
@@ -206,7 +208,7 @@ template<class T> FibNode<T>* FibHeap<T>::ExtractMin(){
         min_ptr->degree = 0;
         current_node = min_ptr;
         numitems--;
-        if (min_ptr == min_ptr->right){
+        if (min_ptr == min_ptr->right){     
             min_ptr = NULL;
         } else {
             min_ptr->right->left = min_ptr->left;

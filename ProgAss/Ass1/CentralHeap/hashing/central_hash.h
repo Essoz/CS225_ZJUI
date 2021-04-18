@@ -29,7 +29,7 @@ public:
     // Return the pointer of the patient instance in the hash table:
     FibNode* retrieval(int id);
     // Return a list containing all the patients' pointer:
-    vector<FibNode*>* list_patient();
+    vector<FibNode*>& list_patient();
     int get_numitems();
 private:
     std::vector<std::vector<FibNode*>*>* hashtable;      // The hashtable

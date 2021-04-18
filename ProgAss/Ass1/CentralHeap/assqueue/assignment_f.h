@@ -44,9 +44,10 @@ AllLocations::AllLocations(vector<Location*>&location_list) {
 
 }
 
-Location::Location(int id, vector<string>&time_slot) {
+Location::Location(int id, vector<string>&time_slot, FibHeap* heap) {
     Location::id = id;
     Location::time_slot = time_slot;
+    Location::heap = heap;
     daily_capacity = int(time_slot.size());
     assigned_queue.resize(360);
     cured_queue.resize(52);
@@ -104,7 +105,7 @@ bool Assignment::Assign(FibNode* reg, int date) {
     
     } else if (heap->hash_intable_check(reg->getid())){
         _assign(reg,date);
-        heap->hash_table_remove(reg->getid());
+        heap->hash_table_remove(reg->getid( ));
     } 
     return true;
 }
@@ -203,7 +204,20 @@ void Location::assignedClear(int date) {
     int week = date / 7;    // week is equal to the actual week - 1
     for (int i = 0; i < int(assigned_queue.at(date).size()); i++) {
         cured_queue.at(week).push_back(assigned_queue.at(date)[i]);
+
+        heap->cured_table_insert(assigned_queue.at(date)[i]);
+        
+        if (assigned_queue.at(date)[i]->getddl() != -1) {
+            if (heap->hash_intable_check(assigned_queue.at(date)[i]->getid())) {
+                heap->hash_table_remove(assigned_queue.at(date)[i]->getid());
+            } else if (heap->highrisk_intable_check(assigned_queue.at(date)[i]->getid())) {
+                heap->highrisk_table_remove(assigned_queue.at(date)[i]->getid());
+            } else {
+                cout << "You are again FUCKED at void Location::assignedClear(int date) { for ddl check\n";
+            }
+        }
     }
+
     // clear the assignment queue for that specific date
     assigned_queue.at(date).clear();
 }
@@ -253,7 +267,7 @@ void AllLocations::updateLocs(int date) {
         if (date >= 1)
         location_list.at(i)->assignedClear(date - 1);
     }
-    if (date % 7 == 1)   // because t
+    if (date && date % 7 == 0)   // because t
     maintainCuredList(date);
 }
 #endif
