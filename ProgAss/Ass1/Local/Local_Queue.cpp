@@ -26,14 +26,14 @@ Queue::Queue()
 	Hashtable = new Hash_Chaining(100);		// The default length of hashtable is 100
 	io = new IO;							// Add a new IO class for this stream
 	id_num = 0;								// ID starts from 0
-	regis_id = 0;							// This registry has id 0
+	regis_id = rand() % 5;					// This registry has id 0
 	// Now deal with the year and date when the program starts:
 	time_t rawtime;
 	struct tm *info;
 	time(&rawtime);
 	info = gmtime(&rawtime);
-	cur_year = 1900 + info->tm_year;					// The current year
-	cur_date = info->tm_mon * 30 + info->tm_mday;		// The current date
+	cur_year = 1900 + info->tm_year;						// The current year
+	cur_date = info->tm_mon * 30 + info->tm_mday + 1;		// The current date
 	//cur_year = 2021;	// The current year
 	//cur_date = 96;		// The current date
 	counter = 0;		// The counter starts with 0
