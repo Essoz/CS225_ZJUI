@@ -90,7 +90,7 @@ int main(){
         //  time counter 
         
         cout << "The system time is now at Year 2021, Month " 
-             << to_string((date+1) / 30 + 1) << ", Date " << to_string((date+1) % 30);
+             << to_string((date+1) / 30 + 1) << ", Date " << to_string((date) % 30 + 1);
         if (timer / 2 * 2 == timer) cout << ", Morning\n";
         else cout << ", Afternoon\n";
 
@@ -113,7 +113,7 @@ int main(){
         // the wrapper function above 
         
         // start processing
-        central_queue->debugPrintTree();
+        if (DEBUG) central_queue->debugPrintTree();
 
         // first assign nodes in the heap
         if (AssignRegistration.checkAvailability(date)) {

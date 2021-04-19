@@ -213,7 +213,7 @@ void Location::assignedClear(int date) {
             } else if (heap->highrisk_intable_check(assigned_queue.at(date)[i]->getid())) {
                 heap->highrisk_table_remove(assigned_queue.at(date)[i]->getid());
             } else {
-                cout << "You are again FUCKED at void Location::assignedClear(int date) { for ddl check\n";
+                ;// cout << "You are again FUCKED at void Location::assignedClear(int date) { for ddl check\n";
             }
         }
     }
