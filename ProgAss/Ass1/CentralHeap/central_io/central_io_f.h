@@ -218,8 +218,8 @@ bool CentralIO::Read2Heap(){
             heap->ddl_insert(newnode);
             assignment->_assign(newnode, newnode->getddl() - 1);
         }    
-    cout << newnode->getid() << endl;
-    heap->debugPrintTree();
+    if (DEBUG) cout << newnode->getid() << endl;
+    if (DEBUG) heap->debugPrintTree();
     }
     return true;
 }
