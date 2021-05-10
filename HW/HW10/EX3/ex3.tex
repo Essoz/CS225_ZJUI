@@ -1,0 +1,26 @@
+\documentclass{article}
+\begin{document}
+\section*{EX3}
+\section*{(i)}
+    Assume the \emph{tournament} has $n$ total nodes. Then for any given node, 
+it has $n-1$ edges (whether incoming or outcoming) connecting with other $n-1$ nodes.
+We have $n$ nodes, so the number of edges in this \emph{tournament} is $n*(n-1)$.
+Since there is exactly one edge between every two vertices, each edge is counted
+twice. Finally, the number of edges in a \emph{tournament} with $n$ nodes is $n*(n-1)/2$.
+
+\section*{(ii)}
+    From the definition of \emph{tournament} and the derivation in (i), if the number 
+of edges is fixed, then the number of nodes and the shape of graph are also uniquely
+determined. The only difference occurring in various \emph{tournaments} with the same 
+number of edges $n$ is the direction of each edge.\\
+    Since each edge has two directions, the overall possibility of the \emph{tournament}
+is $2^n$.
+
+\section*{(iii)}
+    The \emph{tournament} can not be topologically sorted when there are cycles in the graph.\\
+    Topological sorting requires a topological order $<=$ on the set of vertices. If $n$
+nodes in the \emph{tournament} form a cycle, that is, they are connected heads to tails, 
+then we can not find a starting node with incoming order 0. So the topological order $<=$
+doesn't exist in that graph. So not all \emph{tournaments} can be topologically sorted.\\    If there is no cycle in the graph, then we can apply DFS or BFS method to find the 
+topological order.
+\end{document}
