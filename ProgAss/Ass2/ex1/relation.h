@@ -23,11 +23,16 @@ class Block_Header{
                                         {num_items = new_num;}
         void        setNumDeleted(int64_t new_num)     
                                         {num_deleted = new_num;}
+        bool        isDeleted(int64_t index)
+                                        {return tombstone[index];}
+        void        markDeleted(int64_t index)
+                                        {tombstone[index] = true;}
     private:
         int64_t     size;
         int64_t     num_items;
         int64_t     num_deleted;
-        Block_Header<T>*
+        bool*       tombstone;
+        Block_Header<T>*    
                     of_block_ptr;
         bool        is_overflow;
 
@@ -40,6 +45,8 @@ Block_Header<T>::Block_Header(bool if_is_overflow){
     num_items = 0;
     num_deleted = 0;    
     is_overflow = if_is_overflow;
+
+    tombstone = new bool[D_BLOCK_SIZE];
 }
 
 
@@ -54,7 +61,7 @@ class Block{
         int64_t         getSize()       {return header.getSize();}
         
         int64_t         Insert(T* n_tuple);
-        void            Delete(int64_t id); 
+        bool            Delete(int64_t id); 
         void            Sort();     
 
     private:
@@ -71,6 +78,8 @@ Block<T>::Block(bool if_is_overflow){
     } else {
         header.of_block_ptr->header.of_block_ptr = (Block<T>*) &header;
     }
+
+    reparray = new (T*)[D_BLOCK_SIZE];
 }
 
 // class person;
@@ -93,7 +102,6 @@ class Relation{
         vector<Block<T>>   blocks;
 
 };
-
 
 
 /* <=== relational schema for PATIENT ===> */
