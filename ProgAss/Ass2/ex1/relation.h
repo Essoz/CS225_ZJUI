@@ -3,10 +3,10 @@
 #define BTREE_H
 #include <stdlib.h>
 #include <string>
-
+#include <vector>
+#include "relation.cpp"
 #define D_BLOCK_SIZE 4096 //Block size in bytes
 using namespace std;
-
 
 template <class T>
 class Block_Header{
@@ -49,7 +49,16 @@ class Block{
     public:
         Block(bool if_is_overflow);
         Block_Header<T> header;
+        
+        int64_t         getNum()        {return header.getNum();}
+        int64_t         getSize()       {return header.getSize();}
+        
+        int64_t         Insert(T* n_tuple);
+        void            Delete(int64_t id); 
+        void            Sort();     
+
     private:
+        int64_t         Find(int64_t id);
         T* reparray;
 };
 
@@ -64,7 +73,26 @@ Block<T>::Block(bool if_is_overflow){
     }
 }
 
+// class person;
+// class medical_status;
+// class registration;
+// class treatment;
 
+template <class T>
+class Relation{
+    public:
+        int64_t     Insert(T* n_tuple);
+        void        Delete(int64_t  tuple_ID);
+        T*          Retrieve(int64_t tuple_ID);
+        void        Merging(int64_t b_id_1, int64_t b_id_2);
+        void        Splitting(int64_t b_id);
+        void        Sorting(int64_t b_id);
+
+    private:
+        
+        vector<Block<T>>   blocks;
+
+};
 
 
 
