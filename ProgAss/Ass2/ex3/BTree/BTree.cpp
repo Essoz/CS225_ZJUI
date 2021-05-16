@@ -78,6 +78,7 @@ public:
 
 	void insert(int64_t p_k, int64_t s_k);	// Insert a record with both types of keys
 	void remove(int64_t p_k, int64_t s_k);	// Remove a record (here is just id) in the tree
+	vector<int64_t> getAll(int64_t s_k);	// Give the list of all the primary keys related with the input s_k
 	//int64_t find_max();	
 	//int64_t find_min();	
 	//int64_t findSucc(int64_t k);
@@ -425,6 +426,16 @@ void Btree::remove(int64_t p_k, int64_t s_k)
 		delete r;
 	}
 	return;
+}
+
+// Give the list of all the primary keys related with the input s_k:
+vector<int64_t> Btree::getAll(int64_t s_k) {
+	// Find the right node first:
+	BtreeNode* r_node = search(s_k);
+	// Find the right index next:
+	int64_t r_index = r_node->findsId(s_k);
+	// Get the right array of primary keys:
+	return r_node->keys[r_index].primary_key;
 }
 
 // Insert a record if the node is not fully filled:
