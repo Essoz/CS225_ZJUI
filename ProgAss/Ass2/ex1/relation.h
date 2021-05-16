@@ -1,6 +1,6 @@
 /*for excise 1, this is the pridef for information in the data set*/
-#ifndef DATABASE_H
-#define DATABASE_H
+#ifndef RELATION_H
+#define RELATION_H
 #include <stdlib.h>
 #include <string>
 #include <vector>
@@ -397,4 +397,4 @@ treatment::treatment(int64_t n_ID, int64_t n_assigned_loc, int8_t n_treatment_ty
 }
 
 
-#endif /* DATABASE_H */
+#endif /* RELATION_H */
