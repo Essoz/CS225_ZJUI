@@ -13,6 +13,7 @@ using namespace std;
 
 int timer = 0;
 const int interval = 1; // unit in day
+int tre_id_counter = 0;
 string path;
 int date;
 int main(){

@@ -38,9 +38,9 @@ class FibHeap
         int GetNum();
     private:
         void _PrintTree(FibNode* node);
-        void debug_PrintTree(FibNode* node);
+        // void debug_PrintTree(FibNode* node);
         FibNode* min_ptr;
-        vector<FibNode*> fiblist;
+        // vector<FibNode*> fiblist;
         int numitems;
         Hash_Chaining* processin_table;
 };
@@ -48,7 +48,7 @@ class FibHeap
 class FibNode{
     friend class FibHeap;
     public:
-        FibNode(registration* n_registration);
+        FibNode(registration n_registration);
         FibNode* parent;
         FibNode* child;
         FibNode* left;

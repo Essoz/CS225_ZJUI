@@ -63,11 +63,8 @@ bool CentralIO::Read2Heap(){
                 temp.append(line.substr(i,1));
             }
             temp_list.push_back(temp);
-            temp.clear();
         // clear this list for next use
 
-        FibNode* newnode = new FibNode(temp_list);
-        temp_list.clear();
         //check hash set
 
         // since priority rules can be simplified, we left out the original buggy code and 
@@ -76,38 +73,59 @@ bool CentralIO::Read2Heap(){
 
         // 建好各自的relation
         // leave the assigned part empty.
-        registration Reg = registration (, n_assigned = 0, n_treatment_id = -1);
-        person       Per = person ();
+        registration Reg = registration(stoi(temp_list.at(0)),      // ID
+                                    stoi(temp_list.at(4)),          // Registry ID
+                                    stoi(temp_list.at(0)), -1,      // Person ID
+                                    stoi(temp_list.at(9)),          // Treatment Type
+                                    temp_list.at(8),                // Deadline
+                                    temp_list.at(6),                // Registration Date
+                                    stoi(temp_list.at(7)),          // Withdraw state
+                                    false, -1, "Not Assigned", -1);
+
+        person Per = person(stoi(temp_list.at(0)), 0,               // ID
+                                    stoi(temp_list.at(1)),          // Risk ID
+                                    stoi(temp_list.at(2)),          // Profession
+                                    stoi(temp_list.at(3)),          // Age
+                                    temp_list.at(10),               // Name
+                                    temp_list.at(11),               // Email
+                                    temp_list.at(13));              // Date of brith
         // no need to create medical status since we only need four
         // no need to create treatment since it is what assignment does
+        FibNode* newnode = new FibNode(Reg);
+        temp_list.clear();
 
         // 现在还是伪代码
-        registration* node = --Regislation_Relation.retrieval(id);
+        registration* node = Reg_Relation_Retrieve(Reg.getID());
 
         
         if (node) {
-            if (node->getTreatmentID != -1) {return true;}  // has been treated, nothing has to be done
+            if (node->getTreatmentID() != -1) {return true;}  // has been treated, nothing has to be done
             
             
             // do an update
             // FUCK it up
-            --Regislation_Relation.Delete(id);
-            --Registration_Relation.Insert(--Reg);
-            --Person_Relation.Delete(Reg.getPersonID());
-            --Person_Relation.Insert(Per);
+            Reg_Relation_Delete(Reg.getID());
+            Reg_Relation_Insert(Reg);
+            Per_Relation_Delete(Reg.getPersonID());
+            Per_Relation_Insert(Per);
             if (Reg.getWithdraw() == 1){
-                if (Reg.getAssignStatus()){
+                if (node->getAssignStatus()){
                     // TODO type check
                     // TODO　do the following things, remove it from assignment queue etc
                 } else {
                     // TODO delete the node from heap, type check here!!!
                 }
-            }
-        } else {
-            // the node is not in out database, insert corresponding things
-            --Regislation_Relation.Insert(--Reg);
-            --Person_Relation.Insert(--Per);
         }
+            // the node is not in out database, insert corresponding things
+    }
+    Reg_Relation_Insert(Reg);
+    Per_Relation_Insert(Per);
+    if (Reg.getTreatmentType() == 0){
+        vacc_heap->Insert(newnode);
+    } else if (Reg.getTreatmentType() == 1){
+        surg_heap->Insert(newnode);
+    } else {
+        regi_heap->Insert(newnode);
     }
     return true;
 }
@@ -204,7 +222,6 @@ bool CentralIO::ReportMonthly(int month, int key){
  */
 bool CentralIO::_WeeklyCured(int week, int key){
     vector<FibNode*> print_list;
-    
     // copy the list to be printed 
     print_list.assign(assignment->all_locations->cured_list[week].begin(),
     assignment->all_locations->cured_list[week].end());

@@ -5,16 +5,15 @@
                        put in the fibonacci heap only ID and priority
  2. For modifications, check the node if it is in database (implement a cache)
  */
-
-
-
 #define DEBUG false
 
 #include "alist.cpp"
 #include "central_io/central_io_f.h"
 #include "assqueue/assignment_f.h"
 #include "hashing/central_hash.cpp"
-
+#include "../ex3/BPlusTree&Hash/BPlusTree.h"
+#include "../ex3/BPlusTree&Hash/hashtable.hpp"
+#include "../ex3/BTree/BTree.cpp"
 #include <unistd.h>
 #include <string>
 #include <vector>
@@ -24,6 +23,75 @@ int timer = 0;
 const int interval = 1; // unit in day
 string path;
 int date;
+
+Btree tre_week = Btree(4);
+BPtree<int64_t, treatment> tre_id;
+
+BPtree<int64_t, person> per_id;
+
+BPtree<int64_t, registration> reg_id;
+hashtable<int8_t, int64_t> reg_withdraw;
+
+void Reg_Relation_Insert(registration Reg){
+    reg_id.insert(Reg.getID(), Reg);
+    reg_withdraw.put(Reg.getWithdraw(), Reg.getID());
+}
+registration* Reg_Relation_Delete(int64_t ID){
+    registration* Reg;
+    reg_id.remove(ID, *Reg);
+    reg_withdraw.erase(ID);
+    return Reg;
+}
+registration* Reg_Relation_Retrieve(int64_t ID){
+    registration* Reg;
+    reg_id.retrieve(ID, *Reg);
+    return Reg;
+}
+vector<registration*>& Reg_Relation_Retrieve_2(int8_t withdraw){
+    vector<int64_t> result_id = reg_withdraw.get(withdraw);
+    vector<registration*> result_reg;
+
+    int64_t count = result_id.size();
+    for (int64_t i = 0; i < count; i++) {
+        registration* temp_Reg = Reg_Relation_Retrieve(result_id[i]);
+        result_reg.push_back(temp_Reg);
+    }
+    return result_reg;
+}
+
+void Per_Relation_Insert(person Per){
+    per_id.insert(Per.getID(), Per);
+}
+person* Per_Relation_Delete(int64_t ID){
+    person* Per;
+    per_id.remove(ID, *Per);
+    return Per;
+}
+person* Per_Relation_Retrieve(int64_t ID){
+    person* Per;
+    per_id.retrieve(ID, *Per);
+    return Per;
+}
+
+void Tre_Relation_Insert(treatment Tre){
+    tre_id.insert(Tre.getID(), Tre);
+    tre_week.insert(Tre.getID(), stoi(Tre.getFinishedTime()) / 7);
+}
+treatment* Tre_Relation_Delete(int64_t ID){
+    treatment* Tre;
+    tre_id.remove(ID, *Tre);
+    tre_week.remove(ID, stoi(Tre->getFinishedTime()) / 7);
+}
+treatment* Tre_Relation_Retrieve(int64_t ID){
+    treatment* Tre;
+    tre_id.retrieve(ID, Tre);
+    return Tre;
+}
+treatment* Tre_Relation_Retrieve_2(int64_t week){
+    return tre_week.search(week);
+    //??? // TODO
+}
+
 int main(){
     char order;
     cout << "Please Choose how do you want to order the report" << endl;

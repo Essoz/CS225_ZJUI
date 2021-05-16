@@ -4,7 +4,7 @@
 
 #define INFIMUM -100000
 
-FibNode::FibNode(registration* n_registration){
+FibNode::FibNode(registration n_registration){
     parent = NULL;
     child = NULL;
     left = NULL;
@@ -12,15 +12,15 @@ FibNode::FibNode(registration* n_registration){
     degree = 0;
     mark = false;       // default marking == false
     // key = priority;
-    int8_t type = n_registration->getTreatmentType();
-    person Per = --Person_Relation.retrieve(n_registration->getPersonID());
-    medical_status MedStat = --MS_Relation.retrieve(Per.getMedicalStatusID());
+    int8_t type = n_registration.getTreatmentType();
+    person Per = *Per_Relation_Retrieve(n_registration.getPersonID());
+    int8_t MedStat = Per.getMedicalStatusID();
     if (type == 0) {
         // for vaccination
-        key = 4 - MedStat.getStatus();
+        key = 4 - MedStat;
     } else if (type == 1) {
         // for surgery
-        key = stoi(n_registration->getDateOfReg());
+        key = stoi(n_registration.getDateOfReg());
     } else if (type == 2) {
         // for regular registration
         key = 100 - Per.getAge();
@@ -321,48 +321,48 @@ int FibHeap::GetNum(){
 
 
 
-/* This Function is for Testing */
-void FibHeap::PrintTree(){
-    fiblist.clear();
-    if (!fiblist.empty())
-    {
-        cout<<"The fiblist is not empty!"<<endl;
-        return;
-    }
+// /* This Function is for Testing */
+// void FibHeap::PrintTree(){
+//     fiblist.clear();
+//     if (!fiblist.empty())
+//     {
+//         cout<<"The fiblist is not empty!"<<endl;
+//         return;
+//     }
     
-    // cout << "\n=========================\n"; 
+//     // cout << "\n=========================\n"; 
 	
-    if (min_ptr == NULL){
-        cout << "The Heap Structure is Empty" <<endl;
-        return;
-    }
+//     if (min_ptr == NULL){
+//         cout << "The Heap Structure is Empty" <<endl;
+//         return;
+//     }
     
-    FibNode* root_pt = min_ptr;
-    int i = 0;
-    do{
-        // cout << "Heap " << i++ << " :: " <<root_pt->key;
-        fiblist.insert(fiblist.end(),root_pt);
-        _PrintTree(root_pt->child);
-        // cout << "\n------------\n";
-        // move to the next heap
-        root_pt = root_pt->right;
-    }while(root_pt != min_ptr);
+//     FibNode* root_pt = min_ptr;
+//     int i = 0;
+//     do{
+//         // cout << "Heap " << i++ << " :: " <<root_pt->key;
+//         fiblist.insert(fiblist.end(),root_pt);
+//         _PrintTree(root_pt->child);
+//         // cout << "\n------------\n";
+//         // move to the next heap
+//         root_pt = root_pt->right;
+//     }while(root_pt != min_ptr);
     
-}
+// }
 
-/* Recursive Printing*/
-void FibHeap::_PrintTree(FibNode* node){
-    if (node == NULL){return;}
-    FibNode* node_pt = node;
-    // cout << "[";
-    do{
-        // cout<< node_pt->key <<", ";
-        fiblist.insert(fiblist.end(),node_pt);
-        _PrintTree(node_pt->child);
-        node_pt = node_pt->right;
-    }while(node_pt != node);
-    // cout << "]";
-}
+// /* Recursive Printing*/
+// void FibHeap::_PrintTree(FibNode* node){
+//     if (node == NULL){return;}
+//     FibNode* node_pt = node;
+//     // cout << "[";
+//     do{
+//         // cout<< node_pt->key <<", ";
+//         fiblist.insert(fiblist.end(),node_pt);
+//         _PrintTree(node_pt->child);
+//         node_pt = node_pt->right;
+//     }while(node_pt != node);
+//     // cout << "]";
+// }
 
 /* <=== Computing Assignment 1 Helper Function ===>*/
 /* String2Int 
@@ -382,39 +382,39 @@ void FibHeap::_PrintTree(FibNode* node){
 // };
 
 
-/* This Function is for Testing */
-void FibHeap::debugPrintTree(){
-    cout << "\n=========================\n"; 
+// /* This Function is for Testing */
+// void FibHeap::debugPrintTree(){
+//     cout << "\n=========================\n"; 
 	
-    if (min_ptr == NULL){
-        cout << "The Heap Structure is Empty" <<endl;
-        return;
-    }
+//     if (min_ptr == NULL){
+//         cout << "The Heap Structure is Empty" <<endl;
+//         return;
+//     }
     
-    FibNode* root_pt = min_ptr;
-    int i = 0;
-    do{
-        cout << "Heap " << i++ << " :: " <<root_pt->getRegID();
-        debug_PrintTree(root_pt->child);
-        cout << "\n------------\n";
-        // move to the next heap
-        root_pt = root_pt->right;
-    }while(root_pt != min_ptr);
+//     FibNode* root_pt = min_ptr;
+//     int i = 0;
+//     do{
+//         cout << "Heap " << i++ << " :: " <<root_pt->getRegID();
+//         debug_PrintTree(root_pt->child);
+//         cout << "\n------------\n";
+//         // move to the next heap
+//         root_pt = root_pt->right;
+//     }while(root_pt != min_ptr);
     
-}
+// }
 
-/* Recursive Printing*/
-void FibHeap::debug_PrintTree(FibNode* node){
-    if (node == NULL){return;}
-    FibNode* node_pt = node;
-    cout << "[";
-    do{
-        cout<< node_pt->getRegID() <<", ";
-        debug_PrintTree(node_pt->child);
-        node_pt = node_pt->right;
-    }while(node_pt != node);
-    cout << "]";
-}
+// /* Recursive Printing*/
+// void FibHeap::debug_PrintTree(FibNode* node){
+//     if (node == NULL){return;}
+//     FibNode* node_pt = node;
+//     cout << "[";
+//     do{
+//         cout<< node_pt->getRegID() <<", ";
+//         debug_PrintTree(node_pt->child);
+//         node_pt = node_pt->right;
+//     }while(node_pt != node);
+//     cout << "]";
+// }
 
 #endif /* fibheap_f_h */
 

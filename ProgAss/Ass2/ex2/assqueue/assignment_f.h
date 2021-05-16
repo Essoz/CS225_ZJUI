@@ -71,7 +71,7 @@ bool Assignment::Assign(FibNode* reg, int date) {
     // no extension rules here lol
     
     // if no ddl or extension
-    registration* Reg = --Registration_Relation.Retrieve(reg->getRegID());
+    registration* Reg = Reg_Relation_Retrieve(reg->getRegID());
     int8_t type = Reg->getTreatmentType();
     if (checkAvailability(date, type) == false){
         return false;
@@ -96,7 +96,7 @@ bool Assignment::Assign(FibNode* reg, int date) {
  */
 
 void Assignment::_assign(FibNode* reg, int date, int8_t type) {
-    registration Reg = --Registration_Relation.Retreieve(reg->getRegID());
+    registration Reg = *Reg_Relation_Retrieve(reg->getRegID());
     Registry* registry = all_registries->getRegistry(Reg.getRegID());  
     Location* temp_location;
     for (int i = 0; i < int(registry->getLocationDist().size()); i++) {
@@ -108,8 +108,8 @@ void Assignment::_assign(FibNode* reg, int date, int8_t type) {
             n_Reg.setAssignedLoc(i);
             n_Reg.setAssignedDate(to_string(date));
             n_Reg.setAssignedTime(temp_time_assigned);
-            --Registration_Relation.Delete(Reg.getID());
-            --Registration_Relation.Insert(n_Reg);
+            Reg_Relation_Delete(Reg.getID());
+            Reg_Relation_Insert(n_Reg);
             break;
         }
     }
@@ -186,11 +186,11 @@ void Location::assignedClear(int date) {
     for (int j = 0; j < 3; j++) {
         for (int i = 0; i < int(assigned_queue[j].at(date).size()); i++) {
             cured_queue.at(week).push_back(assigned_queue[j].at(date)[i]);
-            registration Reg = --Registration_Relation.Retrieval(assigned_queue[j].at(date)[i]->getRegID());
+            registration Reg = *Reg_Relation_Retrieve(assigned_queue[j].at(date)[i]->getRegID());
             
             treatment Tre = treatment(tre_id_counter++, Reg.getAssignedLoc(), Reg.getTreatmentType(), 
                 Reg.getAssignedDate(), Reg.getAssignedDate());
-            --Treatment_Relation.Insert(Tre); 
+            Tre_Relation_Insert(Tre); 
         }
     assigned_queue[j].at(date).clear();
     }
