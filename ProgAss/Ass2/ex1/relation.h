@@ -55,11 +55,15 @@ struct content_t
     int64_t pri_id;
     T content;
 };
+template<class T>
+using Content_t = content_t<T>;
 
+/*
 typedef content_t<person> person_t;
 typedef content_t<medical_status> medical_status_t;
 typedef content_t<registration> registration_t;
 typedef content_t<treatment> treatment_t;
+*/
 
 template<class T>
 class Block{
@@ -74,10 +78,10 @@ class Block{
         void            setmin_id(int64_t id)   { min_id = id; }
         void            setmax_id(int64_t id)   { max_id = id; }
 
-        content_t<T>*   Insert(content_t<T> record, Block_Header* header);       // Insert a record
-        content_t<T>    retrevial(int64_t id);  // Find a record with primary key id
+        Content_t<T>*   Insert(Content_t<T> record, Block_Header<T>* header);       // Insert a record
+        Content_t<T>    retrevial(int64_t id);  // Find a record with primary key id
         int64_t         FindIndex(int64_t id);  // Find the index of one record in the block
-        void            Delete(int64_t id, Block_Header* header);     // Delete a record with primart key id
+        void            Delete(int64_t id, Block_Header<T>* header);     // Delete a record with primart key id
         void            Merge(Block_Header<T>* header);
         void            Split(Block_Header<T>* header);
         void            Sort();
@@ -88,8 +92,8 @@ class Block{
         int64_t             min_id;     // The smallest id in this block
         int64_t             max_id;     // The largest id in this block
         //Block_Header<T>*    header;
-        vector<content_t<T>>*          Overflow;   // The fixed length is 2
-        vector<content_t<T>>*          reparray;   // The fixed length is 20
+        vector<Content_t<T>>*          Overflow;   // The fixed length is 2
+        vector<Content_t<T>>*          reparray;   // The fixed length is 20
 };
 
 template <class T>
@@ -98,8 +102,8 @@ Block<T>::Block(int64_t min, int64_t max){
     //size = D_BLOCK_SIZE;
     min_id = min;       // When first created, the range of id is determined by B+tree
     max_id = max;
-    Overflow = new vector<content_t<T>>(2);
-    reparray = new vector<content_t<T>>(20);
+    Overflow = new vector<Content_t<T>>(2);
+    reparray = new vector<Content_t<T>>(20);
 
     /*
     if (!if_is_overflow) {
@@ -111,7 +115,7 @@ Block<T>::Block(int64_t min, int64_t max){
 }
 
 // Insert a new record into the block:
-template <class T> content_t<T>* Block<T>::Insert(content_t<T> record, Block_Header<T>* header) {
+template <class T> Content_t<T>* Block<T>::Insert(Content_t<T> record, Block_Header<T>* header) {
     // First, check if the overflow block is full:
     if (2 <= int(Overflow->size()))
     {
@@ -158,7 +162,7 @@ template <class T> void Block<T>::Delete(int64_t id, Block_Header<T>* header) {
 }
 
 // Return a record (again assume the record is in the block):
-template <class T> content_t<T> Block<T>::retrevial(int64_t id) {
+template <class T> Content_t<T> Block<T>::retrevial(int64_t id) {
     // Find the index first:
     int64_t index = FindIndex(id);
     // If it is in the overflow block:
@@ -176,7 +180,7 @@ template <class T> int64_t Block<T>::FindIndex(int64_t id) {
     // In main block:
     for (int i = 0; i < int(reparray->size()) - 1; i++)
     {
-        if (reparray[i].pri_id == id) {
+        if (reparray[i].Content_t<T>::pri_id == id) {
             return result;
         }
         result++;
@@ -184,7 +188,7 @@ template <class T> int64_t Block<T>::FindIndex(int64_t id) {
     // In overflow block:
     for (int i = 0; i < int(Overflow->size()) - 1; i++)
     {
-        if (Overflow[i].pri_id == id) {
+        if (Overflow[i].Content_t<T>::pri_id == id) {
             return result;
         }
         result++;
