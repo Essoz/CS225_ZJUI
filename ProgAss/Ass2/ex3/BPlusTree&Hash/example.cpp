@@ -64,14 +64,19 @@ int main()
 	}
 */
 	hashtable<string, int> ht;
-    ht.put("profession", 80);//这里这个第一项就是四种second key，你随便加，然后第二项是id，put是往hash里面填东西的函数
-	if(ht.get("profession",80) == 80){cout<<"ture"<<endl;}//get就是retrive，格式就是先secondary后id，如果返回的结果和你输进去的id一样的话，证明在hash里面，听起来有点蠢，但是比较好操作
-    ht.put("treatment", 1);
-	if(ht.get("treatment",1) == 1){cout<<"ture"<<endl;}
-	ht.put("treatment", 2);
-    if(ht.get("treatment",2) == 2){cout<<"ture"<<endl;}
+    ht.put("profession",80);//这里这个第一项就是四种second key，你随便加，然后第二项是id，put是往hash里面填东西的函数
+	ht.put("profession",90);
+	if(ht.get("profession") == 80){cout<<"ture"<<endl;}//get就是retrive，格式就是先secondary后id，如果返回的结果和你输进去的id一样的话，证明在hash里面，听起来有点蠢，但是比较好操作
+    cout<<"1"<<endl;
+	ht.put("treatment",1);
+	if(ht.get("treatment") == 1){cout<<"ture"<<endl;}
+	cout<<"2"<<endl;
+	ht.put("treatment",2);
+    if(ht.get("treatment") == 2){cout<<"ture"<<endl;}
+	cout<<"3"<<endl;
     ht.erase("treatment");//erase就是把hash里面某一个secondary key里面所有的id全删了
-	if(ht.get("treatment",2) != 2){cout<<"Erased"<<endl;}
+	if(ht.get("treatment") != 2){cout<<"Erased"<<endl;}
+	cout<<"4"<<endl;
 	return 0;
 }
 //这个hash存起来的都是id，所以返回的也是id，然后如果想从data set找东西，就用hash回来的id过一遍b加树去找pointer
