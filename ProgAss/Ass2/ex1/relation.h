@@ -282,7 +282,7 @@ class registration{
     public:
         registration(int64_t n_ID, int64_t n_reg_id, int64_t n_person_id, int64_t n_treatment_id,
                     int8_t n_treatment_type, string n_deadline, string n_date, int8_t n_withdrawn, 
-                    bool n_assigned, int64_t n_assigned_loc, string n_assigned_date);
+                    bool n_assigned, int64_t n_assigned_loc, string n_assigned_date, int8_t n_assigned_time);
         void        setID(int64_t id)               { ID = id; }
         void        setRegID(int64_t id)            { reg_id = id; }
         void        setPersonID(int64_t id)         { person_id = id; }
@@ -292,7 +292,8 @@ class registration{
         void        setWithdraw(int8_t status)      { withdrawn = status; }
         void        setAssignStatus(bool ass)       { assigned = ass; }
         void        setAssignedLoc(int64_t loc)     { assigned_loc = loc; }
-        void        setAssignedTime(string time)    { assigned_date = time; }
+        void        setAssignedTime(int8_t time)    { assigned_time = time; }
+	void        setAssignedDate(string date)    { assigned_date = date; }
 
 
         int64_t     getID()                         { return ID; }
@@ -305,8 +306,8 @@ class registration{
         int8_t      getWithdraw()                   { return withdrawn; }
         bool        getAssignStatus()               { return assigned; }
         int64_t     getAssignedLoc()                { return assigned_loc; }  // TODO: How can I modify those info later?? This is hard
-        string      getAssignedTime()               { return assigned_date; }
-
+        string      getAssignedDate()               { return assigned_date; }
+        int8_t      getAssignedTime()               { return assigned_time; }
     private:
         int64_t     ID;
         int64_t     reg_id;
@@ -318,6 +319,7 @@ class registration{
         int8_t      withdrawn;
         bool        assigned;
         int64_t     assigned_loc;
+	int8_t      assigned_time;
         string      assigned_date;
 };
 
@@ -368,7 +370,7 @@ medical_status::medical_status(int64_t n_ID, int8_t n_status)
 
 registration::registration(int64_t n_ID, int64_t n_reg_id, int64_t n_person_id, int64_t n_treatment_id, 
                     int8_t n_treatment_type, string n_deadline, string n_date, int8_t n_withdrawn, 
-                    bool n_assigned, int64_t n_assigned_loc, string n_assigned_date)
+                    bool n_assigned, int64_t n_assigned_loc, string n_assigned_date, int8_t n_assigned_time)
                     : ID(n_ID)
                     , reg_id(n_reg_id)
                     , person_id(n_person_id)
@@ -380,6 +382,7 @@ registration::registration(int64_t n_ID, int64_t n_reg_id, int64_t n_person_id, 
                     , assigned_loc(n_assigned_loc)
                     , assigned_date(n_assigned_date)
                     , treatment_type(n_treatment_type)
+		    , assigned_time(n_assigned_time)
 {
 }
 
