@@ -36,7 +36,7 @@ class Block_Header{
 template<class T> Block_Header<T>::Block_Header(){
     num_blks = 0;
     num_deleted = 0;
-    blk_reparrary = new vector<Block*>;
+    blk_reparrary = new vector<Block<T>*>;
 }
 
 template<class T> int64_t Block_Header<T>::find_block_id(int64_t min, int64_t max) {
