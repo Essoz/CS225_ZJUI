@@ -280,10 +280,11 @@ class medical_status{
 /* <=== relational schema for REGISTRATION ===> */
 class registration{
     public:
-        registration(int64_t n_ID, int64_t n_person_id, int64_t n_treatment_id,
+        registration(int64_t n_ID, int64_t n_reg_id, int64_t n_person_id, int64_t n_treatment_id,
                     string n_deadline, string n_date, int8_t n_withdrawn, 
                     bool n_assigned, int64_t n_assigned_loc, string n_assigned_date);
         void        setID(int64_t id)               { ID = id; }
+        void        setRegID(int64_t id)            { reg_id = id; }
         void        setPersonID(int64_t id)         { person_id = id; }
         void        setTreatmentID(int64_t id)      { treatment_id = id; }
         void        setDeadline(string ddl)         { deadline = ddl; }
@@ -295,6 +296,7 @@ class registration{
 
 
         int64_t     getID()                         { return ID; }
+        int64_t     getRegID()                      { return reg_id; }
         int64_t     getPersonID()                   { return person_id; }
         int64_t     getTreatmentID()                { return treatment_id; }
         string      getDeadline()                   { return deadline; }      // YY-MM-DD
@@ -306,6 +308,7 @@ class registration{
 
     private:
         int64_t     ID;
+        int64_t     reg_id;
         int64_t     person_id;
         int64_t     treatment_id;
         string      deadline;
@@ -361,10 +364,11 @@ medical_status::medical_status(int64_t n_ID, int8_t n_status)
 {    
 }
 
-registration::registration(int64_t n_ID, int64_t n_person_id, int64_t n_treatment_id,
+registration::registration(int64_t n_ID, int64_t n_reg_id, int64_t n_person_id, int64_t n_treatment_id,
                     string n_deadline, string n_date, int8_t n_withdrawn, 
                     bool n_assigned, int64_t n_assigned_loc, string n_assigned_date)
                     : ID(n_ID)
+                    , reg_id(n_reg_id)
                     , person_id(n_person_id)
                     , treatment_id(n_treatment_id)
                     , deadline(n_deadline)
