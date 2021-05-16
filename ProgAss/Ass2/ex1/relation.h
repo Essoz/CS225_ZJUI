@@ -11,7 +11,7 @@ using namespace std;
 using std::cout;
 using std::cin;
 
-template<class T> class Block_Header<T>;
+template<class T> class Block_Header;
 class person;
 class medical_status;
 class registration;
@@ -74,7 +74,7 @@ class Block_Header{
         //int64_t             getNumDeleted()         { return num_deleted; }     // ???
 
         void                setNum(int64_t new_num)         { num_blks = new_num; }
-        void                setNumDeleted(int64_t new_num)  { num_deleted = new_num; }
+        //void                setNumDeleted(int64_t new_num)  { num_deleted = new_num; }
 
         int64_t             find_block_id(int64_t id);      // Find the index of block where the primary key lies in
         Content_t<T>        Retrieval(int64_t id);          // Find a record with primary key id
@@ -94,7 +94,7 @@ class Block_Header{
 // Block_Header Methods:
 template<class T> Block_Header<T>::Block_Header(){
     num_blks = 0;
-    num_deleted = 0;
+    //num_deleted = 0;
     blk_reparray = new vector<Block<T>*>;
 }
 
