@@ -281,7 +281,7 @@ class medical_status{
 class registration{
     public:
         registration(int64_t n_ID, int64_t n_reg_id, int64_t n_person_id, int64_t n_treatment_id,
-                    string n_deadline, string n_date, int8_t n_withdrawn, 
+                    int8_t n_treatment_type, string n_deadline, string n_date, int8_t n_withdrawn, 
                     bool n_assigned, int64_t n_assigned_loc, string n_assigned_date);
         void        setID(int64_t id)               { ID = id; }
         void        setRegID(int64_t id)            { reg_id = id; }
@@ -299,6 +299,7 @@ class registration{
         int64_t     getRegID()                      { return reg_id; }
         int64_t     getPersonID()                   { return person_id; }
         int64_t     getTreatmentID()                { return treatment_id; }
+        int8_t      getTreatmentType()              { return treatment_type; }
         string      getDeadline()                   { return deadline; }      // YY-MM-DD
         string      getDateOfReg()                  { return date; }          // YY-MM-DD
         int8_t      getWithdraw()                   { return withdrawn; }
@@ -311,6 +312,7 @@ class registration{
         int64_t     reg_id;
         int64_t     person_id;
         int64_t     treatment_id;
+        int8_t      treatment_type;
         string      deadline;
         string      date;
         int8_t      withdrawn;
@@ -364,8 +366,8 @@ medical_status::medical_status(int64_t n_ID, int8_t n_status)
 {    
 }
 
-registration::registration(int64_t n_ID, int64_t n_reg_id, int64_t n_person_id, int64_t n_treatment_id,
-                    string n_deadline, string n_date, int8_t n_withdrawn, 
+registration::registration(int64_t n_ID, int64_t n_reg_id, int64_t n_person_id, int64_t n_treatment_id, 
+                    int8_t n_treatment_type, string n_deadline, string n_date, int8_t n_withdrawn, 
                     bool n_assigned, int64_t n_assigned_loc, string n_assigned_date)
                     : ID(n_ID)
                     , reg_id(n_reg_id)
@@ -377,6 +379,7 @@ registration::registration(int64_t n_ID, int64_t n_reg_id, int64_t n_person_id, 
                     , assigned(n_assigned)
                     , assigned_loc(n_assigned_loc)
                     , assigned_date(n_assigned_date)
+                    , treatment_type(n_treatment_type)
 {
 }
 
