@@ -43,7 +43,7 @@ queue<Patient*>* IO::write_all(queue<Patient*>* queue)
 		exit(1);
 	}
 	// Write the header of the output file first:
-	fprintf(update, "ID,Risk_Status,Profession,Age,Reg_ID,Reg_Year,Reg_Date,Withdraw,Letter_DDL,Priority,");
+	fprintf(update, "ID,Risk_Status,Profession,Age,Reg_ID,Reg_Year,Reg_Date,Withdraw,Letter_DDL,Treatment_Type,");
 	fprintf(update, "Name,Email,Phone,Birthday\n");
 
 	// Loop all the patients in the local registry queue and write all the 
@@ -121,7 +121,7 @@ queue<Patient*>* IO::write_all(queue<Patient*>* queue)
 			}
 		}
 		
-		fprintf(update, "%d,%d,", queue->front()->getddl(),queue->front()->getpriority());
+		fprintf(update, "%d,%d,", queue->front()->getddl(),queue->front()->gettreatment_type());
 		fprintf(update, "%s,%s,%s,%s\n", 
 			queue->front()->getinfo()->name.c_str(), queue->front()->getinfo()->email.c_str(), 
 			queue->front()->getinfo()->phone.c_str(), queue->front()->getinfo()->birthday.c_str());
@@ -171,13 +171,14 @@ queue<Patient*>* IO::read_all(string path, Queue* queue)
 		Profession prof = Profession(atoi(Trim(fields[1]).c_str()));
 		Age a = Age(atoi(Trim(fields[2]).c_str()));
 		int ddl = atoi(Trim(fields[3]).c_str());
+		int treat = atoi(Trim(fields[4]).c_str());
 		Information* info = new Information;
-		info->name = Trim(fields[4]);
-		info->email = Trim(fields[5]);
-		info->phone = Trim(fields[6]).c_str();
-		info->birthday = Trim(fields[7]).c_str();
+		info->name = Trim(fields[5]);
+		info->email = Trim(fields[6]);
+		info->phone = Trim(fields[7]).c_str();
+		info->birthday = Trim(fields[8]).c_str();
 		// Create a new patient:
-		queue->new_patient(risk, prof, a, info, ddl);
+		queue->new_patient(risk, prof, a, info, ddl, treat);
 	}
 	return queue->getl_queue();
 }
@@ -230,7 +231,6 @@ queue<Patient*>* IO::read_update(string path, Queue* queue)
 	return queue->getl_queue();
 }
 
-//ɾ���ַ����пո��Ʊ���tab����Ч�ַ�:
 string IO::Trim(string& str)
 {
 	//str.find_first_not_of(" \t\r\n"),���ַ���str�д�����0��ʼ�������״β�ƥ��"-\t\r\n"��λ��

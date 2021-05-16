@@ -42,7 +42,7 @@ class Queue
 public:
 	Queue();	// Default constructor for empty queue and empty IO stream class.
 	// Create a new patient member:
-	void new_patient(Risk risk, Profession prof, Age a, Information* info, int ddl);
+	void new_patient(Risk risk, Profession prof, Age a, Information* info, int ddl, int treat);
 	// Update the information of a patient with unique id number, up_type determines what info will be changed:
 	void update(int id, int up_type, int info);
 	void update_info(int id, int up_type, string info);		// Only for information
