@@ -25,8 +25,7 @@ typedef struct
 class BtreeNode
 {
 	friend class Btree;
-
-private:
+public:
 	Keys* keys;					// List of key structures
 	vector<BtreeNode*>* Child;	// Pointer to a list containing ptr of childs
 	int64_t num_keys;			// The number of key structures in this node
@@ -34,7 +33,6 @@ private:
 	bool leaf;					// If it is a leaf node
 	BtreeNode* parent;			// Point to its parent
 
-public:
 	BtreeNode(int64_t order, bool leaf, BtreeNode* parent)
 	{
 		this->order = order;
@@ -65,11 +63,10 @@ public:
 
 class Btree
 {
-private:
+public:
 	BtreeNode* root;		// Root node pointer
 	int64_t order;			// Mini-degree
 
-public:
 	Btree(int64_t order)
 	{
 		root = new BtreeNode(order, true, NULL);	// Create root node
