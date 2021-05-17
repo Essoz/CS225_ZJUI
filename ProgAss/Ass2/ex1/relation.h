@@ -288,7 +288,7 @@ template <class T> Content_t<T> Block<T>::Retrieval(int64_t id) {
     if (-1 == index)
     {
         cout << "Id not exist in this block!" << endl;
-        return NULL;
+        return 0;
     }
     // If it is in the overflow block:
     if (index >= 20)
