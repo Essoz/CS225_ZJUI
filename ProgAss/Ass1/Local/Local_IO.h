@@ -56,6 +56,7 @@ public:
 // This new added function is used to read the updated info and update the queue:
 	static queue<Patient*>* read_update(string path, Queue* queue);
 
+//ɾ���ַ����пո��Ʊ���tab����Ч�ַ�
 	static string Trim(string& str);
 };
 

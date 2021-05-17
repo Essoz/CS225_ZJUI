@@ -63,14 +63,12 @@ private:
     int withdraw;    // Indicate that the patient has withdrew before
     int re_reg;      // Indicate that the patient has registered after withdraw
     int letter_ddl; // The deadline of the priority letter, should be -1 if no letter is handed in
-    // int priority;   // The priority of treatment
-    int treatment_type;// The type for treatment, which has three choices: 0,1,2
+    int priority;   // The priority of treatment
     Appointment* appointment;
 
 public:
     Patient();
-    Patient(int id, Risk risk, Profession professionLevel, Age a, Information* info,
-            int regis_id, int year, int date, int ddl, int treat);      // Constructor for new patient
+    Patient(int id, Risk risk, Profession professionLevel, Age a, Information* info, int regis_id, int year, int date, int ddl);      // Constructor for new patient
 
     /*set functions*/
     void setid(int id) {
@@ -110,12 +108,10 @@ public:
     {
         letter_ddl = ddl;
     }
-    /*
     void setpriority(int prio)
     {
         priority = prio;
     }
-    */
     void setinfo(Information* info) {
         information = info;
     }
@@ -131,11 +127,9 @@ public:
     void setbirthday(string bir) {
         information->birthday = bir;
     }
-    void setappoint(Appointment* appo) {
+    void setappoint(Appointment* appo)
+    {
         appointment = appo;
-    }
-    void settreatment_type(int treat) {
-        treatment_type = treat;
     }
 
     /*get functions*/
@@ -176,12 +170,10 @@ public:
     {
         return letter_ddl;
     }
-    /*
     int getpriority()
     {
         return priority;
     }
-    */
     Information* getinfo() {
         return information;
     }
@@ -195,16 +187,11 @@ public:
     string getlocation() {
         return appointment->location;
     }
-    int gettreatment_type() {
-        return treatment_type;
-    }
-
     // Other helper functions:
-    // int calculate_prio();     // Calculate the priority
+    int calculate_prio();     // Calculate the priority
 };
 
-Patient::Patient(int id, Risk risk, Profession professionLevel, Age a, Information* info, 
-                 int regis_id, int year, int date, int ddl, int treat)
+Patient::Patient(int id, Risk risk, Profession professionLevel, Age a, Information* info, int regis_id, int year, int date, int ddl)
 {
     setid(id);
     setrisk(risk);
@@ -219,13 +206,11 @@ Patient::Patient(int id, Risk risk, Profession professionLevel, Age a, Informati
     setre_reg(0);
     setddl(ddl);
     // The priority needs to be calculated first:
-    // int prio = calculate_prio();
-    // setpriority(prio);
+    int prio = calculate_prio();
+    setpriority(prio);
     setappoint(NULL);   // No appoinment yet
-    settreatment_type(treat);
 };
 
-/*
 // The priority is represented by a int number, different fields occupy different places (letter_ddl is not considered):
 int Patient::calculate_prio()
 {
@@ -238,5 +223,5 @@ int Patient::calculate_prio()
     prio = prio + 1000000 * profession;
     return prio;
 }
-*/
+
 #endif /* Patient_h */

@@ -40,7 +40,7 @@ Queue::Queue()
 }
 
 // Create a new patient member:
-void Queue::new_patient(Risk risk, Profession prof, Age a, Information* info, int ddl, int treat)
+void Queue::new_patient(Risk risk, Profession prof, Age a, Information* info, int ddl)
 {
 	id_num++;
 	int id = id_num;		// Allocate a new id number to him
@@ -48,7 +48,7 @@ void Queue::new_patient(Risk risk, Profession prof, Age a, Information* info, in
 	int date = cur_date;
 	int reg_id = regis_id;	// set the registry id
 	Patient* patient;	// Create a new patient instance in the MEM heap
-	patient = new Patient(id, risk, prof, a, info, reg_id, year, date, ddl, treat);
+	patient = new Patient(id, risk, prof, a, info, reg_id, year, date, ddl);
 	// Add the patient into the local queue:
 	l_queue->push(patient);
 	// Add the patient into the hash table:
@@ -127,7 +127,7 @@ void Queue::update(int id, int up_type, int info)
 		break;
 	}
 	// Calculate the updated priority number:
-	// patient->setpriority(patient->calculate_prio());
+	patient->setpriority(patient->calculate_prio());
 	// Remember, do not forget to add this updated patient into the queue,
 	// even it already exists in the queue:
 	l_queue->push(patient);
