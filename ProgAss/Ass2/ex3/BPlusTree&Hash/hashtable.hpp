@@ -32,17 +32,16 @@ public:
         }
     }
 
-    vector<Value>& get(const Key &key) const {
+    void get(const Key &key,vector<Value> &id_vec) const {
         Node *cur = buckets[getBucket(key)];
         // int i=0;
-        vector<Value> const  id_vec;
         while (cur != nullptr) {
             // cout<<i<<" th id in this secondary key is "<<cur->val<<endl;    //这里是把他打出来，你想个办法搞到vector就行
             id_vec.push_back(cur->val);
             cur = cur->next;
             // i++;
         }
-        return id_vec;
+        return;
     }
 
     bool contains(const Key &key) const {
