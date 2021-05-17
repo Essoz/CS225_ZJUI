@@ -1,8 +1,5 @@
 /*
 *	BPlusTree.h
-*
-*	By: Alex Ruth
-*	Github: AlexanderRuth
 *	Modified by Guo Moyang at 2021.5.9
 */
 
