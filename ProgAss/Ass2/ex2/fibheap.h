@@ -10,6 +10,18 @@
 #include "../ex1/relation.h"
 using namespace std;
 
+registration* Reg_Relation_Delete(int64_t ID);
+void Reg_Relation_Insert(registration Reg);
+registration* Reg_Relation_Retrieve(int64_t ID);
+vector<registration*>& Reg_Relation_Retrieve_2(int8_t withdraw);
+void Per_Relation_Insert(person Per);
+person* Per_Relation_Delete(int64_t ID);
+person* Per_Relation_Retrieve(int64_t ID);
+void Tre_Relation_Insert(treatment Tre);
+treatment* Tre_Relation_Delete(int64_t ID);
+treatment* Tre_Relation_Retrieve(int64_t ID);
+vector<treatment*>& Tre_Relation_Retrieve_2(int64_t week);
+
 class FibNode;
 
 class FibHeap

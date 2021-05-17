@@ -48,14 +48,14 @@ registration* Reg_Relation_Retrieve(int64_t ID){
 }
 vector<registration*>& Reg_Relation_Retrieve_2(int8_t withdraw){
     vector<int64_t> result_id = reg_withdraw.get(withdraw);
-    vector<registration*> result_reg;
+    vector<registration*>* result_Reg = new vector<registration*>;
 
     int64_t count = result_id.size();
     for (int64_t i = 0; i < count; i++) {
         registration* temp_Reg = Reg_Relation_Retrieve(result_id[i]);
-        result_reg.push_back(temp_Reg);
+        result_Reg->push_back(temp_Reg);
     }
-    return result_reg;
+    return *result_Reg;
 }
 
 void Per_Relation_Insert(person Per){
@@ -80,22 +80,23 @@ treatment* Tre_Relation_Delete(int64_t ID){
     treatment* Tre;
     tre_id.remove(ID, *Tre);
     tre_week.remove(ID, stoi(Tre->getFinishedTime()) / 7);
+    return Tre;
 }
 treatment* Tre_Relation_Retrieve(int64_t ID){
     treatment* Tre;
-    tre_id.retrieve(ID, Tre);
+    tre_id.retrieve(ID, *Tre);
     return Tre;
 }
 vector<treatment*>& Tre_Relation_Retrieve_2(int64_t week){
     vector<int64_t> result_id = tre_week.getAll(week);
-    vector<treatment*> result_Tre;
+    vector<treatment*>* result_Tre = new vector<treatment*>;
     
     int64_t count = result_id.size();
     for (int64_t i = 0; i < count; i++) {
         treatment* temp_Tre = Tre_Relation_Retrieve(result_id[i]);
-        result_Tre.push_back(temp_Tre);
+        result_Tre->push_back(temp_Tre);
     }
-    return result_Tre;
+    return *result_Tre;
 
     //??? // TODO
 }

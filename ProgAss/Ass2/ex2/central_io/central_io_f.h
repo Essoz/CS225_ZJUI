@@ -127,6 +127,7 @@ bool CentralIO::Read2Heap(){
     } else {
         regi_heap->Insert(newnode);
     }
+    }
     return true;
 }
 /* CentralIO::Write2File
@@ -139,51 +140,51 @@ bool CentralIO::Read2Heap(){
  */
 
 bool CentralIO::Write2File(vector<FibNode*>&print_list, int date, int type) {
-    string filename; // = "Report_";
-    // if (type == 3) {
-    //     filename += "Month_" + to_string(date / 30 + 1);
-    // } else {
-    //     filename += "Week_" + to_string(date / 7 + 1);
+    // string filename; // = "Report_";
+    // // if (type == 3) {
+    // //     filename += "Month_" + to_string(date / 30 + 1);
+    // // } else {
+    // //     filename += "Week_" + to_string(date / 7 + 1);
+    // // }
+
+    // switch (type) {
+    //     case 0:
+    //     filename = "Report_Week_" + to_string(date / 7) + "_Cured.csv";
+    //     break;
+
+    //     case 1:
+    //     filename = "Report_Week_" + to_string(date / 7) + "_Assigned.csv";
+    //     break;
+
+    //     case 2:
+    //     filename = "Report_Week_" + to_string(date / 7) + "_Waiting.csv";
+    //     break;
+
+    //     case 3:
+    //     filename = "Report_Month_" + to_string(date / 30) + ".csv";
+
+    //     default:
+    //     cout << "You are fucked at CentralIO::Write2File" << date << type << endl;
+    //     exit(3);
+    // }   
+
+    // ofstream out(filename, fstream::out);
+    // if (!out) cout << "You are fucked" << endl;
+    // out << "ProfessionCategory,AgeCategory,RiskStatus,WaitingTime" << '\r';
+    // for (int i = 0; i < int(print_list.size()); i++) {
+    //     out << print_list[i]->getpro();
+    //     out << ",";
+    //     out << print_list[i]->getage();
+    //     out << ",";
+    //     out << print_list[i]->getrisk();
+    //     out << ",";
+    //     if (type == 0)
+    //         out << print_list[i]->getAppointment()->getDate() - print_list[i]->getdate() << endl;
+    //     else
+    //         out << date - print_list[i]->getdate();
+    //     out << '\r';
     // }
-
-    switch (type) {
-        case 0:
-        filename = "Report_Week_" + to_string(date / 7) + "_Cured.csv";
-        break;
-
-        case 1:
-        filename = "Report_Week_" + to_string(date / 7) + "_Assigned.csv";
-        break;
-
-        case 2:
-        filename = "Report_Week_" + to_string(date / 7) + "_Waiting.csv";
-        break;
-
-        case 3:
-        filename = "Report_Month_" + to_string(date / 30) + ".csv";
-
-        default:
-        cout << "You are fucked at CentralIO::Write2File" << date << type << endl;
-        exit(3);
-    }   
-
-    ofstream out(filename, fstream::out);
-    if (!out) cout << "You are fucked" << endl;
-    out << "ProfessionCategory,AgeCategory,RiskStatus,WaitingTime" << '\r';
-    for (int i = 0; i < int(print_list.size()); i++) {
-        out << print_list[i]->getpro();
-        out << ",";
-        out << print_list[i]->getage();
-        out << ",";
-        out << print_list[i]->getrisk();
-        out << ",";
-        if (type == 0)
-            out << print_list[i]->getAppointment()->getDate() - print_list[i]->getdate() << endl;
-        else
-            out << date - print_list[i]->getdate();
-        out << '\r';
-    }
-    out.close();
+    // out.close();
     return true;
 }
 
@@ -195,9 +196,9 @@ bool CentralIO::ReportWeekly(int week, int key){
      * 2. the registered people with a set appointment including their profession category, age category, risk status and their waiting time until now
      * 3. the queueing people without a set appointment including their profession category, age category, risk status and their waiting time until now
      */
-    _WeeklyCured(week, key - '0');
-    _WeeklyAssigned(week, key - '0');
-    _WeeklyQueueing(week, key - '0');
+    // _WeeklyCured(week, key - '0');
+    // _WeeklyAssigned(week, key - '0');
+    // _WeeklyQueueing(week, key - '0');
     return true;
 }
 
@@ -205,7 +206,7 @@ bool CentralIO::ReportWeekly(int week, int key){
 
 
 bool CentralIO::ReportMonthly(int month, int key){
-    _Monthly(month, key - '0');
+    // _Monthly(month, key - '0');
     return true;
 }
 
@@ -221,17 +222,17 @@ bool CentralIO::ReportMonthly(int month, int key){
  *      given.
  */
 bool CentralIO::_WeeklyCured(int week, int key){
-    vector<FibNode*> print_list;
-    // copy the list to be printed 
-    print_list.assign(assignment->all_locations->cured_list[week].begin(),
-    assignment->all_locations->cured_list[week].end());
-    // sort the list
-    sortByKey(print_list, key);
-    // generate report using print_list (sorted)
-    if (Write2File(print_list, week * 7, 0) == false) exit(3);
+    // vector<FibNode*> print_list;
+    // // copy the list to be printed 
+    // print_list.assign(assignment->all_locations->cured_list[week].begin(),
+    // assignment->all_locations->cured_list[week].end());
+    // // sort the list
+    // sortByKey(print_list, key);
+    // // generate report using print_list (sorted)
+    // if (Write2File(print_list, week * 7, 0) == false) exit(3);
 
-    cout << "\nWeek " << week << "'s report (Cured patients ordered W.R.T key "<< key;
-    cout << ") has been generated" << endl;
+    // cout << "\nWeek " << week << "'s report (Cured patients ordered W.R.T key "<< key;
+    // cout << ") has been generated" << endl;
     return true;
 }
 bool CentralIO::_WeeklyAssigned(int week, int key){
@@ -239,73 +240,73 @@ bool CentralIO::_WeeklyAssigned(int week, int key){
 
     // print_list 
     // TODO This needs further Verification
-    vector <FibNode*> print_list = heap->assigned_table->list_patient();
+    // vector <FibNode*> print_list = heap->assigned_table->list_patient();
 
-    sortByKey(print_list, key);
-    if (Write2File(print_list, week * 7, 1) == false) exit(3);
+    // sortByKey(print_list, key);
+    // if (Write2File(print_list, week * 7, 1) == false) exit(3);
 
     
-    cout << "\nWeek " << week << "'s report (Assigned patients ordered W.R.T key "<< key;
-    cout << ") has been generated" << endl;
-    return true;
+    // cout << "\nWeek " << week << "'s report (Assigned patients ordered W.R.T key "<< key;
+    // cout << ") has been generated" << endl;
+    // return true;
 
     return true;
 }
 bool CentralIO::_WeeklyQueueing(int week, int key){
-    vector<FibNode*> print_list;
-    // generate fiblist
-    print_list.assign(heap->fiblist.begin(), heap->fiblist.end());
-    print_list.insert(print_list.end(), heap->highrisk_queue->fiblist.begin(), heap->highrisk_queue->fiblist.end());
-    sortByKey(print_list, key);
+    // vector<FibNode*> print_list;
+    // // generate fiblist
+    // print_list.assign(heap->fiblist.begin(), heap->fiblist.end());
+    // print_list.insert(print_list.end(), heap->highrisk_queue->fiblist.begin(), heap->highrisk_queue->fiblist.end());
+    // sortByKey(print_list, key);
 
-    if (Write2File(print_list, week * 7, 2) == false) exit(3);
+    // if (Write2File(print_list, week * 7, 2) == false) exit(3);
 
-    cout << "\nWeek " << week << "'s report (Queueing patients ordered W.R.T key "<< key;
-    cout << ") has been generated" << endl;
+    // cout << "\nWeek " << week << "'s report (Queueing patients ordered W.R.T key "<< key;
+    // cout << ") has been generated" << endl;
     return true;
 }
 bool CentralIO::_Monthly(int month, int key){
     
-    string filename = "MonthlyStat_";
-    filename += to_string(month) + ".md";
+    // string filename = "MonthlyStat_";
+    // filename += to_string(month) + ".md";
 
-    ofstream out(filename, fstream::out);
-    out << "# Central Queueing System Monthly Statistic Report | 2021, Month " << month << endl;
+    // ofstream out(filename, fstream::out);
+    // out << "# Central Queueing System Monthly Statistic Report | 2021, Month " << month << endl;
     
-    out << "### Number of Waiting People" << endl;
-    out << heap->GetNum() + heap->highrisk_queue->GetNum() << "  "<< endl;
+    // out << "### Number of Waiting People" << endl;
+    // out << heap->GetNum() + heap->highrisk_queue->GetNum() << "  "<< endl;
 
     
 
-    out << "### Number of Treated People Per Month" << endl;
-    // int num_treated = 0;
-    // for (int i = 0; i < int(assignment->all_locations->cured_list.size()); i++) {
-    //     num_treated += assignment->all_locations->cured_list;
+    // out << "### Number of Treated People Per Month" << endl;
+    // // int num_treated = 0;
+    // // for (int i = 0; i < int(assignment->all_locations->cured_list.size()); i++) {
+    // //     num_treated += assignment->all_locations->cured_list;
+    // // }
+    // int cured_nums = assignment->all_locations->cured_list[month*4 - 4].size() 
+    //                + assignment->all_locations->cured_list[month*4 - 3].size()
+    //                + assignment->all_locations->cured_list[month*4 - 2].size() 
+    //                + assignment->all_locations->cured_list[month*4 - 1].size();
+    // out << cured_nums << "  " << endl;
+
+    // out << "### Average Waiting Time" << endl;
+    // int avg_time = 0;
+    // for (int k = 0; k < 4; k++){
+    //     for (int i = 0; i < assignment->all_locations->cured_list[month*4 - k].size(); i++) {
+    //         avg_time += assignment->all_locations->cured_list[month*4 - k][i]->getAppointment()->getDate() - 
+    //         assignment->all_locations->cured_list[month*4 - k][i]->getdate();
+    //     }
     // }
-    int cured_nums = assignment->all_locations->cured_list[month*4 - 4].size() 
-                   + assignment->all_locations->cured_list[month*4 - 3].size()
-                   + assignment->all_locations->cured_list[month*4 - 2].size() 
-                   + assignment->all_locations->cured_list[month*4 - 1].size();
-    out << cured_nums << "  " << endl;
+    // avg_time /= cured_nums;
 
-    out << "### Average Waiting Time" << endl;
-    int avg_time = 0;
-    for (int k = 0; k < 4; k++){
-        for (int i = 0; i < assignment->all_locations->cured_list[month*4 - k].size(); i++) {
-            avg_time += assignment->all_locations->cured_list[month*4 - k][i]->getAppointment()->getDate() - 
-            assignment->all_locations->cured_list[month*4 - k][i]->getdate();
-        }
-    }
-    avg_time /= cured_nums;
+    // out << avg_time << "days  " << endl;
+    // ;
 
-    out << avg_time << "days  " << endl;
-    ;
+    // out << "### Number of People who withdrew their registration" << endl;
+    // out << heap->withdraw_table->get_numitems() << "  " << endl;
 
-    out << "### Number of People who withdrew their registration" << endl;
-    out << heap->withdraw_table->get_numitems() << "  " << endl;
-
-    out.close();
-    cout << "\nMonth " << month << "'s report has been generated." << endl;
+    // out.close();
+    // cout << "\nMonth " << month << "'s report has been generated." << endl;
     
     return true;
 }
@@ -317,33 +318,33 @@ bool CentralIO::_Monthly(int month, int key){
  */
 bool CentralIO::compare(FibNode* a, FibNode* b, int key)
 {
-    if (key == 0) {
-        return (a->getname() < b->getname());
-    } 
-    if (key == 1) {
-        return (a->getpro() < b->getpro());
-    }
-    if (key == 2) {
-        return (a->getage() < b->getage());
-    }
+    // if (key == 0) {
+    //     return (a->getname() < b->getname());
+    // } 
+    // if (key == 1) {
+    //     return (a->getpro() < b->getpro());
+    // }
+    // if (key == 2) {
+    //     return (a->getage() < b->getage());
+    // }
     return false;
 }
 
 void CentralIO::sortByKey(vector<FibNode*>&fiblist,int key)
 {
-    FibNode* temp;
-    for (int i = 0; i < int(fiblist.size())-1; i++)
-    {
-        for (int j = 0; j < int(fiblist.size())-1-i; j++)
-        {
-            if (!this->compare(fiblist[j], fiblist[j+1], key))
-            {
-                temp=fiblist[j];
-                fiblist[j]=fiblist[j+1];
-                fiblist[j+1]=temp;
-            }
-        }
-    }
+    // FibNode* temp;
+    // for (int i = 0; i < int(fiblist.size())-1; i++)
+    // {
+    //     for (int j = 0; j < int(fiblist.size())-1-i; j++)
+    //     {
+    //         if (!this->compare(fiblist[j], fiblist[j+1], key))
+    //         {
+    //             temp=fiblist[j];
+    //             fiblist[j]=fiblist[j+1];
+    //             fiblist[j+1]=temp;
+    //         }
+    //     }
+    // }
 }
 
 #endif
