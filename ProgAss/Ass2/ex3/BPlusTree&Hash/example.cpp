@@ -66,9 +66,13 @@ int main()
 	hashtable<int, int> ht;
     ht.put(1,80);//这里这个第一项就是四种second key，你随便加，然后第二项是id，put是往hash里面填东西的函数
 	ht.put(1,90);
-	ht.get(1);
-    cout<<"1"<<endl;
+	vector<int> result_id;
+	vector<int> result_id1;
+	ht.get(1,result_id);
+	cout<<result_id.capacity()<<endl;
 	ht.put(2,1);
+	ht.get(2,result_id1);
+	cout<<result_id1.capacity()<<endl;
 	return 0;
 }
 //这个hash存起来的都是id，所以返回的也是id，然后如果想从data set找东西，就用hash回来的id过一遍b加树去找pointer

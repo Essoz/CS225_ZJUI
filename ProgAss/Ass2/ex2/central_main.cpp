@@ -47,7 +47,8 @@ registration* Reg_Relation_Retrieve(int64_t ID){
     return Reg;
 }
 vector<registration*>& Reg_Relation_Retrieve_2(int8_t withdraw){
-    vector<int64_t> result_id = reg_withdraw.get(withdraw);
+    vector<int64_t> result_id;
+    reg_withdraw.get(withdraw,result_id);
     vector<registration*>* result_Reg = new vector<registration*>;
 
     int64_t count = result_id.size();
