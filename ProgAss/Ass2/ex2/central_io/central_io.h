@@ -17,7 +17,7 @@
 #include <fstream>
 #include "../fibheap_f.h"
 #include "../assqueue/assignment.h"
-#include "../ex1/relation.h"
+#include "../../ex1/relation.h"
 using namespace std;
 
 // TODO: ADD this class as a friend class of FibHeap

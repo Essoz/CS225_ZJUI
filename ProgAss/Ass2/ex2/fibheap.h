@@ -42,7 +42,6 @@ class FibHeap
         FibNode* min_ptr;
         // vector<FibNode*> fiblist;
         int numitems;
-        Hash_Chaining* processin_table;
 };
 
 class FibNode{

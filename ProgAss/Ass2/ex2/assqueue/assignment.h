@@ -15,7 +15,7 @@ person* Per_Relation_Retrieve(int64_t ID);
 void Tre_Relation_Insert(treatment Tre);
 treatment* Tre_Relation_Delete(int64_t ID);
 treatment* Tre_Relation_Retrieve(int64_t ID);
-treatment* Tre_Relation_Retrieve_2(int64_t week);
+vector<treatment*>& Tre_Relation_Retrieve_2(int64_t week);
 
 
 class FibNode;

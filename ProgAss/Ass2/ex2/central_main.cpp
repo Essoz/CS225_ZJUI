@@ -10,7 +10,6 @@
 #include "alist.cpp"
 #include "central_io/central_io_f.h"
 #include "assqueue/assignment_f.h"
-#include "hashing/central_hash.cpp"
 #include "../ex3/BPlusTree&Hash/BPlusTree.h"
 #include "../ex3/BPlusTree&Hash/hashtable.hpp"
 #include "../ex3/BTree/BTree.cpp"
@@ -87,8 +86,17 @@ treatment* Tre_Relation_Retrieve(int64_t ID){
     tre_id.retrieve(ID, Tre);
     return Tre;
 }
-treatment* Tre_Relation_Retrieve_2(int64_t week){
-    return tre_week.search(week);
+vector<treatment*>& Tre_Relation_Retrieve_2(int64_t week){
+    vector<int64_t> result_id = tre_week.getAll(week);
+    vector<treatment*> result_Tre;
+    
+    int64_t count = result_id.size();
+    for (int64_t i = 0; i < count; i++) {
+        treatment* temp_Tre = Tre_Relation_Retrieve(result_id[i]);
+        result_Tre.push_back(temp_Tre);
+    }
+    return result_Tre;
+
     //??? // TODO
 }
 
