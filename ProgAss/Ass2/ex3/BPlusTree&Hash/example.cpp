@@ -44,14 +44,14 @@ int main()
 	}
 	if(patient_bptree.retrieve(1000, cur_patient)){;
 		cout << "=======" << endl;
-		cout << "ID: Min" << endl;
+		cout << "ID: Max" << endl;
 		cout << "=======" << endl;
 		cout << "Patient ID: " << cur_patient->ID << endl;
 		//cout << "Patient pointer in data set " << cur_patient->pointer << endl << endl;
 	}
 	if(patient_bptree.retrieve(42, cur_patient)){;
 		cout << "=======" << endl;
-		cout << "ID: Min" << endl;
+		cout << "ID: 42" << endl;
 		cout << "=======" << endl;
 		cout << "Patient ID: " << cur_patient->ID << endl;
 		//cout << "Patient pointer in data set " << cur_patient->pointer << endl << endl;
@@ -69,9 +69,14 @@ int main()
 	vector<int> result_id;
 	vector<int> result_id1;
 	ht.get(1,result_id);
+	cout<<"vector capacity:"<<endl;
 	cout<<result_id.capacity()<<endl;
+	cout<<"vector element:"<<endl;
+	cout<<result_id.at(0)<<endl;
+	cout<<result_id.at(1)<<endl;
 	ht.put(2,1);
 	ht.get(2,result_id1);
+	cout<<"vector capacity:"<<endl;
 	cout<<result_id1.capacity()<<endl;
 	return 0;
 }
