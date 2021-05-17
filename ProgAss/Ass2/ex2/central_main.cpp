@@ -12,7 +12,7 @@
 #include "assqueue/assignment_f.h"
 #include "../ex3/BPlusTree&Hash/BPlusTree.h"
 #include "../ex3/BPlusTree&Hash/hashtable.hpp"
-#include "../ex3/BTree/BTree.cpp"
+#include "../ex3/BTree/B.cpp"
 #include <unistd.h>
 #include <string>
 #include <vector>
@@ -23,9 +23,8 @@ const int interval = 1; // unit in day
 string path;
 int date;
 
-Btree tre_week = Btree(4);
+B tre_week = B(4);
 Btree<int64_t, treatment> tre_id;
-
 Btree<int64_t, person> per_id;
 
 Btree<int64_t, registration> reg_id;
