@@ -6,7 +6,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Sun May  9 20:23:55 2021
+# Make data base, printed on Mon May 17 16:37:49 2021
 
 # Variables
 
@@ -18,8 +18,12 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 WSLENV = ELECTRON_RUN_AS_NODE/w:
 # default
 .SHELLFLAGS := -c
+# makefile (from 'Makefile', line 6)
+OBJ = $(SRC:.cc=.o)
 # environment
 VSCODE_AGENT_FOLDER = /home/moyangg2/.vscode-server
+# makefile (from 'Makefile', line 5)
+SRC = central_main.cpp
 # environment
 VSCODE_LOG_NATIVE = false
 # automatic
@@ -29,17 +33,19 @@ VSCODE_LOG_NATIVE = false
 # automatic
 @F = $(notdir $@)
 # makefile
-CURDIR := /home/moyangg2/CS225/Joshua/ProgAss/Ass2/ex3
+CURDIR := /home/moyangg2/CS225/Joshua/ProgAss/Ass2/ex2
 # makefile
 SHELL = /bin/sh
 # environment
-VSCODE_NLS_CONFIG = {"locale":"zh-cn","availableLanguages":{"*":"zh-cn"},"_languagePackId":"b475c8051e44470192b4d0d6d26919c5.zh-cn","_translationsConfigFile":"/home/moyangg2/.vscode-server/data/clp/b475c8051e44470192b4d0d6d26919c5.zh-cn/tcf.json","_cacheRoot":"/home/moyangg2/.vscode-server/data/clp/b475c8051e44470192b4d0d6d26919c5.zh-cn","_resolvedLanguagePackCoreLocation":"/home/moyangg2/.vscode-server/data/clp/b475c8051e44470192b4d0d6d26919c5.zh-cn/cfa2e218100323074ac1948c885448fdf4de2a7f","_corruptedFile":"/home/moyangg2/.vscode-server/data/clp/b475c8051e44470192b4d0d6d26919c5.zh-cn/corrupted.info","_languagePackSupport":true}
+VSCODE_NLS_CONFIG = {"locale":"zh-cn","availableLanguages":{"*":"zh-cn"},"_languagePackId":"71ffa7264d3a9c91d6413c59d18c2924.zh-cn","_translationsConfigFile":"/home/moyangg2/.vscode-server/data/clp/71ffa7264d3a9c91d6413c59d18c2924.zh-cn/tcf.json","_cacheRoot":"/home/moyangg2/.vscode-server/data/clp/71ffa7264d3a9c91d6413c59d18c2924.zh-cn","_resolvedLanguagePackCoreLocation":"/home/moyangg2/.vscode-server/data/clp/71ffa7264d3a9c91d6413c59d18c2924.zh-cn/054a9295330880ed74ceaedda236253b4f39a335","_corruptedFile":"/home/moyangg2/.vscode-server/data/clp/71ffa7264d3a9c91d6413c59d18c2924.zh-cn/corrupted.info","_languagePackSupport":true}
 # environment
 _ = /mnt/c/Users/Joshua/AppData/Local/Programs/Microsoft VS Code/bin/code
 # makefile (from 'Makefile', line 1)
 MAKEFILE_LIST :=  Makefile
 # 'override' directive
 GNUMAKEFLAGS := 
+# makefile (from 'Makefile', line 2)
+CXXFLAGS = -Wall -Werror -Wextra -pedantic -std=c++17 -g 
 # environment
 XDG_DATA_DIRS = /usr/local/share:/usr/share:/var/lib/snapd/desktop
 # environment
@@ -51,13 +57,15 @@ VSCODE_CWD = /mnt/c/Users/Joshua/AppData/Local/Programs/Microsoft VS Code
 # default
 MAKE_HOST := x86_64-pc-linux-gnu
 # environment
-PATH = /home/moyangg2/.vscode-server/bin/cfa2e218100323074ac1948c885448fdf4de2a7f/bin:/usr/local/cuda-11.2/bin:/usr/local/cuda-11.2/nsight-compute-2020.2.0:/home/moyangg2/anaconda3/bin:/home/moyangg2/anaconda3/condabin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.1/bin:/mnt/c/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.1/libnvvp:/mnt/c/x86_64-8.1.0-release-posix-seh-rt_v6-rev0/mingw64/bin:/mnt/c/Program Files/NVIDIA Corporation/NVIDIA NvDLISR:/mnt/c/Program Files (x86)/NVIDIA Corporation/PhysX/Common:/mnt/c/Program Files/NVIDIA Corporation/Nsight Compute 2020.2.0:/mnt/c/Program Files/MATLAB/R2021a/bin:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0:/mnt/c/WINDOWS/System32/OpenSSH:/mnt/c/Users/Joshua/AppData/Local/Microsoft/WindowsApps:/mnt/c/Users/Joshua/AppData/Local/Programs/Microsoft VS Code/bin:/mnt/d/intel_quartus/modelsim_ase/win32aloem:/snap/bin
+PATH = /home/moyangg2/.vscode-server/bin/054a9295330880ed74ceaedda236253b4f39a335/bin:/usr/local/cuda-11.2/bin:/usr/local/cuda-11.2/nsight-compute-2020.2.0:/home/moyangg2/anaconda3/bin:/home/moyangg2/anaconda3/condabin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.1/bin:/mnt/c/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.1/libnvvp:/mnt/c/x86_64-8.1.0-release-posix-seh-rt_v6-rev0/mingw64/bin:/mnt/c/Program Files/NVIDIA Corporation/NVIDIA NvDLISR:/mnt/c/Program Files (x86)/NVIDIA Corporation/PhysX/Common:/mnt/c/Program Files/NVIDIA Corporation/Nsight Compute 2020.2.0:/mnt/c/Program Files/MATLAB/R2021a/bin:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0:/mnt/c/WINDOWS/System32/OpenSSH:/mnt/c/Users/Joshua/AppData/Local/Microsoft/WindowsApps:/mnt/c/Users/Joshua/AppData/Local/Programs/Microsoft VS Code/bin:/mnt/d/intel_quartus/modelsim_ase/win32aloem:/snap/bin
 # environment
 CONDA_PREFIX = /home/moyangg2/anaconda3
 # environment
 VSCODE_LOG_STACK = false
 # environment
-VSCODE_IPC_HOOK_CLI = /tmp/vscode-ipc-e4d19ba4-c907-4340-bdab-c65eb2f5404e.sock
+VSCODE_IPC_HOOK_CLI = /tmp/vscode-ipc-3e345795-181c-4047-aca6-09050fa303bf.sock
+# makefile (from 'Makefile', line 3)
+LDFLAGS = -g
 # default
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell archives jobserver output-sync check-symlink load
 # environment
@@ -69,7 +77,7 @@ CONDA_EXE = /home/moyangg2/anaconda3/bin/conda
 # environment
 VSCODE_PIPE_LOGGING = true
 # environment
-PWD = /home/moyangg2/CS225/Joshua/ProgAss/Ass2/ex3
+PWD = /home/moyangg2/CS225/Joshua/ProgAss/Ass2/ex2
 # default
 .LOADED := 
 # environment
@@ -104,6 +112,8 @@ MAKECMDGOALS := all
 CONDA_SHLVL = 1
 # environment
 SHLVL = 1
+# makefile (from 'Makefile', line 7)
+EXEC = central
 # default
 MAKE_VERSION := 4.2.1
 # environment
@@ -115,7 +125,7 @@ NAME = Code
 # automatic
 %D = $(patsubst %/,%,$(dir $%))
 # environment
-VSCODE_WSL_EXT_LOCATION = /mnt/c/Users/Joshua/.vscode/extensions/ms-vscode-remote.remote-wsl-0.54.6
+VSCODE_WSL_EXT_LOCATION = /mnt/c/Users/Joshua/.vscode/extensions/ms-vscode-remote.remote-wsl-0.56.2
 # default
 MAKE_COMMAND := make
 # default
@@ -136,8 +146,8 @@ MFLAGS = -pqrR
 MAKEFILES := 
 # automatic
 <F = $(notdir $<)
-# makefile (from 'Makefile', line 2)
-GXX = g++
+# makefile (from 'Makefile', line 1)
+CXX = g++
 # environment
 LC_ALL = C
 # environment
@@ -148,14 +158,12 @@ HOSTTYPE = x86_64
 ^F = $(notdir $^)
 # default
 SUFFIXES := 
-# makefile (from 'Makefile', line 1)
-FLAGS = -g -Wall -Werror -Wextra -std=gnu++11
 # environment
 _CE_M = 
 # default
 .INCLUDE_DIRS = /usr/include /usr/local/include /usr/include
 # environment
-VSCODE_INJECT_NODE_MODULE_LOOKUP_PATH = /home/moyangg2/.vscode-server/bin/cfa2e218100323074ac1948c885448fdf4de2a7f/remote/node_modules
+VSCODE_INJECT_NODE_MODULE_LOOKUP_PATH = /home/moyangg2/.vscode-server/bin/054a9295330880ed74ceaedda236253b4f39a335/remote/node_modules
 # default
 .RECIPEPREFIX := 
 # environment
@@ -169,7 +177,7 @@ WSL_DISTRO_NAME = Ubuntu-20.04
 # environment
 _CE_CONDA = 
 # variable set hash-table stats:
-# Load=79/1024=8%, Rehash=0, Collisions=6/109=6%
+# Load=83/1024=8%, Rehash=0, Collisions=9/120=8%
 
 # Pattern-specific Variable Values
 
@@ -177,9 +185,9 @@ _CE_CONDA =
 
 # Directories
 
-# . (device 2064, inode 193964): 6 files, no impossibilities.
+# . (device 2064, inode 193962): 17 files, no impossibilities.
 
-# 6 files, no impossibilities in 1 directories.
+# 17 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -187,33 +195,41 @@ _CE_CONDA =
 
 # Files
 
-all: example.cpp BPlusTree.h
-#  Command line target.
+central: central_main.cpp
 #  Implicit rule search has not been done.
 #  Implicit/static pattern stem: ''
 #  File does not exist.
 #  File has been updated.
 #  Needs to be updated (-q is set).
 # automatic
-# @ := all
+# @ := central
 # automatic
 # % := 
 # automatic
 # * := 
 # automatic
-# + := example.cpp BPlusTree.h
+# + := central_main.cpp
 # automatic
 # | := 
 # automatic
-# < := example.cpp
+# < := central_main.cpp
 # automatic
-# ^ := example.cpp BPlusTree.h
+# ^ := central_main.cpp
 # automatic
-# ? := example.cpp BPlusTree.h
+# ? := central_main.cpp
 # variable set hash-table stats:
-# Load=8/32=25%, Rehash=0, Collisions=1/13=8%
-#  recipe to execute (from 'Makefile', line 5):
-	$(GXX) $(FLAGS) example.cpp -o example
+# Load=8/32=25%, Rehash=0, Collisions=3/17=18%
+#  recipe to execute (from 'Makefile', line 12):
+	$(CXX) $(LDFLAGS) -o $@ $(OBJ) $(LBLIBS)
+
+all: central
+#  Command line target.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Needs to be updated (-q is set).
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/8=0%
 
 # Not a target:
 .SUFFIXES:
@@ -224,7 +240,7 @@ all: example.cpp BPlusTree.h
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2021-05-09 19:26:47.74
+#  Last modified 2021-05-17 02:45:19.94
 #  File has been updated.
 #  Successfully updated.
 
@@ -234,41 +250,35 @@ Makefile:
 #  Modification time never checked.
 #  File has not been updated.
 
-# Not a target:
-example.cpp:
-#  Implicit rule search has been done.
-#  Last modified 2021-05-09 19:26:37.371
-#  File has been updated.
-#  Successfully updated.
-
 clean:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 8):
-	rm example
+#  recipe to execute (from 'Makefile', line 15):
+	rm central 
 
 # Not a target:
-BPlusTree.h:
+central_main.cpp:
 #  Implicit rule search has been done.
-#  Last modified 2021-05-09 19:26:13.65
+#  Last modified 2021-05-17 16:12:55.09
 #  File has been updated.
 #  Successfully updated.
 
 # files hash-table stats:
-# Load=7/1024=1%, Rehash=0, Collisions=0/21=0%
+# Load=7/1024=1%, Rehash=0, Collisions=3/22=14%
 # VPATH Search Paths
 
 # No 'vpath' search paths.
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 12 / storage = 107 B / avg = 8 B
-# current buf: size = 8162 B / used = 107 B / count = 12 / avg = 8 B
+# strcache buffers: 1 (0) / strings = 24 / storage = 249 B / avg = 10 B
+# current buf: size = 8162 B / used = 249 B / count = 24 / avg = 10 B
 
-# strcache performance: lookups = 22 / hit rate = 45%
+# strcache performance: lookups = 35 / hit rate = 31%
+ 
 # hash-table stats:
-# Load=12/8192=0%, Rehash=0, Collisions=1/22=5%
-# Finished Make data base on Sun May  9 20:23:55 2021
+# Load=24/8192=0%, Rehash=0, Collisions=1/35=3%
+# Finished Make data base on Mon May 17 16:37:49 2021
 
  

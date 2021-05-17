@@ -18,7 +18,7 @@
 using namespace std;
 
 template <class K, class T>
-class BPtree {
+class Btree {
 
 	public:
 		
@@ -35,7 +35,7 @@ class BPtree {
 			data_entry;
 		
 		//A struct that holds a vector of data entries
-		//Local to the given templated version of the BPtree
+		//Local to the given templated version of the Btree
 
 		struct DataNode_t{
 			vector< data_entry > m_entries; //List of data_entry's, every data node have many member entry
@@ -229,15 +229,15 @@ class BPtree {
 
 		//Public methods		
 
-		BPtree();			//Default Constructor
-		BPtree(int block_size);			//Constructor with user 
+		Btree();			//Default Constructor
+		Btree(int block_size);			//Constructor with user 
 						//defined block size
 		bool insert(K, const T&);	//Insert into the B+ Tree
 		bool remove(K, T&);		//Remove from the B+ Tree
 		void inorder(int min);		//Print contents of the B+ Tree
 		bool retrieve(K, T&);		//Get a given entry
 		int depth();			//Return the depth of the tree
-		~BPtree();			//Deconstructor
+		~Btree();			//Deconstructor
 
 	private:
 		
@@ -260,7 +260,7 @@ class BPtree {
 //
 //Use a default block size
 template <class K, class T>
-BPtree<K,T>::BPtree()
+Btree<K,T>::Btree()
 	: m_block_size(BLOCK_SIZE), 
 	  m_max_entries(BLOCK_SIZE / sizeof(data_entry)),
 	  m_depth(0)
@@ -272,7 +272,7 @@ BPtree<K,T>::BPtree()
 //
 //Use the specified block size
 template <class K, class T>
-BPtree<K,T>::BPtree(int block_size)
+Btree<K,T>::Btree(int block_size)
 	: m_block_size(block_size),
 	  m_max_entries(block_size / sizeof(data_entry)),
 	  m_depth(0)
@@ -280,11 +280,11 @@ BPtree<K,T>::BPtree(int block_size)
 	m_root = new DataNode(m_max_entries, true);
 }
 
-//~BPtree()
+//~Btree()
 //
 //Deconstructor
 template <class K, class T>
-BPtree<K,T>::~BPtree()
+Btree<K,T>::~Btree()
 {
 	//If root is not a leaf, then start traversing the left of the tree
 	if(!m_root->m_is_leaf)
@@ -297,7 +297,7 @@ BPtree<K,T>::~BPtree()
 //
 //Recursive deletion, used by deconstructor
 template <class K, class T>
-void BPtree<K,T>::delete_recursive(DataNode* curr)
+void Btree<K,T>::delete_recursive(DataNode* curr)
 {
 	DataNode* tmp;	//Loop over data right nodes
 
@@ -321,7 +321,7 @@ void BPtree<K,T>::delete_recursive(DataNode* curr)
 //
 //Print the contents of the tree
 template <class K, class T>
-void BPtree<K,T>::inorder(int min)
+void Btree<K,T>::inorder(int min)
 {
 	DataNode* curr;		//Current node
 	DataNode* right;	//Node to the right
@@ -358,7 +358,7 @@ void BPtree<K,T>::inorder(int min)
 //
 //Insert the given data based on the key
 template <class K, class T>
-bool BPtree<K,T>::insert(K key, const T &data)
+bool Btree<K,T>::insert(K key, const T &data)
 {
 	data_entry new_entry; //The entry to add
 	
@@ -385,7 +385,7 @@ bool BPtree<K,T>::insert(K key, const T &data)
 //
 //Private. Recursive portion of the insert method
 template <class K, class T>
-bool BPtree<K,T>::insert_recursive(DataNode *curr, K key, const T &data, 
+bool Btree<K,T>::insert_recursive(DataNode *curr, K key, const T &data, 
 					data_entry &entry)
 {
 	
@@ -432,7 +432,7 @@ bool BPtree<K,T>::insert_recursive(DataNode *curr, K key, const T &data,
 //Currently does not perform coalescing
 //(may implement this later)
 template <class K, class T>
-bool BPtree<K,T>::remove(K key, T &storage)
+bool Btree<K,T>::remove(K key, T &storage)
 {
 	//Traverse to the leaf node
 	DataNode* curr = m_root;
@@ -449,7 +449,7 @@ bool BPtree<K,T>::remove(K key, T &storage)
 //Public wrapper around retrieve. Returns a pointer
 //to the desired entry, or NULL if it does not exist
 template <class K, class T>
-bool BPtree<K,T>::retrieve(K key, T &storage)
+bool Btree<K,T>::retrieve(K key, T &storage)
 {
 	//Start at root
 	return retrieve_recursive(key, m_root, storage);	
@@ -459,7 +459,7 @@ bool BPtree<K,T>::retrieve(K key, T &storage)
 //
 //Recursive retrieve function
 template <class K, class T>
-bool BPtree<K,T>::retrieve_recursive(K key, DataNode* curr, T &storage)
+bool Btree<K,T>::retrieve_recursive(K key, DataNode* curr, T &storage)
 {
 	//Keep going until at leaf, then retrieve
 	//based on the given key
@@ -474,7 +474,7 @@ bool BPtree<K,T>::retrieve_recursive(K key, DataNode* curr, T &storage)
 //Split the passed DataNode into two, and set new_entry to the upwards
 //propagated data entry
 template <class K, class T>
-void  BPtree<K,T>::split(DataNode* to_split, bool is_leaf, data_entry &new_entry)
+void  Btree<K,T>::split(DataNode* to_split, bool is_leaf, data_entry &new_entry)
 {
 	int half_size = (m_max_entries) / 2;		//Half the size of 
 							//DataNode
@@ -529,6 +529,6 @@ void  BPtree<K,T>::split(DataNode* to_split, bool is_leaf, data_entry &new_entry
 //
 //Return the depth of the tree
 template <class K, class T>
-int BPtree<K,T>::depth() {return m_depth;}
+int Btree<K,T>::depth() {return m_depth;}
 
 #endif

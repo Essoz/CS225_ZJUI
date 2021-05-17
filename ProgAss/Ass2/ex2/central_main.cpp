@@ -24,11 +24,11 @@ string path;
 int date;
 
 Btree tre_week = Btree(4);
-BPtree<int64_t, treatment> tre_id;
+Btree<int64_t, treatment> tre_id;
 
-BPtree<int64_t, person> per_id;
+Btree<int64_t, person> per_id;
 
-BPtree<int64_t, registration> reg_id;
+Btree<int64_t, registration> reg_id;
 hashtable<int8_t, int64_t> reg_withdraw;
 
 void Reg_Relation_Insert(registration Reg){
@@ -38,7 +38,7 @@ void Reg_Relation_Insert(registration Reg){
 registration* Reg_Relation_Delete(int64_t ID){
     registration* Reg;
     reg_id.remove(ID, *Reg);
-    reg_withdraw.erase(ID);
+    //reg_withdraw.erase(ID);
     return Reg;
 }
 registration* Reg_Relation_Retrieve(int64_t ID){
