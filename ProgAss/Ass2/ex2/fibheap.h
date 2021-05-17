@@ -8,7 +8,6 @@
 #include <vector>
 
 #include "../ex1/relation.h"
-#include "hashing/central_hash.h"
 using namespace std;
 
 class FibNode;

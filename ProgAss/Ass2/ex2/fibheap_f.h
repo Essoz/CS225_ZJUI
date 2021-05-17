@@ -31,7 +31,6 @@ FibNode::FibNode(registration n_registration){
 FibHeap::FibHeap(){
     min_ptr = NULL;
     numitems = 0;
-    processin_table = new Hash_Chaining;
 };
 
 /* <===> Test Passed <===> */
