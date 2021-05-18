@@ -4,26 +4,27 @@
 
 #define INFIMUM -100000
 
-FibNode::FibNode(registration n_registration){
+FibNode::FibNode(registration* n_registration){
     parent = NULL;
     child = NULL;
     left = NULL;
     right = NULL;
     degree = 0;
     mark = false;       // default marking == false
+    reg_id = n_registration->getID();
     // key = priority;
-    int8_t type = n_registration.getTreatmentType();
-    person Per = *Per_Relation_Retrieve(n_registration.getPersonID());
-    int8_t MedStat = Per.getMedicalStatusID();
+    int8_t type = n_registration->getTreatmentType();
+    person* Per = Per_Relation_Retrieve(n_registration->getPersonID());
+    int8_t MedStat = Per->getMedicalStatusID();
     if (type == 0) {
         // for vaccination
         key = 4 - MedStat;
     } else if (type == 1) {
         // for surgery
-        key = stoi(n_registration.getDateOfReg());
+        key = stoi(n_registration->getDateOfReg());
     } else if (type == 2) {
         // for regular registration
-        key = 100 - Per.getAge();
+        key = 100 - Per->getAge();
     }
 }
 
@@ -31,6 +32,7 @@ FibNode::FibNode(registration n_registration){
 FibHeap::FibHeap(){
     min_ptr = NULL;
     numitems = 0;
+    processin_table = new Hash_Chaining();
 };
 
 /* <===> Test Passed <===> */
@@ -51,6 +53,7 @@ void FibHeap::Insert(FibNode* fib_node){
 	numitems = 0;
     }
     numitems++;
+    hash_table_insert(fib_node);
 }
 /* FibHeap - Decrease Key
  * Input: 
@@ -234,6 +237,7 @@ FibNode* FibHeap::ExtractMin(){
         //FindMin();
 	    
         }
+        hash_table_remove(current_node->getRegID());
         return current_node;
     } else {
         // the structure is empty
@@ -316,6 +320,63 @@ int FibHeap::GetNum(){
     return numitems;
 }
 
+void FibHeap::removeReg(registration* Reg){
+    int64_t reg_id = Reg->getID();
+    FibNode* handle = hash_table_find(reg_id);
+    if (handle) {
+        Delete(handle);
+        hash_table_remove(reg_id);
+    } else {
+        cout << "Reg of ID: " << Reg->getID() << " being deleted is not in the heap" << endl;   
+    }
+
+}
+
+/* <=== Functions for Hash tables ===> */
+FibNode* FibHeap::hash_table_find(int id){
+    return processin_table->retrieval(id);
+};
+bool FibHeap::hash_intable_check(int id){
+    if (processin_table->retrieval(id) == NULL) return false;
+    // else the element is in the hashtable
+    return true;
+};
+
+/* hash_table_remove
+ * INPUT
+ * 1. the id of the element to be deleted
+ * OUTPUT
+ * 1. the address to the removed node (for further removing the node from the central heap)
+ */
+FibNode* FibHeap::hash_table_remove(int id){
+    // first record the address of the node to be deleted
+    FibNode* old = processin_table->retrieval(id);
+    // then delete the entry from the central heap
+    processin_table->deletion(id);
+    // return the pointer to the old node
+    return old;    
+};
+
+void FibHeap::hash_table_insert(FibNode* node){
+    processin_table->insertion(node);
+};
+
+/* hash_table_swap
+ * INPUT
+ * the updated version of a registration (node)
+ * OUTPUT
+ * the older version of a registration
+ * EFFECT
+ * swap a registration (only in hash table) that is under assignment with its newer version
+ */
+
+FibNode* FibHeap::hash_table_swap(FibNode* node){
+    int id = node->getRegID();
+    FibNode* old = processin_table->retrieval(id);
+    processin_table->deletion(id);
+    hash_table_insert(node);
+    return old;
+};
 
 
 
@@ -414,6 +475,122 @@ int FibHeap::GetNum(){
 //     }while(node_pt != node);
 //     cout << "]";
 // }
+
+Hash_Chaining::Hash_Chaining(int length)
+{
+    // Initialize the attributes of the hashtable
+    hash_maxsize = length;
+    if (length < 20) {
+        hash_maxsize = 20;  // Default size for hashtable
+    }
+    hash_numitems = 0;   // The current number of pairs in hashtable
+    hashtable = new vector<vector<FibNode*>*>(hash_maxsize);
+    for (int i = 0; i < hash_maxsize; i++) {
+        hashtable->at(i) = NULL;
+    }
+}
+
+int Hash_Chaining::get_numitems() {
+    return hash_numitems;
+}
+// Calculate the hashvalue:
+int Hash_Chaining::calculate_hashvalue(int id, int size)
+{
+    hash<int> hashfunction; // use the predefined hashfunction to get "key" values
+    return hashfunction(id) % size;
+}
+
+// Insert a value:
+void Hash_Chaining::insertion(FibNode* node)
+{
+    int index = calculate_hashvalue(node->getRegID(), hash_maxsize); // Calculate the hashvalue
+    // If the corresponding entry is not defined, define it:
+    if (hashtable->at(index) == NULL) {
+        vector<FibNode*>* entry = new vector<FibNode*>;
+        hashtable->at(index) = entry;
+        hash_numitems++;
+        hashtable->at(index)->push_back(node);   // Add that item into the entry
+        return;
+    }
+    // Go through that entry to check if the item is already there:
+    for (int i = 0; i < int(hashtable->at(index)->size()); i++)
+    {
+        if (hashtable->at(index)->at(i) == node) {
+            return;
+        }
+    }
+    hashtable->at(index)->push_back(node);   // Add that item into the entry
+    return;
+}
+
+// Delete a value:
+void Hash_Chaining::deletion(int id)
+{
+    // Get the correspoding node pointer:
+    FibNode* node = retrieval(id);
+    // If no node in the table, do nothing:
+    if (NULL == node){
+        return;
+    }
+
+    int index = calculate_hashvalue(id, hash_maxsize); // Calculate the hashvalue
+    // If the corresponding entry is not defined, just return:
+    for (int i = 0; i < int(hashtable->at(index)->size()); i++)
+    {
+        if (node == hashtable->at(index)->at(i)) {
+            // item found
+            hashtable->at(index)->erase(hashtable->at(index)->begin() + i);
+            // If now the entry is empty, undefine that entry:
+            if (0 >= int(hashtable->at(index)->size())) {
+                hashtable->at(index) = NULL;
+                hash_numitems--;
+            }
+            return;
+        }
+    }
+    return;
+}
+
+// Return the pointer of the patient instance in the hash table:
+FibNode* Hash_Chaining::retrieval(int id)
+{
+    int index = calculate_hashvalue(id, hash_maxsize); // Calculate the hashvalue
+    // If the corresponding entry is not defined, just return:
+    if (hashtable->at(index) == NULL) {
+        if (DEBUG) cout << "The patient of id " << id << " is not in the hashtable." << endl;
+        return NULL;
+    }
+    else {
+        // Loop through that vector entry:
+        for (int i = 0; i < int(hashtable->at(index)->size()); i++) {
+            if (id == hashtable->at(index)->at(i)->getRegID()) {
+                // item found
+                return hashtable->at(index)->at(i);
+            }
+        }
+        if (DEBUG) cout << "The patient of id " << id << " is not in the hashtable." << endl;
+        return NULL;
+    }
+}
+
+// Return a list containing all the patients' pointer:
+vector<FibNode*>& Hash_Chaining::list_patient()
+{
+    // Creat a vector to store the pointers:
+    vector<FibNode*>* list = new vector<FibNode*>;
+    // Loop through all the entries of the hashtable:
+    for (int i = 0; i < hash_numitems; i++)
+    {
+        // Loop through each entry:
+        for (int j = 0; j < int(hashtable->at(i)->size()); j++)
+        {
+            // Add each patient to the list:
+            list->push_back(hashtable->at(i)->at(j));
+        }
+    }
+    return *list;
+}
+
 
 #endif /* fibheap_f_h */
 

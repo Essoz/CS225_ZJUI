@@ -18,6 +18,8 @@ using namespace std;
  *  in the Local_Queue.h. It is modified from the HW5, ex2.
  *  We apply hashing with chaining here.
  */
+class FibNode;
+class FibHeap;
 
 class Hash_Chaining
 {
@@ -25,13 +27,13 @@ class Hash_Chaining
 public:
     Hash_Chaining(int length);
     int calculate_hashvalue(int id, int size);
-    void insertion(Patient* item);
-    //void deletion(Patient* item);
-    // Return the pointer of the patient instance in the hash table:
-    Patient* retrieval(int id);
+    void insertion(FibNode* item);
+    //void deletion(FibNode* item);
+    // Return the pointer of the FibNode instance in the hash table:
+    FibNode* retrieval(int id);
 
 private:
-    std::vector<vector<Patient*>*>* hashtable;      // The hashtable
+    std::vector<vector<FibNode*>*>* hashtable;      // The hashtable
     int hash_numitems;                  // length of hashtable
     int hash_maxsize;                   // defines the size of the hashtable
 };
