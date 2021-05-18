@@ -24,25 +24,24 @@ string path;
 int date;
 
 B tre_week = B(4);
-Btree<int64_t, treatment> tre_id;
-Btree<int64_t, person> per_id;
-
-Btree<int64_t, registration> reg_id;
+BP<int64_t, treatment*> tre_id;
+BP<int64_t, person*> per_id;
+BP<int64_t, registration*> reg_id;
 hashtable<int8_t, int64_t> reg_withdraw;
 
 void Reg_Relation_Insert(registration Reg){
-    reg_id.insert(Reg.getID(), Reg);
+    reg_id.insert(Reg.getID(), &Reg);
     reg_withdraw.put(Reg.getWithdraw(), Reg.getID());
 }
 registration* Reg_Relation_Delete(int64_t ID){
     registration* Reg;
-    reg_id.remove(ID, *Reg);
+    reg_id.remove(ID, Reg);
     //reg_withdraw.erase(ID);
     return Reg;
 }
 registration* Reg_Relation_Retrieve(int64_t ID){
     registration* Reg;
-    reg_id.retrieve(ID, *Reg);
+    reg_id.retrieve(ID, Reg);
     return Reg;
 }
 vector<registration*>& Reg_Relation_Retrieve_2(int8_t withdraw){
@@ -59,32 +58,32 @@ vector<registration*>& Reg_Relation_Retrieve_2(int8_t withdraw){
 }
 
 void Per_Relation_Insert(person Per){
-    per_id.insert(Per.getID(), Per);
+    per_id.insert(Per.getID(), &Per);
 }
 person* Per_Relation_Delete(int64_t ID){
     person* Per;
-    per_id.remove(ID, *Per);
+    per_id.remove(ID, Per);
     return Per;
 }
 person* Per_Relation_Retrieve(int64_t ID){
     person* Per;
-    per_id.retrieve(ID, *Per);
+    per_id.retrieve(ID, Per);
     return Per;
 }
 
 void Tre_Relation_Insert(treatment Tre){
-    tre_id.insert(Tre.getID(), Tre);
+    tre_id.insert(Tre.getID(), &Tre);
     tre_week.insert(Tre.getID(), stoi(Tre.getFinishedTime()) / 7);
 }
 treatment* Tre_Relation_Delete(int64_t ID){
     treatment* Tre;
-    tre_id.remove(ID, *Tre);
+    tre_id.remove(ID, Tre);
     tre_week.remove(ID, stoi(Tre->getFinishedTime()) / 7);
     return Tre;
 }
 treatment* Tre_Relation_Retrieve(int64_t ID){
     treatment* Tre;
-    tre_id.retrieve(ID, *Tre);
+    tre_id.retrieve(ID, Tre);
     return Tre;
 }
 vector<treatment*>& Tre_Relation_Retrieve_2(int64_t week){
