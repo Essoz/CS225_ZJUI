@@ -92,13 +92,13 @@ void Hash_Chaining::deletion(Patient* item)
     }
 }
 */
-// Return the pointer of the patient instance in the hash table:
+// Return the pointer of the Patient instance in the hash table:
 Patient* Hash_Chaining::retrieval(int id)
 {
     int index = calculate_hashvalue(id, hash_maxsize); // Calculate the hashvalue
     // If the corresponding entry is not defined, just return:
     if (hashtable->at(index) == NULL) {
-        //cout << "The patient of id " << id << " is not in the hashtable." << endl;
+        //cout << "The Patient of id " << id << " is not in the hashtable." << endl;
         return NULL;
     }
     else {
@@ -109,7 +109,7 @@ Patient* Hash_Chaining::retrieval(int id)
                 return hashtable->at(index)->at(i);
             }
         }
-        //cout << "The patient of id " << id << " is not in the hashtable." << endl;
+        //cout << "The Patient of id " << id << " is not in the hashtable." << endl;
         return NULL;
     }
 }

@@ -22,9 +22,9 @@ int main()
 	//		comparison operators defined
 	//	The B+ Tree stores student structs
 	//	Each node is aligned to 4096 byte (4 KiB) blocks
-	Btree<int, patient*> patient_bptree(4096); 
+	BP<int, patient*> patient_bptree(4096); 
 	
-	patient *cur_patient;
+	patient* cur_patient;
 	/*initializing the B+ tree, the key is the ID of the student, and the information stored in the B+ tree
 	* is the structure of student, which contain the name and GPA
 	*/
@@ -35,21 +35,21 @@ int main()
 		//Pass item to insert
 		patient_bptree.insert(i, cur_patient);
 	}
-	if(patient_bptree.retrieve(1, cur_patient)){;
+	if(patient_bptree.retrieve(1, cur_patient)){
 		cout << "=======" << endl;
 		cout << "ID: Min" << endl;
 		cout << "=======" << endl;
 		cout << "Patient ID: " << cur_patient->ID << endl;
 		//cout << "Patient pointer in data set " << cur_patient->pointer->name << endl << endl;//想要什么就往里面加，这里是name
 	}
-	if(patient_bptree.retrieve(1000, cur_patient)){;
+	if(patient_bptree.retrieve(1000, cur_patient)){
 		cout << "=======" << endl;
 		cout << "ID: Max" << endl;
 		cout << "=======" << endl;
 		cout << "Patient ID: " << cur_patient->ID << endl;
 		//cout << "Patient pointer in data set " << cur_patient->pointer << endl << endl;
 	}
-	if(patient_bptree.retrieve(42, cur_patient)){;
+	if(patient_bptree.retrieve(42, cur_patient)){
 		cout << "=======" << endl;
 		cout << "ID: 42" << endl;
 		cout << "=======" << endl;
@@ -62,7 +62,7 @@ int main()
 		if(patient_bptree.remove(i, cur_patient))
 			delete cur_patient;
 	}
-*/
+	*/
 	hashtable<int, int> ht;
     ht.put(1,80);//这里这个第一项就是四种second key，你随便加，然后第二项是id，put是往hash里面填东西的函数
 	ht.put(1,90);

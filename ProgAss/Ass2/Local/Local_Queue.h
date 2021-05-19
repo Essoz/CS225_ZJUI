@@ -46,7 +46,7 @@ public:
 	// Update the information of a patient with unique id number, up_type determines what info will be changed:
 	void update(int id, int up_type, int info);
 	void update_info(int id, int up_type, string info);		// Only for information
-	// Report data to centralised treatment queue:
+	// Report data to centralized treatment queue:
 	queue<Patient*>* report(queue<Patient*>* l_queue);
 	// Get io pointer:
 	IO* getio(){
@@ -59,6 +59,10 @@ public:
 	// Get hashtable:
 	Hash_Chaining* getHashtable() {
 		return Hashtable;
+	}
+	// Get the global counter:
+	int getcounter() {
+		return counter;
 	}
 	// Set local queue pointer:
 	void setl_queue(queue<Patient*>* queue){

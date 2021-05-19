@@ -18,7 +18,7 @@ using namespace std;
  *  in the Local_Queue.h. It is modified from the HW5, ex2.
  *  We apply hashing with chaining here.
  */
-
+ 
 class Hash_Chaining
 {
     friend class Queue;
@@ -27,7 +27,7 @@ public:
     int calculate_hashvalue(int id, int size);
     void insertion(Patient* item);
     //void deletion(Patient* item);
-    // Return the pointer of the patient instance in the hash table:
+    // Return the pointer of the Patient instance in the hash table:
     Patient* retrieval(int id);
 
 private:

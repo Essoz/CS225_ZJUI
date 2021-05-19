@@ -12,7 +12,7 @@
 #include "assqueue/assignment_f.h"
 #include "../ex3/BPlusTree&Hash/BPlusTree.h"
 #include "../ex3/BPlusTree&Hash/hashtable.hpp"
-#include "../ex3/BTree/BTree.cpp"
+#include "../ex3/BTree/B.cpp"
 #include <unistd.h>
 #include <string>
 #include <vector>
@@ -23,27 +23,32 @@ const int interval = 1; // unit in day
 string path;
 int date;
 
-Btree tre_week = Btree(4);
-Btree<int64_t, treatment> tre_id;
-
-Btree<int64_t, person> per_id;
-
-Btree<int64_t, registration> reg_id;
+B tre_week = B(4);
+BP<int64_t, treatment*> tre_id;
+BP<int64_t, person*> per_id;
+BP<int64_t, registration*> reg_id;
 hashtable<int8_t, int64_t> reg_withdraw;
 
-void Reg_Relation_Insert(registration Reg){
-    reg_id.insert(Reg.getID(), Reg);
-    reg_withdraw.put(Reg.getWithdraw(), Reg.getID());
+void Reg_Relation_Insert(registration* Reg){
+    reg_id.insert(Reg->getID(), Reg);
+    reg_withdraw.put(Reg->getWithdraw(), Reg->getID());
 }
 registration* Reg_Relation_Delete(int64_t ID){
     registration* Reg;
-    reg_id.remove(ID, *Reg);
+    reg_id.remove(ID, Reg);
     //reg_withdraw.erase(ID);
+    if (Reg == NULL || Reg->getID() != ID){
+        cout << "REG DELETE || The registration ID:" << ID << "has not been inserted!" << endl;
+    }
     return Reg;
 }
 registration* Reg_Relation_Retrieve(int64_t ID){
     registration* Reg;
-    reg_id.retrieve(ID, *Reg);
+    reg_id.retrieve(ID, Reg);
+    if (Reg == NULL || Reg->getID() != ID){
+        cout << "REG RETRIEVE || The registration ID:" << ID << "has not been inserted!" << endl;
+    }
+    
     return Reg;
 }
 vector<registration*>& Reg_Relation_Retrieve_2(int8_t withdraw){
@@ -59,33 +64,45 @@ vector<registration*>& Reg_Relation_Retrieve_2(int8_t withdraw){
     return *result_Reg;
 }
 
-void Per_Relation_Insert(person Per){
-    per_id.insert(Per.getID(), Per);
+void Per_Relation_Insert(person* Per){
+    per_id.insert(Per->getID(), Per);
 }
 person* Per_Relation_Delete(int64_t ID){
     person* Per;
-    per_id.remove(ID, *Per);
+    per_id.remove(ID, Per);
+    if (Per == NULL || Per->getID() != ID){
+        cout << "PER DELETE || The person ID:" << ID << "has not been inserted!" << endl;
+    }
     return Per;
 }
 person* Per_Relation_Retrieve(int64_t ID){
     person* Per;
-    per_id.retrieve(ID, *Per);
+    per_id.retrieve(ID, Per);
+    if (Per == NULL || Per->getID() != ID){
+        cout << "PER RETRIEVE || The person ID:" << ID << "has not been inserted!" << endl;
+    }
     return Per;
 }
 
-void Tre_Relation_Insert(treatment Tre){
-    tre_id.insert(Tre.getID(), Tre);
-    tre_week.insert(Tre.getID(), stoi(Tre.getFinishedTime()) / 7);
+void Tre_Relation_Insert(treatment* Tre){
+    tre_id.insert(Tre->getID(), Tre);
+    tre_week.insert(Tre->getID(), stoi(Tre->getFinishedTime()) / 7);
 }
 treatment* Tre_Relation_Delete(int64_t ID){
     treatment* Tre;
-    tre_id.remove(ID, *Tre);
+    tre_id.remove(ID, Tre);
     tre_week.remove(ID, stoi(Tre->getFinishedTime()) / 7);
+    if (Tre == NULL || Tre->getID() != ID){
+        cout << "Tre DELETE || The treatment ID:" << ID << "has not been inserted!" << endl;
+    }
     return Tre;
 }
 treatment* Tre_Relation_Retrieve(int64_t ID){
     treatment* Tre;
-    tre_id.retrieve(ID, *Tre);
+    tre_id.retrieve(ID, Tre);
+    if (Tre == NULL || Tre->getID() != ID){
+        cout << "Tre RETRIEVE || The treatment ID:" << ID << "has not been inserted!" << endl;
+    }
     return Tre;
 }
 vector<treatment*>& Tre_Relation_Retrieve_2(int64_t week){
@@ -113,7 +130,7 @@ int main(){
     // cout << "Please Provide a path to the file" << endl;
     // cin >> path;
     if (DEBUG) path ="../Local/test_withdraw.csv";
-    else path = "../Local/Submit.csv";
+    else path = "/home/essoz/2021SA/CS225/rtrepo/ProgAss/Ass2/Local/Submit.csv";
     FibHeap* vacc_queue = new FibHeap;
     FibHeap* surg_queue = new FibHeap;
     FibHeap* regi_queue = new FibHeap;
@@ -199,6 +216,7 @@ int main(){
             if (failure == 5) {
                 cout << "no file found, aborting";
                 exit(3);
+
             }
         }
         
@@ -211,19 +229,19 @@ int main(){
         if (AssignRegistration.checkAvailability(date, 0)) {
             while (vacc_queue->GetNum() && AssignRegistration.Assign((vacc_queue->Minimum()), date)) {
                 // keep assign until no further registrations can be assigned
-                ;
+                vacc_queue->ExtractMin();
             }
         }
         if (AssignRegistration.checkAvailability(date, 1)) {
             while (surg_queue->GetNum() && AssignRegistration.Assign((surg_queue->Minimum()), date)) {
                 // keep assign until no further registrations can be assigned
-                ;
+                surg_queue->ExtractMin();
             }
         }
         if (AssignRegistration.checkAvailability(date, 2)) {
             while (regi_queue->GetNum() && AssignRegistration.Assign((regi_queue->Minimum()), date)) {
                 // keep assign until no further registrations can be assigned
-                ;
+                regi_queue->ExtractMin();
             }
         }
         // central_queue->debugPrintTree();

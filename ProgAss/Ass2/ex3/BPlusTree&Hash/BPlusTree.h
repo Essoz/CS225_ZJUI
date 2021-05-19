@@ -3,51 +3,41 @@
 *	Modified by Guo Moyang at 2021.5.9
 */
 
-#ifndef BTREE_H
-#define BTREE_H
+#ifndef BPTREE_H
+#define BPTREE_H
 
 #include <vector>
 #include <tuple>
 #include <iostream>
 
-#define BLOCK_SIZE 4096 //Block size in bytes
+#define BLOCK_SIZE 4096 // Block size in bytes
 
 using namespace std;
 
 template <class K, class T>
-class Btree {
-
+class BP {
 	public:
-		
-		struct DataNode_t; //Forward declare
+		struct DataNode_t;			// Store the data structure
 
 		//This is the meat of each node. Each node is a vector of
 		//data_entry's.
 		//
-		// 0 = Pointer to left node
+		// 0 = Pointer to left entry
 		// 1 = Key for the given entry
 		// 2 = Pointer to actual data (only for leaf nodes)
-		// 3 = Pointer to right node
-		typedef tuple<struct DataNode_t*, K, T, struct DataNode_t*> 
-			data_entry;
+		// 3 = Pointer to right entry
+		typedef tuple<struct DataNode_t*, K, T, struct DataNode_t*> data_entry;
 		
 		//A struct that holds a vector of data entries
-		//Local to the given templated version of the Btree
-
+		//Local to the given templated version of the BP
 		struct DataNode_t{
 			vector< data_entry > m_entries; //List of data_entry's, every data node have many member entry
 											//for member in one data node, the member is also sorted by key in the member entry (list)
 
-			int m_num_entries;		//Number of 
-							//valid entries, number of entries that are in this node
-			
-			struct DataNode_t* m_right;	//Pointer to its 
-							//right neighbor
-						
-			int m_max_entries;		//Max number of 
-							//possible entries, the upper bound of all entries in one node
-
-			bool m_is_leaf;			//Is the node a leaf?
+			int m_num_entries;				//Number of valid entries, number of entries that are in this node
+			struct DataNode_t* m_right;		//Pointer to its right neighbor (the right BP)
+			int m_max_entries;				//Max number of possible entries, the upper bound of all entries in one node
+			bool m_is_leaf;					//Is the node a leaf?
 
 			//Constructor
 			//
@@ -55,7 +45,7 @@ class Btree {
 			//and sets values to default
 			DataNode_t(int max_entries, bool is_leaf) 
 				: m_num_entries(0), 
-				  m_right(NULL),	//for new node, the right pointer is Null
+				  m_right(NULL),		//for new node, the right pointer is Null
 				  m_is_leaf(is_leaf)	//this is a quick way to assign value to the variable
 			{
 				m_entries.resize(max_entries);
@@ -64,8 +54,7 @@ class Btree {
 
 			//next()
 			//
-			//Get a pointer to the next level of nodes 
-			//based on the key 
+			//Get a pointer to the next level of nodes based on the key 
 			//NOTE: Returns NULL if at a leaf
 			struct DataNode_t* next(K key)	//struct DataNode_t* is the return type
 			{
@@ -125,17 +114,15 @@ class Btree {
 				int index;	//Found index
 
 				//If there are no entries, insert at index 0
-				if(!m_num_entries){
+				if(0 == m_num_entries){
 					index = 0;
 				}
 
 				//Otherwise, find correct location
 				else{
-			
 					//Search for index
 					for(i = 0; i < m_num_entries; i++){
-						cur_key = 
-							get<1>(m_entries.at(i));	
+						cur_key = get<1>(m_entries.at(i));	
 					
 						if(get<1>(entry) <= cur_key)	//compare their key value, find the inserted location
 							break;
@@ -146,17 +133,14 @@ class Btree {
 
 				//Insert the entry at the given index
 				m_num_entries++;
-				m_entries.insert(m_entries.begin()+index, 
-							entry);
+				m_entries.insert(m_entries.begin()+index, entry);
 
 				//Update the pointers to the left and 
 				//right entries, if they exist
 				if(index != 0)
-					get<3>(m_entries.at(index-1)) = 
-						get<0>(entry);
+					get<3>(m_entries.at(index-1)) = get<0>(entry);		//????
 				if(index != m_num_entries-1)
-					get<0>(m_entries.at(index+1)) = 
-						get<3>(entry);
+					get<0>(m_entries.at(index+1)) = get<3>(entry);		//????
 
 				//Insert successful!
 				return true;
@@ -181,14 +165,10 @@ class Btree {
 					cur_key = get<1>(m_entries.at(i));
 					
 					if(cur_key == key){
-					
 						//Get the stored data
 						storage = get<2>(m_entries.at(i));
-
 						//Erase the entry
-						m_entries.erase(
-							m_entries.begin() + i);
-
+						m_entries.erase(m_entries.begin() + i);
 						return true;
 					}
 				}
@@ -216,8 +196,7 @@ class Btree {
 			void inorder()
 			{
 				for(int i = 0; i < m_num_entries; i++)
-					cout << "[i=" << i << " k=" 
-					<< get<1>(m_entries.at(i)) << "]";
+					cout << "[ith = " << i << " key = " << get<1>(m_entries.at(i)) << "]";
 				cout << endl;
 			}
 
@@ -225,28 +204,23 @@ class Btree {
 		typedef struct DataNode_t DataNode;
 
 		//Public methods		
-
-		Btree();			//Default Constructor
-		Btree(int block_size);			//Constructor with user 
-						//defined block size
+		BP();						//Default Constructor
+		BP(int block_size);			//Constructor with user defined block size
 		bool insert(K, const T&);	//Insert into the B+ Tree
-		bool remove(K, T&);		//Remove from the B+ Tree
+		bool remove(K, T&);			//Remove from the B+ Tree
 		void inorder(int min);		//Print contents of the B+ Tree
 		bool retrieve(K, T&);		//Get a given entry
-		int depth();			//Return the depth of the tree
-		~Btree();			//Deconstructor
+		int depth();				//Return the depth of the tree
+		~BP();						//Deconstructor
 
 	private:
-		
 		//Members
-
-		DataNode *m_root;		//Root of the tree
+		DataNode *m_root;			//Root of the tree
 		const int m_block_size;		//Block size for each node
 		const int m_max_entries;	//Max entries for each node
-		int m_depth;			//Current depth (starts at 0)
+		int m_depth;				//Current depth (starts at 0)
 
 		//Super secret methods
-
 		bool insert_recursive(DataNode*, K, const T &, data_entry&);	
 		bool retrieve_recursive(K, DataNode*, T&);			
 		void split(DataNode*, bool, data_entry&);		
@@ -257,19 +231,19 @@ class Btree {
 //
 //Use a default block size
 template <class K, class T>
-Btree<K,T>::Btree()
+BP<K,T>::BP()
 	: m_block_size(BLOCK_SIZE), 
 	  m_max_entries(BLOCK_SIZE / sizeof(data_entry)),
 	  m_depth(0)
 {
-	m_root = new DataNode(m_max_entries, true);
+	m_root = new DataNode(m_max_entries, true);		// Now root must ba a leaf node
 }
 
 //Specific Constructor
 //
 //Use the specified block size
 template <class K, class T>
-Btree<K,T>::Btree(int block_size)
+BP<K,T>::BP(int block_size)
 	: m_block_size(block_size),
 	  m_max_entries(block_size / sizeof(data_entry)),
 	  m_depth(0)
@@ -277,11 +251,11 @@ Btree<K,T>::Btree(int block_size)
 	m_root = new DataNode(m_max_entries, true);
 }
 
-//~Btree()
+//~BP()
 //
 //Deconstructor
 template <class K, class T>
-Btree<K,T>::~Btree()
+BP<K,T>::~BP()
 {
 	//If root is not a leaf, then start traversing the left of the tree
 	if(!m_root->m_is_leaf)
@@ -294,7 +268,7 @@ Btree<K,T>::~Btree()
 //
 //Recursive deletion, used by deconstructor
 template <class K, class T>
-void Btree<K,T>::delete_recursive(DataNode* curr)
+void BP<K,T>::delete_recursive(DataNode* curr)
 {
 	DataNode* tmp;	//Loop over data right nodes
 
@@ -318,7 +292,7 @@ void Btree<K,T>::delete_recursive(DataNode* curr)
 //
 //Print the contents of the tree
 template <class K, class T>
-void Btree<K,T>::inorder(int min)
+void BP<K,T>::inorder(int min)
 {
 	DataNode* curr;		//Current node
 	DataNode* right;	//Node to the right
@@ -355,7 +329,7 @@ void Btree<K,T>::inorder(int min)
 //
 //Insert the given data based on the key
 template <class K, class T>
-bool Btree<K,T>::insert(K key, const T &data)
+bool BP<K,T>::insert(K key, const T &data)
 {
 	data_entry new_entry; //The entry to add
 	
@@ -363,9 +337,7 @@ bool Btree<K,T>::insert(K key, const T &data)
 	get<1>(new_entry)=key;
 	get<2>(new_entry)=data;
 
-
-	//If split propagates to the top of the tree,
-	//make a new root
+	//If split propagates to the top of the tree, make a new root
 	if(insert_recursive(m_root, key, data, new_entry)){
 		m_root = new DataNode(m_max_entries, false);
 		m_root->insert(new_entry);
@@ -381,16 +353,14 @@ bool Btree<K,T>::insert(K key, const T &data)
 //insert_recursive()
 //
 //Private. Recursive portion of the insert method
+//If split is needed, then return true, otherwise false
 template <class K, class T>
-bool Btree<K,T>::insert_recursive(DataNode *curr, K key, const T &data, 
-					data_entry &entry)
+bool BP<K,T>::insert_recursive(DataNode *curr, K key, const T &data, data_entry &entry)
 {
-	
 	//If not at leaf, keep recursing
 	if(curr->next(key)){
 	
-		//If split propagates up, insert entry and
-		//split again as needed
+		//If split propagates up, insert entry and split again as needed
 		if(insert_recursive(curr->next(key), key, data, entry)){
 
 			if(curr->is_full()){
@@ -429,7 +399,7 @@ bool Btree<K,T>::insert_recursive(DataNode *curr, K key, const T &data,
 //Currently does not perform coalescing
 //(may implement this later)
 template <class K, class T>
-bool Btree<K,T>::remove(K key, T &storage)
+bool BP<K,T>::remove(K key, T &storage)
 {
 	//Traverse to the leaf node
 	DataNode* curr = m_root;
@@ -446,7 +416,7 @@ bool Btree<K,T>::remove(K key, T &storage)
 //Public wrapper around retrieve. Returns a pointer
 //to the desired entry, or NULL if it does not exist
 template <class K, class T>
-bool Btree<K,T>::retrieve(K key, T &storage)
+bool BP<K,T>::retrieve(K key, T &storage)
 {
 	//Start at root
 	return retrieve_recursive(key, m_root, storage);	
@@ -456,7 +426,7 @@ bool Btree<K,T>::retrieve(K key, T &storage)
 //
 //Recursive retrieve function
 template <class K, class T>
-bool Btree<K,T>::retrieve_recursive(K key, DataNode* curr, T &storage)
+bool BP<K,T>::retrieve_recursive(K key, DataNode* curr, T &storage)
 {
 	//Keep going until at leaf, then retrieve
 	//based on the given key
@@ -468,25 +438,19 @@ bool Btree<K,T>::retrieve_recursive(K key, DataNode* curr, T &storage)
 
 //split()
 //
-//Split the passed DataNode into two, and set new_entry to the upwards
-//propagated data entry
+//Split the passed DataNode into two, and set new_entry to the upwards propagated data entry
 template <class K, class T>
-void  Btree<K,T>::split(DataNode* to_split, bool is_leaf, data_entry &new_entry)
+void  BP<K,T>::split(DataNode* to_split, bool is_leaf, data_entry &new_entry)
 {
-	int half_size = (m_max_entries) / 2;		//Half the size of 
-							//DataNode
-							
-	K mid_key;					//The key in the middle
+	int half_size = (m_max_entries) / 2;		//Half the size of DataNode
+	K mid_key;									//The key in the middle
+	DataNode* right_node = new DataNode(m_max_entries, is_leaf);	//Allocate a new node
 
-	DataNode* right_node = 
-		new DataNode(m_max_entries, is_leaf);	//Allocate a new node
-
-	
 	//Get the middle key
 	mid_key = get<1>(to_split->m_entries.at(half_size));
 
 	//Make the new node the right of the two, and fill its entries
-	//If this is not the leaf node, ditch the middle key
+	//If this is not the leaf node, ditch (throw) the middle key
 	right_node->m_entries = vector<data_entry>(
 		to_split->m_entries.begin() + half_size + (is_leaf ? 0 : 1), 
 		to_split->m_entries.begin() + m_max_entries
@@ -508,7 +472,8 @@ void  Btree<K,T>::split(DataNode* to_split, bool is_leaf, data_entry &new_entry)
 	to_split->m_entries.resize(m_max_entries);
 	to_split->m_right = right_node;
 
-	//Insert the new entry in the proper node of the two
+	//Insert the new entry in the proper node of the two			// This new entry is the one you want to insert
+																	// Later it will become the middle node to move up to the upper layer
 	if(mid_key < get<1>(new_entry))
 		right_node->insert(new_entry);	
 	else
@@ -526,6 +491,6 @@ void  Btree<K,T>::split(DataNode* to_split, bool is_leaf, data_entry &new_entry)
 //
 //Return the depth of the tree
 template <class K, class T>
-int Btree<K,T>::depth() {return m_depth;}
+int BP<K,T>::depth() {return m_depth;}
 
 #endif

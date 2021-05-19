@@ -1,5 +1,0 @@
-make --dry-run --always-make --keep-going --print-directory
-make: Entering directory '/home/moyangg2/CS225/Joshua/ProgAss/Ass2/ex2'
-g++ -g -o central central_main.cpp 
-make: Leaving directory '/home/moyangg2/CS225/Joshua/ProgAss/Ass2/ex2'
- 

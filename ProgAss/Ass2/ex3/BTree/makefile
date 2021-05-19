@@ -1,5 +1,5 @@
-BTree.o: BTree.cpp
-	g++ -g BTree.cpp -o BTree
+B.o: B.cpp
+	g++ -g B.cpp -o B
 
 clean:
-	rm BTree
+	rm B
