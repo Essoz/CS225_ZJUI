@@ -73,7 +73,7 @@ bool CentralIO::Read2Heap(){
 
         // 建好各自的relation
         // leave the assigned part empty.
-        registration Reg = registration(stoi(temp_list.at(0)),      // ID
+        registration* Reg = new registration(stoi(temp_list.at(0)),      // ID
                                     stoi(temp_list.at(4)),          // Registry ID
                                     stoi(temp_list.at(0)), -1,      // Person ID
                                     stoi(temp_list.at(9)),          // Treatment Type
@@ -82,7 +82,7 @@ bool CentralIO::Read2Heap(){
                                     stoi(temp_list.at(7)),          // Withdraw state
                                     false, -1, "Not Assigned", -1);
 
-        person Per = person(stoi(temp_list.at(0)), 0,               // ID
+        person* Per = new person(stoi(temp_list.at(0)), 0,               // ID
                                     stoi(temp_list.at(1)),          // Risk ID
                                     stoi(temp_list.at(2)),          // Profession
                                     stoi(temp_list.at(3)),          // Age
@@ -91,43 +91,56 @@ bool CentralIO::Read2Heap(){
                                     temp_list.at(13));              // Date of brith
         // no need to create medical status since we only need four
         // no need to create treatment since it is what assignment does
-        FibNode* newnode = new FibNode(Reg);
         temp_list.clear();
 
         // 现在还是伪代码
-        registration* node = Reg_Relation_Retrieve(Reg.getID());
+        registration* node = Reg_Relation_Retrieve(Reg->getID());
 
         
-        if (node) {
+        if (node->getID() == Reg->getID()) {
             if (node->getTreatmentID() != -1) {return true;}  // has been treated, nothing has to be done
             
             
             // do an update
             // FUCK it up
-            Reg_Relation_Delete(Reg.getID());
-            Reg_Relation_Insert(Reg);
-            Per_Relation_Delete(Reg.getPersonID());
-            Per_Relation_Insert(Per);
-            if (Reg.getWithdraw() == 1){
+            Reg_Relation_Delete(Reg->getID());
+            Per_Relation_Delete(Reg->getPersonID());
+
+            if (Reg->getWithdraw() == 1){
                 if (node->getAssignStatus()){
-                    // TODO type check
-                    // TODO　do the following things, remove it from assignment queue etc
+                    assignment->removeAppointment(Reg);
+
+
                 } else {
+                    int8_t type = Reg->getTreatmentType();
+                    if (type == 0) {
+                        vacc_heap->removeReg(Reg);
+                    } else if (type == 1) {
+                        surg_heap->removeReg(Reg);
+                    } else if (type == 2) {
+                        regi_heap->removeReg(Reg);
+                    }
                     // TODO delete the node from heap, type check here!!!
                 }
         }
             // the node is not in out database, insert corresponding things
     }
+
     Reg_Relation_Insert(Reg);
     Per_Relation_Insert(Per);
-    if (Reg.getTreatmentType() == 0){
+
+    FibNode* newnode = new FibNode(Reg);
+    if (Reg->getTreatmentType() == 0){
         vacc_heap->Insert(newnode);
-    } else if (Reg.getTreatmentType() == 1){
+    } else if (Reg->getTreatmentType() == 1){
         surg_heap->Insert(newnode);
     } else {
         regi_heap->Insert(newnode);
     }
     }
+
+
+    cout << "Read complete" << endl;
     return true;
 }
 /* CentralIO::Write2File

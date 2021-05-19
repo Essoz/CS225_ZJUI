@@ -6,13 +6,13 @@
 using namespace std;
 
 registration* Reg_Relation_Delete(int64_t ID);
-void Reg_Relation_Insert(registration Reg);
+void Reg_Relation_Insert(registration* Reg);
 registration* Reg_Relation_Retrieve(int64_t ID);
 vector<registration*>& Reg_Relation_Retrieve_2(int8_t withdraw);
-void Per_Relation_Insert(person Per);
+void Per_Relation_Insert(person* Per);
 person* Per_Relation_Delete(int64_t ID);
 person* Per_Relation_Retrieve(int64_t ID);
-void Tre_Relation_Insert(treatment Tre);
+void Tre_Relation_Insert(treatment* Tre);
 treatment* Tre_Relation_Delete(int64_t ID);
 treatment* Tre_Relation_Retrieve(int64_t ID);
 vector<treatment*>& Tre_Relation_Retrieve_2(int64_t week);
@@ -33,6 +33,7 @@ class Assignment{
         Assignment(AllLocations* all_locations, AllRegistries* all_registries);
         bool Assign(FibNode* reg, int date); // on false goes to the next day
         bool checkAvailability(int date, int8_t type);
+        void removeAppointment(registration* Reg);
     private:
         void _assign(FibNode* reg, int date, int8_t type);
         AllLocations* all_locations;

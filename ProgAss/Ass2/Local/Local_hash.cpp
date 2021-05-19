@@ -26,7 +26,7 @@ Hash_Chaining::Hash_Chaining(int length)
         hash_maxsize = 20;  // Default size for hashtable
     }
     hash_numitems = 0;   // The current number of pairs in hashtable
-    hashtable = new vector<vector<Patient*>*>(hash_maxsize);
+    hashtable = new vector<vector<FibNode*>*>(hash_maxsize);
     for (int i = 0; i < hash_maxsize; i++) {
         hashtable->at(i) = NULL;
     }
@@ -40,12 +40,12 @@ int Hash_Chaining::calculate_hashvalue(int id, int size)
 }
 
 // Insert a value:
-void Hash_Chaining::insertion(Patient* item)
+void Hash_Chaining::insertion(FibNode* item)
 {
-    int index = calculate_hashvalue(item->getid(), hash_maxsize); // Calculate the hashvalue
+    int index = calculate_hashvalue(item->getRegID(), hash_maxsize); // Calculate the hashvalue
     // If the corresponding entry is not defined, define it:
     if (hashtable->at(index) == NULL) {
-        vector<Patient*>* entry = new vector<Patient*>;
+        vector<FibNode*>* entry = new vector<FibNode*>;
         hashtable->at(index) = entry;
         hash_numitems++;
         hashtable->at(index)->push_back(item);   // Add that item into the entry
@@ -63,7 +63,7 @@ void Hash_Chaining::insertion(Patient* item)
 }
 /*
 // Delete a value:
-void Hash_Chaining::deletion(Patient* item)
+void Hash_Chaining::deletion(FibNode* item)
 {
     int index = calculate_hashvalue(item->getid(), hash_maxsize); // Calculate the hashvalue
     // If the corresponding entry is not defined, just return:
@@ -92,13 +92,13 @@ void Hash_Chaining::deletion(Patient* item)
     }
 }
 */
-// Return the pointer of the patient instance in the hash table:
-Patient* Hash_Chaining::retrieval(int id)
+// Return the pointer of the FibNode instance in the hash table:
+FibNode* Hash_Chaining::retrieval(int id)
 {
     int index = calculate_hashvalue(id, hash_maxsize); // Calculate the hashvalue
     // If the corresponding entry is not defined, just return:
     if (hashtable->at(index) == NULL) {
-        //cout << "The patient of id " << id << " is not in the hashtable." << endl;
+        //cout << "The FibNode of id " << id << " is not in the hashtable." << endl;
         return NULL;
     }
     else {
@@ -109,7 +109,7 @@ Patient* Hash_Chaining::retrieval(int id)
                 return hashtable->at(index)->at(i);
             }
         }
-        //cout << "The patient of id " << id << " is not in the hashtable." << endl;
+        //cout << "The FibNode of id " << id << " is not in the hashtable." << endl;
         return NULL;
     }
 }

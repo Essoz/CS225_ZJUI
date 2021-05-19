@@ -96,19 +96,19 @@ bool Assignment::Assign(FibNode* reg, int date) {
  */
 
 void Assignment::_assign(FibNode* reg, int date, int8_t type) {
-    registration Reg = *Reg_Relation_Retrieve(reg->getRegID());
-    Registry* registry = all_registries->getRegistry(Reg.getRegID());  
+    registration* Reg = Reg_Relation_Retrieve(reg->getRegID());
+    Registry* registry = all_registries->getRegistry(Reg->getRegID());  
     Location* temp_location;
     for (int i = 0; i < int(registry->getLocationDist().size()); i++) {
         temp_location = all_locations->getLocation(registry->getLocationDist()[i]);
         if (temp_location->checkAvailability(date, type)) {
             int temp_time_assigned = temp_location->assignedInsert(date, reg, type); 
-            registration n_Reg = Reg;
-            n_Reg.setAssignStatus(true);
-            n_Reg.setAssignedLoc(i);
-            n_Reg.setAssignedDate(to_string(date));
-            n_Reg.setAssignedTime(temp_time_assigned);
-            Reg_Relation_Delete(Reg.getID());
+            registration* n_Reg = Reg;
+            n_Reg->setAssignStatus(true);
+            n_Reg->setAssignedLoc(i);
+            n_Reg->setAssignedDate(to_string(date));
+            n_Reg->setAssignedTime(temp_time_assigned);
+            Reg_Relation_Delete(Reg->getID());
             Reg_Relation_Insert(n_Reg);
             break;
         }
@@ -119,6 +119,16 @@ bool Assignment::checkAvailability(int date, int8_t type) {
     if (all_locations->calcCapacity(date, type)) return true;
     return false;
 }
+void Assignment::removeAppointment(registration* Reg){
+    treatment* Tre = Tre_Relation_Retrieve(Reg->getTreatmentID());
+    int64_t loc_id = Tre->getAssignedLoc();
+    Location* loc = all_locations->getLocation(loc_id);
+    loc->removeAppointment(Reg);
+    Tre_Relation_Delete(Tre->getID());
+    Reg->setTreatmentID(-1);
+    Reg->setAssignStatus(false);
+}
+
 
 int AllLocations::getNumLocs(){
     return num_locations;
@@ -186,10 +196,10 @@ void Location::assignedClear(int date) {
     for (int j = 0; j < 3; j++) {
         for (int i = 0; i < int(assigned_queue[j].at(date).size()); i++) {
             cured_queue.at(week).push_back(assigned_queue[j].at(date)[i]);
-            registration Reg = *Reg_Relation_Retrieve(assigned_queue[j].at(date)[i]->getRegID());
+            registration* Reg = Reg_Relation_Retrieve(assigned_queue[j].at(date)[i]->getRegID());
             
-            treatment Tre = treatment(tre_id_counter++, Reg.getAssignedLoc(), Reg.getTreatmentType(), 
-                Reg.getAssignedDate(), Reg.getAssignedDate());
+            treatment* Tre = new treatment(tre_id_counter++, Reg->getAssignedLoc(), Reg->getTreatmentType(), 
+                Reg->getAssignedDate(), Reg->getAssignedDate());
             Tre_Relation_Insert(Tre); 
         }
     assigned_queue[j].at(date).clear();
