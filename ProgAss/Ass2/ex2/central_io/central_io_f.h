@@ -58,11 +58,12 @@ bool CentralIO::Read2Heap(){
                     continue;
                 }
                 if (line.substr(i,1) == "\r") {
-                    continue;
+                    break;
                 }
                 temp.append(line.substr(i,1));
             }
             temp_list.push_back(temp);
+            temp.clear();
         // clear this list for next use
 
         //check hash set
@@ -95,10 +96,12 @@ bool CentralIO::Read2Heap(){
 
         // 现在还是伪代码
         registration* node = Reg_Relation_Retrieve(Reg->getID());
-
+        Reg->printReg();
         
-        if (node->getID() == Reg->getID()) {
-            if (node->getTreatmentID() != -1) {return true;}  // has been treated, nothing has to be done
+        if (node && node->getID() == Reg->getID()) {
+            if (node->getTreatmentID() != -1) { 
+                cout << "Reg ID: " << node->getID() << " has been treated, nothing has to be done\n";
+                continue; }  // has been treated, nothing has to be done
             
             
             // do an update
@@ -108,23 +111,42 @@ bool CentralIO::Read2Heap(){
 
             if (Reg->getWithdraw() == 1){
                 if (node->getAssignStatus()){
-                    assignment->removeAppointment(Reg);
-
-
+                    assignment->removeAppointment(node);
+                    cout << "Reg ID " << node->getID() << " has been withdrawn (already assigned) from type" << node->getTreatmentType() << "\n";
                 } else {
                     int8_t type = Reg->getTreatmentType();
                     if (type == 0) {
-                        vacc_heap->removeReg(Reg);
+                        vacc_heap->removeReg(node);
                     } else if (type == 1) {
-                        surg_heap->removeReg(Reg);
+                        surg_heap->removeReg(node);
                     } else if (type == 2) {
-                        regi_heap->removeReg(Reg);
+                        regi_heap->removeReg(node);
                     }
+
+                    cout << "Reg ID: " << node->getID() << " has been withdrawn (Still Queueing) from type:" << type << "\n";
                     // TODO delete the node from heap, type check here!!!
                 }
-        }
+            } else {
+                if (node->getAssignStatus()) {
+                    Reg_Relation_Insert(node);
+                    Per_Relation_Insert(Per);
+                    cout << "Reg ID: " << node->getID() << " is already assigned, info update not supported\n";
+                    continue;
+                     
+                }
+                int8_t type = Reg->getTreatmentType();
+                if (type == 0) {
+                    vacc_heap->removeReg(node);
+                } else if (type == 1) {
+                    surg_heap->removeReg(node);
+                } else if (type == 2) {
+                    regi_heap->removeReg(node);
+                }
+                cout << "Reg ID: " << node->getID() << "'s information has been updated (type = " << (int64_t) type << ")\n";
+            }
             // the node is not in out database, insert corresponding things
     }
+
 
     Reg_Relation_Insert(Reg);
     Per_Relation_Insert(Per);
@@ -137,10 +159,11 @@ bool CentralIO::Read2Heap(){
     } else {
         regi_heap->Insert(newnode);
     }
+
     }
 
 
-    cout << "Read complete" << endl;
+    cout << ">>>> Read complete" << endl;
     return true;
 }
 /* CentralIO::Write2File
@@ -209,9 +232,9 @@ bool CentralIO::ReportWeekly(int week, int key){
      * 2. the registered people with a set appointment including their profession category, age category, risk status and their waiting time until now
      * 3. the queueing people without a set appointment including their profession category, age category, risk status and their waiting time until now
      */
-    // _WeeklyCured(week, key - '0');
-    // _WeeklyAssigned(week, key - '0');
-    // _WeeklyQueueing(week, key - '0');
+    _WeeklyCured(week, key - '0');
+    _WeeklyAssigned(week, key - '0');
+    _WeeklyQueueing(week, key - '0');
     return true;
 }
 
@@ -235,17 +258,17 @@ bool CentralIO::ReportMonthly(int month, int key){
  *      given.
  */
 bool CentralIO::_WeeklyCured(int week, int key){
-    // vector<FibNode*> print_list;
-    // // copy the list to be printed 
-    // print_list.assign(assignment->all_locations->cured_list[week].begin(),
-    // assignment->all_locations->cured_list[week].end());
-    // // sort the list
-    // sortByKey(print_list, key);
-    // // generate report using print_list (sorted)
-    // if (Write2File(print_list, week * 7, 0) == false) exit(3);
+    vector<FibNode*> print_list;
+    // copy the list to be printed 
+    print_list.assign(assignment->all_locations->cured_list[week].begin(),
+    assignment->all_locations->cured_list[week].end());
+    // sort the list
+    sortByKey(print_list, key);
+    // generate report using print_list (sorted)
+    if (Write2File(print_list, week * 7, 0) == false) exit(3);
 
-    // cout << "\nWeek " << week << "'s report (Cured patients ordered W.R.T key "<< key;
-    // cout << ") has been generated" << endl;
+    cout << "\nWeek " << week << "'s report (Cured patients ordered W.R.T key "<< key;
+    cout << ") has been generated" << endl;
     return true;
 }
 bool CentralIO::_WeeklyAssigned(int week, int key){

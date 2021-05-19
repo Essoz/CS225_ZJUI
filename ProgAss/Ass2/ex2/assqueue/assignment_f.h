@@ -67,11 +67,14 @@ Registry::Registry(int id, vector<int>&location_dist) {
 }
 
 bool Assignment::Assign(FibNode* reg, int date) {
-
     // no extension rules here lol
     
     // if no ddl or extension
     registration* Reg = Reg_Relation_Retrieve(reg->getRegID());
+    if (Reg == NULL) {
+        cout << "***WARNING***: Reg ID: " << reg->getRegID() << " cannot be located in the database, skip for now\n";
+        return true;
+    }
     int8_t type = Reg->getTreatmentType();
     if (checkAvailability(date, type) == false){
         return false;
@@ -104,12 +107,12 @@ void Assignment::_assign(FibNode* reg, int date, int8_t type) {
         if (temp_location->checkAvailability(date, type)) {
             int temp_time_assigned = temp_location->assignedInsert(date, reg, type); 
             registration* n_Reg = Reg;
-            n_Reg->setAssignStatus(true);
-            n_Reg->setAssignedLoc(i);
-            n_Reg->setAssignedDate(to_string(date));
-            n_Reg->setAssignedTime(temp_time_assigned);
-            Reg_Relation_Delete(Reg->getID());
-            Reg_Relation_Insert(n_Reg);
+            Reg->setAssignStatus(true);
+            Reg->setAssignedLoc(registry->getLocationDist()[i]);  
+            Reg->setAssignedDate(to_string(date));
+            Reg->setAssignedTime(temp_time_assigned);
+            // Reg_Relation_Delete(Reg->getID());
+            // Reg_Relation_Insert(n_Reg);
             break;
         }
     }
@@ -120,11 +123,18 @@ bool Assignment::checkAvailability(int date, int8_t type) {
     return false;
 }
 void Assignment::removeAppointment(registration* Reg){
-    treatment* Tre = Tre_Relation_Retrieve(Reg->getTreatmentID());
-    int64_t loc_id = Tre->getAssignedLoc();
+    int64_t tre_id = Reg->getTreatmentID();
+    int64_t loc_id = Reg->getAssignedLoc();
     Location* loc = all_locations->getLocation(loc_id);
     loc->removeAppointment(Reg);
-    Tre_Relation_Delete(Tre->getID());
+
+    if (tre_id != -1) {
+        treatment* Tre = Tre_Relation_Retrieve(tre_id);
+        Tre_Relation_Delete(tre_id);
+
+        cout << "Warning: A Treated Reg of ID: " << Reg->getID() << "has been removed" << endl;
+    }
+
     Reg->setTreatmentID(-1);
     Reg->setAssignStatus(false);
 }
@@ -201,6 +211,7 @@ void Location::assignedClear(int date) {
             treatment* Tre = new treatment(tre_id_counter++, Reg->getAssignedLoc(), Reg->getTreatmentType(), 
                 Reg->getAssignedDate(), Reg->getAssignedDate());
             Tre_Relation_Insert(Tre); 
+            Reg->setTreatmentID(Tre->getID());
         }
     assigned_queue[j].at(date).clear();
     }
