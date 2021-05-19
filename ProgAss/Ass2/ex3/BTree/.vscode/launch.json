@@ -8,7 +8,7 @@
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/BTree",
+            "program": "${workspaceFolder}/B",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
