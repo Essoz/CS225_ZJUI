@@ -98,7 +98,7 @@ public:
 // Find the index of primary key with value p_k in the structure:
 int64_t BNode::findpId(int64_t ids_k, int64_t p_k) {
     int i;
-	for (i = 0; i < int(keys[ids_k].primary_key.size()) - 1; i++)
+	for (i = 0; i < int(keys[ids_k].primary_key.size()); i++)
 	{
 		if (keys[ids_k].primary_key[i] == p_k)
 		{
@@ -316,7 +316,6 @@ void BNode::merge(int64_t id)
 }
 
 */
-
 
 // Print all the secondary keys in current subtree with inorder traversal:
 void BNode::traverse()
@@ -645,19 +644,19 @@ int main()
 	t.insert(7,1);
 	t.insert(10,332);
 	t.insert(11,43);
-	t.insert(13,1);
+	t.insert(13,14);
 	t.insert(14,32);
-	t.insert(15,55);
+	t.insert(15,14);
 	t.insert(18,93);
 	t.insert(16,8);
 	t.insert(19,12);
 	t.insert(24,33);
-	t.insert(25,3);
+	t.insert(25,14);
 	t.insert(26,987);
-	t.insert(4,109);
+	t.insert(4,14);
 	t.insert(5,234);
 	t.insert(20,77);
-	t.insert(22,95);
+	t.insert(22,14);
 	t.insert(2,123);
 	t.insert(17,68);
 	t.insert(12,14);
@@ -667,14 +666,21 @@ int main()
 	t.traverse();
 	cout << endl;
 	
-	cout << "Max key is " << t.find_max() << endl;
-	cout << "Min key is " << t.find_min() << endl;
-	cout << "The predecessor of 1 is " << t.findPrec(1) << endl;
-	cout << "The predecessor of 13 is " << t.findPrec(13) << endl;
-	cout << "The predecessor of 5 is " << t.findPrec(5) << endl;
-	cout << "The successor of 11 is " << t.findSucc(11) << endl;
-	cout << "The successor of 24 is " << t.findSucc(24) << endl;
-	cout << "The successor of 26 is " << t.findSucc(26) << endl;
+	// Now test for getAll():
+	vector<int64_t> test = t.getAll(14);
+	for (int i = 0; i < int(test.size()); i++)
+	{
+		cout << test.at(i) << " ";
+	}
+
+	//cout << "Max key is " << t.find_max() << endl;
+	//cout << "Min key is " << t.find_min() << endl;
+	//cout << "The predecessor of 1 is " << t.findPrec(1) << endl;
+	//cout << "The predecessor of 13 is " << t.findPrec(13) << endl;
+	//cout << "The predecessor of 5 is " << t.findPrec(5) << endl;
+	//cout << "The successor of 11 is " << t.findSucc(11) << endl;
+	//cout << "The successor of 24 is " << t.findSucc(24) << endl;
+	//cout << "The successor of 26 is " << t.findSucc(26) << endl;
 	
 	return 0;
 }
