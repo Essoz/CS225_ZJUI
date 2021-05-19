@@ -135,8 +135,7 @@ int main(){
     
     // cout << "Please Provide a path to the file" << endl;
     // cin >> path;
-    if (DEBUG) path ="../Local/test_withdraw.csv";
-    else path = "/home/essoz/2021SA/CS225/rtrepo/ProgAss/Ass2/Local/Submit.csv";
+    path = "../Local/Submit/";
     FibHeap* vacc_queue = new FibHeap;
     FibHeap* surg_queue = new FibHeap;
     FibHeap* regi_queue = new FibHeap;
@@ -240,7 +239,7 @@ int main(){
 
             }
         }
-        
+        central_IO.IO_timer++;        
         // the wrapper function above 
         
         // start processing

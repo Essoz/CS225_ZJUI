@@ -26,7 +26,14 @@ using namespace std;
 bool CentralIO::Read2Heap(){
     // read all informations that needs to be inserted into 
     ifstream infile;
-    infile.open(path, ifstream::in);
+    string temp_path = path + "Submit(";
+    if (IO_timer < 10) {
+        temp_path += to_string(IO_timer) + " ).csv";
+    } else {
+        temp_path += to_string(IO_timer) + ").csv";
+    }
+    cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>\n\n.... READING files from " + temp_path + "...\n\n>>>>>>>>>>>>>>>>>>>>>>>>>>\n";
+    infile.open(temp_path, ifstream::in);
 
     // wait for information from local registries
     if (infile.eof()){
@@ -175,52 +182,52 @@ bool CentralIO::Read2Heap(){
  * 1. true/false -- whether the report generation has succeeded
  */
 
-bool CentralIO::Write2File(vector<FibNode*>&print_list, int date, int type) {
-    // string filename; // = "Report_";
-    // // if (type == 3) {
-    // //     filename += "Month_" + to_string(date / 30 + 1);
-    // // } else {
-    // //     filename += "Week_" + to_string(date / 7 + 1);
-    // // }
-
-    // switch (type) {
-    //     case 0:
-    //     filename = "Report_Week_" + to_string(date / 7) + "_Cured.csv";
-    //     break;
-
-    //     case 1:
-    //     filename = "Report_Week_" + to_string(date / 7) + "_Assigned.csv";
-    //     break;
-
-    //     case 2:
-    //     filename = "Report_Week_" + to_string(date / 7) + "_Waiting.csv";
-    //     break;
-
-    //     case 3:
-    //     filename = "Report_Month_" + to_string(date / 30) + ".csv";
-
-    //     default:
-    //     cout << "You are fucked at CentralIO::Write2File" << date << type << endl;
-    //     exit(3);
-    // }   
-
-    // ofstream out(filename, fstream::out);
-    // if (!out) cout << "You are fucked" << endl;
-    // out << "ProfessionCategory,AgeCategory,RiskStatus,WaitingTime" << '\r';
-    // for (int i = 0; i < int(print_list.size()); i++) {
-    //     out << print_list[i]->getpro();
-    //     out << ",";
-    //     out << print_list[i]->getage();
-    //     out << ",";
-    //     out << print_list[i]->getrisk();
-    //     out << ",";
-    //     if (type == 0)
-    //         out << print_list[i]->getAppointment()->getDate() - print_list[i]->getdate() << endl;
-    //     else
-    //         out << date - print_list[i]->getdate();
-    //     out << '\r';
+bool CentralIO::Write2File(vector<registration*> &print_list, int date, int type) {
+    string filename; // = "Report_";
+    // if (type == 3) {
+    //     filename += "Month_" + to_string(date / 30 + 1);
+    // } else {
+    //     filename += "Week_" + to_string(date / 7 + 1);
     // }
-    // out.close();
+
+    switch (type) {
+        case 0:
+        filename = "Report_Week_" + to_string(date / 7) + "_Cured.csv";
+        break;
+
+        case 1:
+        filename = "Report_Week_" + to_string(date / 7) + "_Assigned.csv";
+        break;
+
+        case 2:
+        filename = "Report_Week_" + to_string(date / 7) + "_Waiting.csv";
+        break;
+
+        case 3:
+        filename = "Report_Month_" + to_string(date / 30) + ".csv";
+
+        default:
+        cout << "You are fucked at CentralIO::Write2File" << date << type << endl;
+        exit(3);
+    }   
+
+    ofstream out(filename, fstream::out);
+    if (!out) cout << "You are fucked" << endl;
+    out << "ProfessionCategory,AgeCategory,RiskStatus,WaitingTime" << '\r';
+    for (int i = 0; i < int(print_list.size()); i++) {
+        out << print_list[i]->getpro();
+        out << ",";
+        out << print_list[i]->getage();
+        out << ",";
+        out << print_list[i]->getrisk();
+        out << ",";
+        if (type == 0)
+            out << print_list[i]->getAppointment()->getDate() - print_list[i]->getdate() << endl;
+        else
+            out << date - print_list[i]->getdate();
+        out << '\r';
+    }
+    out.close();
     return true;
 }
 
@@ -352,35 +359,38 @@ bool CentralIO::_Monthly(int month, int key){
  * 1. 0 (a >= b)
  * 2. 1 (a <  b)
  */
-bool CentralIO::compare(FibNode* a, FibNode* b, int key)
+bool CentralIO::compare(registration* a, registration* b, int key)
 {
-    // if (key == 0) {
-    //     return (a->getname() < b->getname());
-    // } 
-    // if (key == 1) {
-    //     return (a->getpro() < b->getpro());
-    // }
-    // if (key == 2) {
-    //     return (a->getage() < b->getage());
-    // }
+    person* Per1 = Per_Relation_Retrieve(a->getPersonID());
+    person* Per2 = Per_Relation_Retrieve(b->getPersonID());
+
+    if (key == 0) {
+        return (Per1->getName() < Per2->getName());
+    } 
+    if (key == 1) {
+        return (Per1->getProfession() < Per2->getProfession());
+    }
+    if (key == 2) {
+        return (Per1->getAge() < Per2->getAge());
+    }
     return false;
 }
 
-void CentralIO::sortByKey(vector<FibNode*>&fiblist,int key)
+void CentralIO::sortByKey(vector<registration*>& Reg_list,int key)
 {
-    // FibNode* temp;
-    // for (int i = 0; i < int(fiblist.size())-1; i++)
-    // {
-    //     for (int j = 0; j < int(fiblist.size())-1-i; j++)
-    //     {
-    //         if (!this->compare(fiblist[j], fiblist[j+1], key))
-    //         {
-    //             temp=fiblist[j];
-    //             fiblist[j]=fiblist[j+1];
-    //             fiblist[j+1]=temp;
-    //         }
-    //     }
-    // }
+    registration* temp;
+    for (int i = 0; i < int(Reg_list.size())-1; i++)
+    {
+        for (int j = 0; j < int(Reg_list.size())-1-i; j++)
+        {
+            if (!this->compare(Reg_list[j], Reg_list[j+1], key))
+            {
+                temp = Reg_list[j];
+                Reg_list[j] = Reg_list[j+1];
+                Reg_list[j+1] = temp;
+            }
+        }
+    }
 }
 
 #endif
