@@ -78,6 +78,11 @@ int main()
 	ht.get(2,result_id1);
 	cout<<"vector capacity:"<<endl;
 	cout<<result_id1.capacity()<<endl;
+	ht.deleteID(1,90);
+	ht.deleteID(1,80);
+	vector<int> result_id2;
+	ht.get(1,result_id2);
+	cout<<result_id2.capacity()<<endl;
 	return 0;
 }
 //这个hash存起来的都是id，所以返回的也是id，然后如果想从data set找东西，就用hash回来的id过一遍b加树去找pointer

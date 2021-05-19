@@ -47,7 +47,16 @@ public:
     bool contains(const Key &key) const {
         return searchNode(getBucket(key), key) != nullptr;
     }
-
+    void deleteID(const Key &key,const Value &id){
+        size_t bucket = getBucket(key);
+        Node *cur = buckets[bucket];
+        Node *prev = nullptr;
+        while (cur->val!=id) {
+            prev = cur;
+            cur = cur->next;
+        }
+        return deleteNode(bucket, cur, prev);
+    }
     void erase(const Key &key) {
         size_t bucket = getBucket(key);
         Node *cur = buckets[bucket];
