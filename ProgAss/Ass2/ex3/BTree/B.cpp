@@ -114,6 +114,11 @@ int64_t BNode::findsId(int64_t s_k)
 {
     int i;
 	for (i = 0; i < num_keys && keys[i].secondary_key < s_k; i++);
+	// If the s_k is not in the node, we return -1 for convention:
+	if (i == num_keys)
+	{
+		return -1;
+	}
 	return i;
 }
 
@@ -122,7 +127,7 @@ void BNode::remove(int64_t p_k, int64_t s_k)
 {
 	int64_t id = findsId(s_k);
 	// Check if the key is in this node:
-	if (id < num_keys && keys[id].secondary_key == s_k)
+	if (id < num_keys && id >= 0 && keys[id].secondary_key == s_k)
 	{	// The key is in this node:
 		// Find the primary key in this structure entry
 		int64_t uid = findpId(id, p_k);
@@ -428,7 +433,13 @@ void B::remove(int64_t p_k, int64_t s_k)
 vector<int64_t> B::getAll(int64_t s_k) {
 	// Find the right node first:
 	BNode* r_node = search(s_k);
-	// Find the right index next:
+	// Check if s_k is in the tree:
+	if (NULL == r_node)
+	{
+		vector<int64_t> empty;
+		return empty;
+	}
+	// If s_k is in the tree, find the right index next:
 	int64_t r_index = r_node->findsId(s_k);
 	// Get the right array of primary keys:
 	return r_node->keys[r_index].primary_key;
@@ -635,16 +646,16 @@ BNode* B::find_par(BNode* node, int64_t k)
 	return par;
 }
 */
-/*
+
 int main()
 {
 	B t(3);
 	t.insert(1,9);
-	t.insert(3,20);
-	t.insert(7,1);
+	t.insert(1,20);
+	t.insert(1,1);
 	t.insert(10,332);
 	t.insert(11,43);
-	t.insert(13,14);
+	t.insert(1,14);
 	t.insert(14,32);
 	t.insert(15,14);
 	t.insert(18,93);
@@ -667,10 +678,17 @@ int main()
 	cout << endl;
 	
 	// Now test for getAll():
-	vector<int64_t> test = t.getAll(14);
-	for (int i = 0; i < int(test.size()); i++)
+	vector<int64_t> test = t.getAll(2);
+	if (1 == test.empty())
 	{
-		cout << test.at(i) << " ";
+		cout << "The is no such secondary key." << endl;
+	}
+	else
+	{
+		for (int i = 0; i < int(test.size()); i++)
+		{
+			cout << test.at(i) << " ";
+		}		
 	}
 
 	//cout << "Max key is " << t.find_max() << endl;
@@ -684,4 +702,4 @@ int main()
 	
 	return 0;
 }
-*/
+
