@@ -57,6 +57,8 @@ class FibHeap
         FibNode* hash_table_find(int id);
         FibNode* hash_table_swap(FibNode* node);   // helper function for updating nodes (only for priority
         bool hash_intable_check(int id);
+
+        int withdrew_num;
     private:
         void _PrintTree(FibNode* node);
         // void debug_PrintTree(FibNode* node);

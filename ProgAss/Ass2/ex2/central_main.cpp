@@ -28,42 +28,60 @@ BP<int64_t, treatment*> tre_id;
 BP<int64_t, person*> per_id;
 BP<int64_t, registration*> reg_id;
 hashtable<int8_t, int64_t> reg_withdraw;
+hashtable<bool, int64_t> reg_assigned;
 
 void Reg_Relation_Insert(registration* Reg){
     reg_id.insert(Reg->getID(), Reg);
     reg_withdraw.put(Reg->getWithdraw(), Reg->getID());
+    cout << "Reg ID: " << Reg->getID() << " is inserted\n";
 }
 registration* Reg_Relation_Delete(int64_t ID){
     registration* Reg;
     reg_id.remove(ID, Reg);
-    //reg_withdraw.erase(ID);
+
     if (Reg == NULL || Reg->getID() != ID){
-        cout << "REG DELETE || The registration ID:" << ID << "has not been inserted!" << endl;
+        cout << "REG DELETE || The registration ID: " << ID << " has not been inserted!" << endl;
+    } else {
+        cout << "REG DELETE || The registration ID: " << ID << " has been SUCCESSFULLY deleted\n";
     }
     return Reg;
 }
 registration* Reg_Relation_Retrieve(int64_t ID){
     registration* Reg;
-    reg_id.retrieve(ID, Reg);
-    if (Reg == NULL || Reg->getID() != ID){
-        cout << "REG RETRIEVE || The registration ID:" << ID << "has not been inserted!" << endl;
+    if (reg_id.retrieve(ID, Reg) == false) {
+        cout << "REG RETRIEVE || The registration ID:" << ID << " has not been inserted!" << endl;
+        return nullptr;
+    } else if (Reg == NULL || Reg->getID() != ID){
+        cout << "REG RETRIEVE || The registration ID:" << ID << " has not been inserted!" << endl;
+        return nullptr;
     }
     
     return Reg;
 }
 vector<registration*>& Reg_Relation_Retrieve_2(int8_t withdraw){
-    vector<int64_t> result_id;
-    reg_withdraw.get(withdraw,result_id);
+    vector<int64_t>* result_id;
+    reg_withdraw.get(withdraw, *result_id);
     vector<registration*>* result_Reg = new vector<registration*>;
 
-    int64_t count = result_id.size();
+    int64_t count = result_id->size();
     for (int64_t i = 0; i < count; i++) {
-        registration* temp_Reg = Reg_Relation_Retrieve(result_id[i]);
+        registration* temp_Reg = Reg_Relation_Retrieve(result_id->at(i));
         result_Reg->push_back(temp_Reg);
     }
     return *result_Reg;
 }
+vector<registration*>& Reg_Relation_Retrieve_3(bool assigned){
+    vector<int64_t>* result_id;
+    reg_assigned.get(assigned, *result_id);
+    vector<registration*>* result_Reg = new vector<registration*>;
 
+    int64_t count = result_id->size();
+    for (int64_t i = 0; i < count; i++) {
+        registration* temp_Reg = Reg_Relation_Retrieve(result_id->at(i));
+        result_Reg->push_back(temp_Reg);
+    }
+    return *result_Reg;
+}
 void Per_Relation_Insert(person* Per){
     per_id.insert(Per->getID(), Per);
 }
@@ -129,8 +147,7 @@ int main(){
     
     // cout << "Please Provide a path to the file" << endl;
     // cin >> path;
-    if (DEBUG) path ="../Local/test_withdraw.csv";
-    else path = "/home/essoz/2021SA/CS225/rtrepo/ProgAss/Ass2/Local/Submit.csv";
+    path = "../Local/Submit/";
     FibHeap* vacc_queue = new FibHeap;
     FibHeap* surg_queue = new FibHeap;
     FibHeap* regi_queue = new FibHeap;
@@ -196,8 +213,23 @@ int main(){
     while (true) {
         
         date = timer / 2; 
-        //  time counter 
         
+        //  time counter 
+        // do update every date
+        if (timer && timer % 2 == 0){
+        cout << ">>>> Updating Cured Registration yesterday\n";
+            Locs->updateLocs(date);
+        cout << ">>>> Update Success!\n";
+
+        }
+        // if counter % 7 == 0, generate reports
+        if (timer != 1 && timer % 14 == 1){
+            central_IO.ReportWeekly(timer / 14, order);
+        }
+        if (timer != 1 && timer % 60 == 1){
+            central_IO.ReportMonthly(timer / 60, order);
+        }
+
         cout << "The system time is now at Year 2021, Month " 
              << to_string((date+1) / 30 + 1) << ", Date " << to_string((date) % 30 + 1);
         if (timer / 2 * 2 == timer) cout << ", Morning\n";
@@ -219,45 +251,49 @@ int main(){
 
             }
         }
-        
+        central_IO.IO_timer++;        
         // the wrapper function above 
         
         // start processing
         // if (DEBUG) central_queue->debugPrintTree();
 
         // first assign nodes in the heap
+        cout << "\nAssigning Vaccinations ... \n";
+        int c = 0;
         if (AssignRegistration.checkAvailability(date, 0)) {
             while (vacc_queue->GetNum() && AssignRegistration.Assign((vacc_queue->Minimum()), date)) {
                 // keep assign until no further registrations can be assigned
                 vacc_queue->ExtractMin();
+                c++;
             }
         }
+        cout << "Complete with " << c << " assigned\n" << endl;
+
+        cout << "Assigning Surgeries ... \n";
+        c = 0;
         if (AssignRegistration.checkAvailability(date, 1)) {
             while (surg_queue->GetNum() && AssignRegistration.Assign((surg_queue->Minimum()), date)) {
                 // keep assign until no further registrations can be assigned
                 surg_queue->ExtractMin();
+                c++;
             }
         }
+        cout << "Complete with " << c << " assigned\n" << endl;
+
+        cout << "Assinging Normal Registrations ... \n";
+        c = 0;
         if (AssignRegistration.checkAvailability(date, 2)) {
             while (regi_queue->GetNum() && AssignRegistration.Assign((regi_queue->Minimum()), date)) {
                 // keep assign until no further registrations can be assigned
                 regi_queue->ExtractMin();
+                c++;
             }
         }
+        cout << "Complete with " << c << " assigned\n" << endl;
         // central_queue->debugPrintTree();
 
 
-        // do update every date
-        if (timer % 2 == 1){
-            Locs->updateLocs(date);
-        }
-        // if counter % 7 == 0, generate reports
-        if (timer != 1 && timer % 14 == 1){
-            central_IO.ReportWeekly(timer / 14, order);
-        }
-        if (timer != 1 && timer % 60 == 1){
-            central_IO.ReportMonthly(timer / 60, order);
-        }
+
         // if counter % 30 == 0, generate weekly reports
 
         if (DEBUG) break;

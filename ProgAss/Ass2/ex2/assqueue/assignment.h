@@ -9,6 +9,7 @@ registration* Reg_Relation_Delete(int64_t ID);
 void Reg_Relation_Insert(registration* Reg);
 registration* Reg_Relation_Retrieve(int64_t ID);
 vector<registration*>& Reg_Relation_Retrieve_2(int8_t withdraw);
+vector<registration*>& Reg_Relation_Retrieve_3(bool assigned);
 void Per_Relation_Insert(person* Per);
 person* Per_Relation_Delete(int64_t ID);
 person* Per_Relation_Retrieve(int64_t ID);

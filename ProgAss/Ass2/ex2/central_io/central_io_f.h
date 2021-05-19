@@ -26,7 +26,14 @@ using namespace std;
 bool CentralIO::Read2Heap(){
     // read all informations that needs to be inserted into 
     ifstream infile;
-    infile.open(path, ifstream::in);
+    string temp_path = path + "Submit(";
+    if (IO_timer < 10) {
+        temp_path += to_string(IO_timer) + " ).csv";
+    } else {
+        temp_path += to_string(IO_timer) + ").csv";
+    }
+    cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>\n\n.... READING files from " + temp_path + "...\n\n>>>>>>>>>>>>>>>>>>>>>>>>>>\n";
+    infile.open(temp_path, ifstream::in);
 
     // wait for information from local registries
     if (infile.eof()){
@@ -58,11 +65,12 @@ bool CentralIO::Read2Heap(){
                     continue;
                 }
                 if (line.substr(i,1) == "\r") {
-                    continue;
+                    break;
                 }
                 temp.append(line.substr(i,1));
             }
             temp_list.push_back(temp);
+            temp.clear();
         // clear this list for next use
 
         //check hash set
@@ -95,52 +103,82 @@ bool CentralIO::Read2Heap(){
 
         // 现在还是伪代码
         registration* node = Reg_Relation_Retrieve(Reg->getID());
-
+        Reg->printReg();
         
-        if (node->getID() == Reg->getID()) {
-            if (node->getTreatmentID() != -1) {return true;}  // has been treated, nothing has to be done
+        if (node && node->getID() == Reg->getID()) {
+            if (node->getTreatmentID() != -1) { 
+                cout << "Reg ID: " << node->getID() << " has been treated, nothing has to be done\n";
+                continue; }  // has been treated, nothing has to be done
             
             
             // do an update
             // FUCK it up
             Reg_Relation_Delete(Reg->getID());
             Per_Relation_Delete(Reg->getPersonID());
+            reg_withdraw.deleteID(node->getWithdraw(), node->getID());
 
             if (Reg->getWithdraw() == 1){
                 if (node->getAssignStatus()){
-                    assignment->removeAppointment(Reg);
+                    assignment->removeAppointment(node);
 
-
+                    cout << "Reg ID " << node->getID() << " has been withdrawn (already assigned) from type" << node->getTreatmentType() << "\n";
                 } else {
                     int8_t type = Reg->getTreatmentType();
                     if (type == 0) {
-                        vacc_heap->removeReg(Reg);
+                        vacc_heap->removeReg(node);
+                        vacc_heap->withdrew_num++;
                     } else if (type == 1) {
-                        surg_heap->removeReg(Reg);
+                        surg_heap->removeReg(node);
+                        surg_heap->withdrew_num++;
                     } else if (type == 2) {
-                        regi_heap->removeReg(Reg);
+                        regi_heap->removeReg(node);
+                        regi_heap->withdrew_num++;
                     }
+                    cout << "Reg ID: " << node->getID() << " has been withdrawn (Still Queueing) from type:" << type << "\n";
                     // TODO delete the node from heap, type check here!!!
                 }
-        }
+            } else {
+                if (node->getAssignStatus()) {
+                    Reg_Relation_Insert(node);
+                    Per_Relation_Insert(Per);
+                    cout << "Reg ID: " << node->getID() << " is already assigned, info update not supported\n";
+                    continue;
+                     
+                }
+                int8_t type = Reg->getTreatmentType();
+                if (type == 0) {
+                    vacc_heap->removeReg(node);
+                } else if (type == 1) {
+                    surg_heap->removeReg(node);
+                } else if (type == 2) {
+                    regi_heap->removeReg(node);
+                }
+                cout << "Reg ID: " << node->getID() << "'s information has been updated (type = " << (int64_t) type << ")\n";
+            }
             // the node is not in out database, insert corresponding things
     }
 
+
     Reg_Relation_Insert(Reg);
     Per_Relation_Insert(Per);
-
+    reg_assigned.put(Reg->getAssignStatus(), Reg->getID());
+    
     FibNode* newnode = new FibNode(Reg);
     if (Reg->getTreatmentType() == 0){
         vacc_heap->Insert(newnode);
+        if (Reg->getWithdraw() == 2) {vacc_heap->withdrew_num--;}
     } else if (Reg->getTreatmentType() == 1){
         surg_heap->Insert(newnode);
+        if (Reg->getWithdraw() == 2) {surg_heap->withdrew_num--;}
     } else {
         regi_heap->Insert(newnode);
+        if (Reg->getWithdraw() == 2) {regi_heap->withdrew_num--;}
     }
+
     }
 
 
-    cout << "Read complete" << endl;
+    cout << ">>>> Read complete" << endl;
     return true;
 }
 /* CentralIO::Write2File
@@ -152,52 +190,43 @@ bool CentralIO::Read2Heap(){
  * 1. true/false -- whether the report generation has succeeded
  */
 
-bool CentralIO::Write2File(vector<FibNode*>&print_list, int date, int type) {
-    // string filename; // = "Report_";
-    // // if (type == 3) {
-    // //     filename += "Month_" + to_string(date / 30 + 1);
-    // // } else {
-    // //     filename += "Week_" + to_string(date / 7 + 1);
-    // // }
-
-    // switch (type) {
-    //     case 0:
-    //     filename = "Report_Week_" + to_string(date / 7) + "_Cured.csv";
-    //     break;
-
-    //     case 1:
-    //     filename = "Report_Week_" + to_string(date / 7) + "_Assigned.csv";
-    //     break;
-
-    //     case 2:
-    //     filename = "Report_Week_" + to_string(date / 7) + "_Waiting.csv";
-    //     break;
-
-    //     case 3:
-    //     filename = "Report_Month_" + to_string(date / 30) + ".csv";
-
-    //     default:
-    //     cout << "You are fucked at CentralIO::Write2File" << date << type << endl;
-    //     exit(3);
-    // }   
-
-    // ofstream out(filename, fstream::out);
-    // if (!out) cout << "You are fucked" << endl;
-    // out << "ProfessionCategory,AgeCategory,RiskStatus,WaitingTime" << '\r';
-    // for (int i = 0; i < int(print_list.size()); i++) {
-    //     out << print_list[i]->getpro();
-    //     out << ",";
-    //     out << print_list[i]->getage();
-    //     out << ",";
-    //     out << print_list[i]->getrisk();
-    //     out << ",";
-    //     if (type == 0)
-    //         out << print_list[i]->getAppointment()->getDate() - print_list[i]->getdate() << endl;
-    //     else
-    //         out << date - print_list[i]->getdate();
-    //     out << '\r';
+bool CentralIO::Write2File(vector<PrintInfo*> &print_list, int date, int type) {
+    string filename; // = "Report_";
+    // if (type == 3) {
+    //     filename += "Month_" + to_string(date / 30 + 1);
+    // } else {
+    //     filename += "Week_" + to_string(date / 7 + 1);
     // }
-    // out.close();
+
+    switch (type) {
+        case 0:
+        filename = "Report_Week_" + to_string(date / 7) + "_Cured.csv";
+        break;
+
+        case 1:
+        filename = "Report_Week_" + to_string(date / 7) + "_Assigned.csv";
+        break;
+
+        case 2:
+        filename = "Report_Week_" + to_string(date / 7) + "_Waiting.csv";
+        break;
+
+        case 3:
+        filename = "Report_Month_" + to_string(date / 30) + ".csv";
+
+        default:
+        cout << "You are fucked at CentralIO::Write2File" << date << type << endl;
+        exit(3);
+    }   
+
+    ofstream out(filename, fstream::out);
+    if (!out) cout << "You are fucked" << endl;
+    out << "RegistrationID,PersonID,TreatmentID,TreatmentType,Name,RiskStatus,DateOfRegistration,WaitingTime" << '\r';
+    for (int i = 0; i < int(print_list.size()); i++) {
+        print_list[i]->print(out);
+        out << '\r';
+    }
+    out.close();
     return true;
 }
 
@@ -209,9 +238,9 @@ bool CentralIO::ReportWeekly(int week, int key){
      * 2. the registered people with a set appointment including their profession category, age category, risk status and their waiting time until now
      * 3. the queueing people without a set appointment including their profession category, age category, risk status and their waiting time until now
      */
-    // _WeeklyCured(week, key - '0');
-    // _WeeklyAssigned(week, key - '0');
-    // _WeeklyQueueing(week, key - '0');
+    _WeeklyCured(week, key - '0');
+    _WeeklyAssigned(week, key - '0');
+    _WeeklyQueueing(week, key - '0');
     return true;
 }
 
@@ -219,7 +248,7 @@ bool CentralIO::ReportWeekly(int week, int key){
 
 
 bool CentralIO::ReportMonthly(int month, int key){
-    // _Monthly(month, key - '0');
+    _Monthly(month, key - '0');
     return true;
 }
 
@@ -235,91 +264,114 @@ bool CentralIO::ReportMonthly(int month, int key){
  *      given.
  */
 bool CentralIO::_WeeklyCured(int week, int key){
-    // vector<FibNode*> print_list;
-    // // copy the list to be printed 
-    // print_list.assign(assignment->all_locations->cured_list[week].begin(),
-    // assignment->all_locations->cured_list[week].end());
-    // // sort the list
-    // sortByKey(print_list, key);
-    // // generate report using print_list (sorted)
-    // if (Write2File(print_list, week * 7, 0) == false) exit(3);
+    // copy the list to be printed 
+    vector<treatment*> tre_list = Tre_Relation_Retrieve_2(week - 1);
+    vector<PrintInfo*>* print_list = new vector<PrintInfo*>;
+    PrintInfo* temp_ptr;
+    int count = tre_list.size();
+    for (int i = 0; i < count; i++)
+    {
+        temp_ptr = new PrintInfo(Reg_Relation_Retrieve(tre_list[i]->getRegID()), IO_timer);
+        print_list->push_back(temp_ptr);
+    }
+    sortByKey(*print_list, key);
+    // generate report using print_list (sorted)
+    if (Write2File(*print_list, week * 7, 0) == false) exit(3);
 
-    // cout << "\nWeek " << week << "'s report (Cured patients ordered W.R.T key "<< key;
-    // cout << ") has been generated" << endl;
+    cout << "\nWeek " << week << "'s report (Cured patients ordered W.R.T key "<< key;
+    cout << ") has been generated" << endl;
     return true;
 }
 bool CentralIO::_WeeklyAssigned(int week, int key){
-    // vector<FibNode*> print_list;
+    vector<PrintInfo*>* print_list;
+    vector<registration*> reg_list = Reg_Relation_Retrieve_3(0);
+    vector<registration*> reg_list_2 = Reg_Relation_Retrieve_3(2);
+    reg_list.insert(reg_list.end(), reg_list_2.begin(), reg_list_2.end());
 
-    // print_list 
-    // TODO This needs further Verification
-    // vector <FibNode*> print_list = heap->assigned_table->list_patient();
-
-    // sortByKey(print_list, key);
-    // if (Write2File(print_list, week * 7, 1) == false) exit(3);
+    PrintInfo* temp_ptr;
+    int count = reg_list.size();
+    for (int i = 0; i < count; i++)
+    {
+        temp_ptr = new PrintInfo(reg_list[i], IO_timer);
+        print_list->push_back(temp_ptr);
+    }
+    sortByKey(*print_list, key);
+    if (Write2File(*print_list, week * 7, 1) == false) exit(3);
 
     
-    // cout << "\nWeek " << week << "'s report (Assigned patients ordered W.R.T key "<< key;
-    // cout << ") has been generated" << endl;
-    // return true;
+    cout << "\nWeek " << week << "'s report (Assigned patients ordered W.R.T key "<< key;
+    cout << ") has been generated" << endl;
+    return true;
 
     return true;
 }
-bool CentralIO::_WeeklyQueueing(int week, int key){
-    // vector<FibNode*> print_list;
-    // // generate fiblist
-    // print_list.assign(heap->fiblist.begin(), heap->fiblist.end());
-    // print_list.insert(print_list.end(), heap->highrisk_queue->fiblist.begin(), heap->highrisk_queue->fiblist.end());
-    // sortByKey(print_list, key);
 
-    // if (Write2File(print_list, week * 7, 2) == false) exit(3);
+
+bool CentralIO::_WeeklyQueueing(int week, int key){
+    // vector<PrintInfo*>* print_list;
+    // vector<registration*> reg_list = Reg_Relation_Retrieve_2(0);
+    // vector<registration*> reg_list_2 = Reg_Relation_Retrieve_2(2);
+    // reg_list.insert(reg_list.end(), reg_list_2.begin(), reg_list_2.end());
+
+    // PrintInfo* temp_ptr;
+    // int count = reg_list.size();
+    // for (int i = 0; i < count; i++)
+    // {
+    //     temp_ptr = new PrintInfo(reg_list[i], IO_timer);
+    //     print_list->push_back(temp_ptr);
+    // }
+    // sortByKey(*print_list, key);
+
+    // if (Write2File(*print_list, week * 7, 2) == false) exit(3);
 
     // cout << "\nWeek " << week << "'s report (Queueing patients ordered W.R.T key "<< key;
     // cout << ") has been generated" << endl;
     return true;
 }
+
+
 bool CentralIO::_Monthly(int month, int key){
     
-    // string filename = "MonthlyStat_";
-    // filename += to_string(month) + ".md";
+    string filename = "MonthlyStat_";
+    filename += to_string(month) + ".md";
 
-    // ofstream out(filename, fstream::out);
-    // out << "# Central Queueing System Monthly Statistic Report | 2021, Month " << month << endl;
+    ofstream out(filename, fstream::out);
+    out << "# Central Queueing System Monthly Statistic Report | 2021, Month " << month << endl;
     
-    // out << "### Number of Waiting People" << endl;
-    // out << heap->GetNum() + heap->highrisk_queue->GetNum() << "  "<< endl;
+    out << "### Number of Waiting People" << endl;
+    out << vacc_heap->GetNum() + surg_heap->GetNum() + regi_heap->GetNum() << "  "<< endl;
 
     
 
-    // out << "### Number of Treated People Per Month" << endl;
-    // // int num_treated = 0;
-    // // for (int i = 0; i < int(assignment->all_locations->cured_list.size()); i++) {
-    // //     num_treated += assignment->all_locations->cured_list;
-    // // }
-    // int cured_nums = assignment->all_locations->cured_list[month*4 - 4].size() 
-    //                + assignment->all_locations->cured_list[month*4 - 3].size()
-    //                + assignment->all_locations->cured_list[month*4 - 2].size() 
-    //                + assignment->all_locations->cured_list[month*4 - 1].size();
-    // out << cured_nums << "  " << endl;
-
-    // out << "### Average Waiting Time" << endl;
-    // int avg_time = 0;
-    // for (int k = 0; k < 4; k++){
-    //     for (int i = 0; i < assignment->all_locations->cured_list[month*4 - k].size(); i++) {
-    //         avg_time += assignment->all_locations->cured_list[month*4 - k][i]->getAppointment()->getDate() - 
-    //         assignment->all_locations->cured_list[month*4 - k][i]->getdate();
-    //     }
+    out << "### Number of Treated People Per Month" << endl;
+    // int num_treated = 0;
+    // for (int i = 0; i < int(assignment->all_locations->cured_list.size()); i++) {
+    //     num_treated += assignment->all_locations->cured_list;
     // }
-    // avg_time /= cured_nums;
+    int cured_nums = assignment->all_locations->cured_list[month*4 - 4].size() 
+                   + assignment->all_locations->cured_list[month*4 - 3].size()
+                   + assignment->all_locations->cured_list[month*4 - 2].size() 
+                   + assignment->all_locations->cured_list[month*4 - 1].size();
+    out << cured_nums << "  " << endl;
 
-    // out << avg_time << "days  " << endl;
-    // ;
+    out << "### Average Waiting Time" << endl;
+    int avg_time = 0;
+    for (int k = 0; k < 4; k++){
+        for (int i = 0; i < assignment->all_locations->cured_list[month*4 - k].size(); i++) {
+            registration* Reg = Reg_Relation_Retrieve(assignment->all_locations->cured_list[month*4 - k][i]->getRegID());
+            avg_time += stoi(Reg->getAssignedDate()) - stoi(Reg->getDateOfReg());
+        }
+    }
+    avg_time /= cured_nums;
 
-    // out << "### Number of People who withdrew their registration" << endl;
-    // out << heap->withdraw_table->get_numitems() << "  " << endl;
+    out << avg_time << "days  " << endl;
+    ;
 
-    // out.close();
-    // cout << "\nMonth " << month << "'s report has been generated." << endl;
+    out << "### Number of People who withdrew their registration" << endl;
+    out << vacc_heap->withdrew_num + surg_heap->withdrew_num + regi_heap->withdrew_num << "  " << endl;
+
+    out.close();
+    cout << "\nMonth " << month << "'s report has been generated." << endl;
     
     return true;
 }
@@ -329,35 +381,38 @@ bool CentralIO::_Monthly(int month, int key){
  * 1. 0 (a >= b)
  * 2. 1 (a <  b)
  */
-bool CentralIO::compare(FibNode* a, FibNode* b, int key)
+bool CentralIO::compare(PrintInfo* a, PrintInfo* b, int key)
 {
-    // if (key == 0) {
-    //     return (a->getname() < b->getname());
-    // } 
-    // if (key == 1) {
-    //     return (a->getpro() < b->getpro());
-    // }
-    // if (key == 2) {
-    //     return (a->getage() < b->getage());
-    // }
+    person* Per1 = Per_Relation_Retrieve(a->per_id);
+    person* Per2 = Per_Relation_Retrieve(b->per_id);
+
+    if (key == 0) {
+        return (Per1->getName() < Per2->getName());
+    } 
+    if (key == 1) {
+        return (Per1->getProfession() < Per2->getProfession());
+    }
+    if (key == 2) {
+        return (Per1->getAge() < Per2->getAge());
+    }
     return false;
 }
 
-void CentralIO::sortByKey(vector<FibNode*>&fiblist,int key)
+void CentralIO::sortByKey(vector<PrintInfo*>& info_list,int key)
 {
-    // FibNode* temp;
-    // for (int i = 0; i < int(fiblist.size())-1; i++)
-    // {
-    //     for (int j = 0; j < int(fiblist.size())-1-i; j++)
-    //     {
-    //         if (!this->compare(fiblist[j], fiblist[j+1], key))
-    //         {
-    //             temp=fiblist[j];
-    //             fiblist[j]=fiblist[j+1];
-    //             fiblist[j+1]=temp;
-    //         }
-    //     }
-    // }
+    PrintInfo* temp;
+    for (int i = 0; i < int(info_list.size())-1; i++)
+    {
+        for (int j = 0; j < int(info_list.size())-1-i; j++)
+        {
+            if (!this->compare(info_list[j], info_list[j+1], key))
+            {
+                temp = info_list[j];
+                info_list[j] = info_list[j+1];
+                info_list[j+1] = temp;
+            }
+        }
+    }
 }
 
 #endif
