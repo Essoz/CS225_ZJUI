@@ -36,7 +36,7 @@ public:
  *  Side Effects:
  *      Write a csv file containing all the information of patients.
  */
-	static queue<Patient*>* write_all(queue<Patient*>* queue);
+	static queue<Patient*>* write_all(queue<Patient*>* queue, int counter);
 
 /*  Description:
  *      This function will read all the information of new patients in a
