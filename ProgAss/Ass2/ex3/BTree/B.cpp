@@ -646,7 +646,7 @@ BNode* B::find_par(BNode* node, int64_t k)
 	return par;
 }
 */
-
+/*
 int main()
 {
 	B t(3);
@@ -702,4 +702,4 @@ int main()
 	
 	return 0;
 }
-
+*/
