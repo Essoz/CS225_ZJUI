@@ -82,7 +82,7 @@ bool Assignment::Assign(FibNode* reg, int date) {
     // this leaves the case where the node can be assigned
 
     _assign(reg, date, type);
-
+    
     
     return true;
 }
@@ -113,7 +113,10 @@ void Assignment::_assign(FibNode* reg, int date, int8_t type) {
             Reg->setAssignedTime(temp_time_assigned);
             // Reg_Relation_Delete(Reg->getID());
             // Reg_Relation_Insert(n_Reg);
+            reg_assigned.deleteID(false, Reg->getID());
+            reg_assigned.put(true, Reg->getID());
             break;
+
         }
     }
 }
@@ -134,6 +137,7 @@ void Assignment::removeAppointment(registration* Reg){
 
         cout << "Warning: A Treated Reg of ID: " << Reg->getID() << "has been removed" << endl;
     }
+    reg_assigned.deleteID(true, Reg->getID());
 
     Reg->setTreatmentID(-1);
     Reg->setAssignStatus(false);
@@ -209,9 +213,11 @@ void Location::assignedClear(int date) {
             registration* Reg = Reg_Relation_Retrieve(assigned_queue[j].at(date)[i]->getRegID());
             
             treatment* Tre = new treatment(tre_id_counter++, Reg->getAssignedLoc(), Reg->getTreatmentType(), 
-                Reg->getAssignedDate(), Reg->getAssignedDate());
+                Reg->getAssignedDate(), Reg->getAssignedDate(), Reg->getID());
             Tre_Relation_Insert(Tre); 
             Reg->setTreatmentID(Tre->getID());
+            reg_assigned.deleteID(true, Reg->getID());
+            reg_assigned.put(false, Reg->getID());
         }
     assigned_queue[j].at(date).clear();
     }

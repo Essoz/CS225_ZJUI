@@ -28,6 +28,7 @@ BP<int64_t, treatment*> tre_id;
 BP<int64_t, person*> per_id;
 BP<int64_t, registration*> reg_id;
 hashtable<int8_t, int64_t> reg_withdraw;
+hashtable<bool, int64_t> reg_assigned;
 
 void Reg_Relation_Insert(registration* Reg){
     reg_id.insert(Reg->getID(), Reg);
@@ -37,7 +38,7 @@ void Reg_Relation_Insert(registration* Reg){
 registration* Reg_Relation_Delete(int64_t ID){
     registration* Reg;
     reg_id.remove(ID, Reg);
-    //reg_withdraw.erase(ID);
+
     if (Reg == NULL || Reg->getID() != ID){
         cout << "REG DELETE || The registration ID: " << ID << " has not been inserted!" << endl;
     } else {
@@ -69,7 +70,18 @@ vector<registration*>& Reg_Relation_Retrieve_2(int8_t withdraw){
     }
     return *result_Reg;
 }
+vector<registration*>& Reg_Relation_Retrieve_3(bool assigned){
+    vector<int64_t>* result_id;
+    reg_assigned.get(assigned, *result_id);
+    vector<registration*>* result_Reg = new vector<registration*>;
 
+    int64_t count = result_id->size();
+    for (int64_t i = 0; i < count; i++) {
+        registration* temp_Reg = Reg_Relation_Retrieve(result_id->at(i));
+        result_Reg->push_back(temp_Reg);
+    }
+    return *result_Reg;
+}
 void Per_Relation_Insert(person* Per){
     per_id.insert(Per->getID(), Per);
 }
