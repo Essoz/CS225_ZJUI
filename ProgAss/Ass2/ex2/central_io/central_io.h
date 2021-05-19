@@ -99,7 +99,7 @@ class PrintInfo {
             risk_status = Per->getMedicalStatusID();
         }
         void print(ofstream& out) {
-            out << reg_id << "," << "per_id" << "," << "tre_id"
+            out << reg_id << "," << per_id << "," << tre_id
             << "," << (int64_t) treatment_type << "," << name 
             << "," << risk_status << "," << date_of_reg 
             << "," << waiting_time;
@@ -110,7 +110,7 @@ class PrintInfo {
         int64_t         tre_id;
         int8_t          treatment_type;
         string          name;
-        string          risk_status;
+        int64_t         risk_status;
         string          date_of_reg;
         int64_t         waiting_time;
 };

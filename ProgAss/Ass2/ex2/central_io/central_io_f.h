@@ -162,6 +162,7 @@ bool CentralIO::Read2Heap(){
     Reg_Relation_Insert(Reg);
     Per_Relation_Insert(Per);
     reg_assigned.put(Reg->getAssignStatus(), Reg->getID());
+    
     FibNode* newnode = new FibNode(Reg);
     if (Reg->getTreatmentType() == 0){
         vacc_heap->Insert(newnode);
@@ -264,7 +265,7 @@ bool CentralIO::ReportMonthly(int month, int key){
  */
 bool CentralIO::_WeeklyCured(int week, int key){
     // copy the list to be printed 
-    vector<treatment*> tre_list = Tre_Relation_Retrieve_2(week);
+    vector<treatment*> tre_list = Tre_Relation_Retrieve_2(week - 1);
     vector<PrintInfo*>* print_list = new vector<PrintInfo*>;
     PrintInfo* temp_ptr;
     int count = tre_list.size();
@@ -307,24 +308,24 @@ bool CentralIO::_WeeklyAssigned(int week, int key){
 
 
 bool CentralIO::_WeeklyQueueing(int week, int key){
-    vector<PrintInfo*>* print_list;
-    vector<registration*> reg_list = Reg_Relation_Retrieve_2(0);
-    vector<registration*> reg_list_2 = Reg_Relation_Retrieve_2(2);
-    reg_list.insert(reg_list.end(), reg_list_2.begin(), reg_list_2.end());
+    // vector<PrintInfo*>* print_list;
+    // vector<registration*> reg_list = Reg_Relation_Retrieve_2(0);
+    // vector<registration*> reg_list_2 = Reg_Relation_Retrieve_2(2);
+    // reg_list.insert(reg_list.end(), reg_list_2.begin(), reg_list_2.end());
 
-    PrintInfo* temp_ptr;
-    int count = reg_list.size();
-    for (int i = 0; i < count; i++)
-    {
-        temp_ptr = new PrintInfo(reg_list[i], IO_timer);
-        print_list->push_back(temp_ptr);
-    }
-    sortByKey(*print_list, key);
+    // PrintInfo* temp_ptr;
+    // int count = reg_list.size();
+    // for (int i = 0; i < count; i++)
+    // {
+    //     temp_ptr = new PrintInfo(reg_list[i], IO_timer);
+    //     print_list->push_back(temp_ptr);
+    // }
+    // sortByKey(*print_list, key);
 
-    if (Write2File(*print_list, week * 7, 2) == false) exit(3);
+    // if (Write2File(*print_list, week * 7, 2) == false) exit(3);
 
-    cout << "\nWeek " << week << "'s report (Queueing patients ordered W.R.T key "<< key;
-    cout << ") has been generated" << endl;
+    // cout << "\nWeek " << week << "'s report (Queueing patients ordered W.R.T key "<< key;
+    // cout << ") has been generated" << endl;
     return true;
 }
 
