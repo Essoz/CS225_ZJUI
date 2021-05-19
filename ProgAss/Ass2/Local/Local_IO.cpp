@@ -31,11 +31,16 @@ using std::cin;
  *  Side Effects:
  *      Write a csv file containing all the information of patients.
  */
-queue<Patient*>* IO::write_all(queue<Patient*>* queue)
+queue<Patient*>* IO::write_all(queue<Patient*>* queue, int counter)
 {
+	// The name of output file is based on "counter" in queue class:
+	string Filename = "Submit/Submit(  ).csv";
+	string Filecounter = to_string(counter);
+	Filename = Filename.replace(14, Filecounter.length(), Filecounter);
+
 	// open the file you want to write:
 	FILE* update;
-	update = fopen("Submit.csv", "w");
+	update = fopen(Filename.c_str(), "w");
 	// check if fopen successes:
 	if (NULL == update)
 	{

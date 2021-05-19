@@ -171,12 +171,13 @@ void Queue::update_info(int id, int up_type, string info)
 	return;
 }
 
-// Report data to centralised treatment queue:
+// Report data to centralized treatment queue:
 queue<Patient*>* Queue::report(queue<Patient*>* l_queue)
 {
-	l_queue = io->write_all(l_queue);
-	// After report, increase the time counter:
+	// Before report, increase the time counter:
 	counter++;
+	l_queue = io->write_all(l_queue, counter);
+
 	if (0 == counter % 2)
 	{
 		cur_date++;
