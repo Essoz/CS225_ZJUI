@@ -22,7 +22,7 @@ string Filename2 = "update/ExportCSV (  ).csv";
 int Daycounter = 0;
 string Filecounter = to_string(Daycounter);
 // Loop for half a day:
-while (Order <= 15)
+while (Order <= 63)
 {
 	cout << "Today is day " << Daycounter/2+1 << " ";
 	if (Daycounter % 2 == 0) {
@@ -44,6 +44,6 @@ while (Order <= 15)
 	Order++;
 }
 // cout << "Down for the local registry system" << endl;
-cout << "The 16 test cases have been runned and tested, the program ends." << endl;
+cout << "The 64 test cases have been runned and tested, the program ends." << endl << endl;
 return 0;
 }
