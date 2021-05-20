@@ -116,6 +116,7 @@ bool CentralIO::Read2Heap(){
             Reg_Relation_Delete(Reg->getID());
             Per_Relation_Delete(Reg->getPersonID());
             reg_withdraw.deleteID(node->getWithdraw(), node->getID());
+            // TODO should add a deletion of reg_assign
 
             if (Reg->getWithdraw() == 1){
                 if (node->getAssignStatus()){
