@@ -59,7 +59,7 @@ registration* Reg_Relation_Retrieve(int64_t ID){
     return Reg;
 }
 vector<registration*>& Reg_Relation_Retrieve_2(int8_t withdraw){
-    vector<int64_t>* result_id;
+    vector<int64_t>* result_id = new vector<int64_t>;
     reg_withdraw.get(withdraw, *result_id);
     vector<registration*>* result_Reg = new vector<registration*>;
 
@@ -71,7 +71,7 @@ vector<registration*>& Reg_Relation_Retrieve_2(int8_t withdraw){
     return *result_Reg;
 }
 vector<registration*>& Reg_Relation_Retrieve_3(bool assigned){
-    vector<int64_t>* result_id;
+    vector<int64_t>* result_id = new vector<int64_t>;
     reg_assigned.get(assigned, *result_id);
     vector<registration*>* result_Reg = new vector<registration*>;
 

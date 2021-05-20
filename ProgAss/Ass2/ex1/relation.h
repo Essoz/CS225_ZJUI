@@ -442,6 +442,9 @@ class registration{
         int64_t     getAssignedLoc()                { return assigned_loc; }  // TODO: How can I modify those info later?? This is hard
         string      getAssignedDate()               { return assigned_date; }
         int8_t      getAssignedTime()               { return assigned_time; }
+
+        void        printReg()                      {cout << ID << "," << 
+        (int64_t) treatment_type << "," << (int64_t) withdrawn << endl;}
     private:
         int64_t     ID;
         int64_t     reg_id;
@@ -453,7 +456,7 @@ class registration{
         int8_t      withdrawn;
         bool        assigned;
         int64_t     assigned_loc;
-	int8_t      assigned_time;
+        int8_t      assigned_time;
         string      assigned_date;
 };
 
@@ -461,7 +464,7 @@ class registration{
 class treatment{
     public:
         treatment(int64_t n_ID, int64_t n_assigned_loc, int8_t n_treatment_type, 
-                string n_assigned_date, string n_end_date);
+                string n_assigned_date, string n_end_date, int64_t n_reg_id);
         void        setID(int64_t id)               { ID = id; }
         void        setAssignedLoc(int64_t loc)     { assigned_loc = loc; }
         void        setTreatType(int8_t type)       { treatment_type = type; }
@@ -469,6 +472,7 @@ class treatment{
         void        setFinishedTime(string time)    { end_date = time; }
 
         int64_t     getID()                         { return ID; }
+        int64_t     getRegID()                      { return reg_id; }
         int64_t     getAssignedLoc()                { return assigned_loc; }
         int8_t      getTreatType()                  { return treatment_type; }
         string      getAssignedTime()               { return assigned_date; }
@@ -480,6 +484,7 @@ class treatment{
         int8_t      treatment_type;
         string      assigned_date;
         string      end_date;
+        int64_t     reg_id;
 };
 
 person::person(int64_t n_ID, int64_t n_address, int64_t n_med_id, 
@@ -521,12 +526,13 @@ registration::registration(int64_t n_ID, int64_t n_reg_id, int64_t n_person_id, 
 }
 
 treatment::treatment(int64_t n_ID, int64_t n_assigned_loc, int8_t n_treatment_type, 
-                    string n_assigned_date, string n_end_date)
+                    string n_assigned_date, string n_end_date, int64_t n_reg_id)
                     : ID(n_ID)
                     , assigned_loc(n_assigned_loc)
                     , treatment_type(n_treatment_type)
                     , assigned_date(n_assigned_date)
                     , end_date(n_end_date)
+                    , reg_id(n_reg_id)
 {
 }
 
